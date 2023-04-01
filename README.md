@@ -9,7 +9,6 @@ Lớp: **SE109.N21**
 |  3   |  Trần Quốc Thắng   | 20521904  |
 |  4   |  Huỳnh Trung Thảo  | 20521932  |
 
-[Lên đầu trang](#top)
 ## Đề tài
 
 Xây dựng phần mềm quản lý chi tiêu cá nhân trên di dộng
@@ -18,7 +17,7 @@ Xây dựng phần mềm quản lý chi tiêu cá nhân trên di dộng
 
 ### Công nghệ sử dụng
 
-- Ngôn ngữ: Dart
+- Ngôn ngữ: javascript
 - Famework: React Native
 
 ### Tính năng chính 
