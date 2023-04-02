@@ -15,6 +15,7 @@ import CalenderScreen from './calender/index.js';
 import HomeScreen from './home/index.js';
 import ProfileScreen from './profile/index.js';
 import styles from './styles.js';
+import {connect} from 'react-native-redux';
 
 const _renderIcon = (routeName, selectedTab) => {
   let icon = '';
@@ -60,7 +61,7 @@ const renderTabBar = ({routeName, selectedTab, navigate}) => {
   );
 };
 
-export default function MainScreen() {
+const MainScreen = () => {
   return (
     <>
       <CurvedBottomBarExpo.Navigator
@@ -105,4 +106,6 @@ export default function MainScreen() {
       </CurvedBottomBarExpo.Navigator>
     </>
   );
-}
+};
+
+export default connect(MainScreen);

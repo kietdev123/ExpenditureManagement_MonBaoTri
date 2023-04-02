@@ -1,4 +1,5 @@
 import {Text, View} from 'react-native';
+import {connect} from 'react-native-redux';
 
 const CalenderScreen = () => {
   return (
@@ -8,4 +9,4 @@ const CalenderScreen = () => {
   );
 };
 
-export default CalenderScreen;
+export default connect(CalenderScreen);

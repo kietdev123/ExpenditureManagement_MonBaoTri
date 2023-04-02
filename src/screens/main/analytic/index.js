@@ -1,4 +1,5 @@
 import {Text, View} from 'react-native';
+import {connect} from 'react-native-redux';
 
 const AnalyticScreen = () => {
   return (
@@ -8,4 +9,4 @@ const AnalyticScreen = () => {
   );
 };
 
-export default AnalyticScreen;
+export default connect(AnalyticScreen);
