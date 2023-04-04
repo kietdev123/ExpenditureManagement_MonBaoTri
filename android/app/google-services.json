@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "367968834061",
+    "project_id": "monbaotriphanmem",
+    "storage_bucket": "monbaotriphanmem.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367968834061:android:c52d62d7470a32256dfb44",
+        "android_client_info": {
+          "package_name": "com.todoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367968834061-kmfuanprbuuao7odvoetd5ftj3bid3pg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdfHjEgAIfZ6HZQQ_VwXM1ri81QswtID0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367968834061-kmfuanprbuuao7odvoetd5ftj3bid3pg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
