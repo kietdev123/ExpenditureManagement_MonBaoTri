@@ -1,12 +1,11 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {Provider} from 'react-native-redux';
+import {Text, View} from 'react-native';
+import ToDoPage from '../screens/todo/todo_page.js';
 import LoginScreen from '../screens/login/index.js';
 import MainScreen from '../screens/main/index.js';
-import {Provider} from 'react-native-redux';
-//import {View} from 'react-native/types/index.js';
-import {Text, View} from 'react-native';
-
 const LoadingScreen = () => {
   return (
     <View>
@@ -32,6 +31,11 @@ function MyStack() {
     >
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Todo"
+            component={ToDoPage}
+            options={{title: 'todo screen'}}
+          />
           <Stack.Screen
             name="Home"
             component={MainScreen}
