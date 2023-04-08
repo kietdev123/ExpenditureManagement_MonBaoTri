@@ -32,15 +32,16 @@ function MyStack() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Todo"
-            component={ToDoPage}
-            options={{title: 'todo screen'}}
-          />
-          <Stack.Screen
             name="Home"
             component={MainScreen}
             options={{title: 'main screen'}}
           />
+          <Stack.Screen
+            name="Todo"
+            component={ToDoPage}
+            options={{title: 'todo screen'}}
+          />
+
           <Stack.Screen
             name="Login"
             component={LoginScreen}
