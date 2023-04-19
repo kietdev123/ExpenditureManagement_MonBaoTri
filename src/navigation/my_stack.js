@@ -6,6 +6,7 @@ import {Text, View} from 'react-native';
 import ToDoPage from '../screens/todo/todo_page.js';
 import LoginScreen from '../screens/login/index.js';
 import MainScreen from '../screens/main/index.js';
+import SignupScreen from '../screens/signup/index.js';
 const LoadingScreen = () => {
   return (
     <View>
@@ -41,7 +42,6 @@ function MyStack() {
             component={ToDoPage}
             options={{title: 'todo screen'}}
           />
-
           <Stack.Screen
             name="Login"
             component={LoginScreen}
@@ -50,6 +50,7 @@ function MyStack() {
               title: 'kiet',
             }}
           />
+          <Stack.Screen name="Signup" component={SignupScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
