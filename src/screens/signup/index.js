@@ -15,7 +15,7 @@ import COLORS from '../../constants/colors.js';
 import Button from './components/button.js';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 
-const SignupScreen = () => {
+const SignupScreen = ({navigation}) => {
   const [inputs, setInputs] = React.useState({
     fullname: '',
     email: '',
@@ -63,6 +63,8 @@ const SignupScreen = () => {
       handleError('Mật khẩu không khớp', 'password');
       isValid = false;
     }
+
+    navigation.navigate('EmailVerify');
   };
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({...prevState, [input]: text}));
@@ -197,7 +199,7 @@ const SignupScreen = () => {
             justifyContent: 'center',
           }}>
           <Text> Đã có tài khoản ?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={{color: '#16d5f2'}}> Đăng nhập ngay</Text>
           </TouchableOpacity>
         </View>

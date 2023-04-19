@@ -3,7 +3,7 @@ import {Image, TouchableOpacity} from 'react-native';
 import {Text, SafeAreaView, StyleSheet} from 'react-native';
 import IconFontisto from 'react-native-vector-icons/dist/Fontisto';
 
-function EmailVerify() {
+function EmailVerify({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.notifications}>Verify Email</Text>
@@ -14,11 +14,18 @@ function EmailVerify() {
         style={styles.logo}
         source={require('../../../assets/icons/email_icon.png')}
       />
-      <TouchableOpacity style={styles.buttonResend} onPress={() => {}}>
+      <TouchableOpacity
+        style={styles.buttonResend}
+        onPress={() => {
+          navigation.navigate('SuccessfulVerify');
+        }}>
         <IconFontisto name="email" size={30} color="#fff" />
         <Text style={styles.textResend}>Resend email</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('SuccessfulVerify');
+        }}>
         <Text style={styles.buttonCancel}>Cancel</Text>
       </TouchableOpacity>
     </SafeAreaView>

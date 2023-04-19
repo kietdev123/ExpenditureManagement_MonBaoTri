@@ -87,21 +87,33 @@ const MainScreen = () => {
           name="home"
           position="LEFT"
           component={HomeScreen}
+          options={{
+            headerShown: false,
+          }}
         />
         <CurvedBottomBarExpo.Screen
           name="calendar"
           position="LEFT"
           component={CalenderScreen}
+          options={{
+            headerShown: false,
+          }}
         />
         <CurvedBottomBarExpo.Screen
           name="analytic"
           component={AnalyticScreen}
           position="RIGHT"
+          options={{
+            headerShown: false,
+          }}
         />
         <CurvedBottomBarExpo.Screen
           name="profile"
           component={ProfileScreen}
           position="RIGHT"
+          options={{
+            headerShown: false,
+          }}
         />
       </CurvedBottomBarExpo.Navigator>
     </>
