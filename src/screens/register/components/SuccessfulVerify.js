@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import IconEntypo from 'react-native-vector-icons/dist/Entypo';
 
-function SuccessfulVerify() {
+function SuccessfulVerify({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.notifications}>Verify Email</Text>
@@ -21,7 +21,11 @@ function SuccessfulVerify() {
         style={styles.logo}
         source={require('../../../assets/icons/verify-email.png')}
       />
-      <TouchableOpacity style={styles.buttonResend} onPress={() => {}}>
+      <TouchableOpacity
+        style={styles.buttonResend}
+        onPress={() => {
+          navigation.navigate('Home');
+        }}>
         <IconEntypo name="home" size={30} color="#fff" />
         <Text style={styles.textResend}>Go to Home</Text>
       </TouchableOpacity>

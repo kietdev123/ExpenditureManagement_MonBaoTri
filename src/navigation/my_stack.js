@@ -3,10 +3,14 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Provider} from 'react-native-redux';
 import {Text, View} from 'react-native';
+
 import ToDoPage from '../screens/todo/todo_page.js';
 import LoginScreen from '../screens/login/index.js';
 import MainScreen from '../screens/main/index.js';
 import SignupScreen from '../screens/signup/index.js';
+import EmailVerify from '../screens/register/components/EmailVerify.js';
+import SuccessfulVerify from '../screens/register/components/SuccessfulVerify.js';
+
 const LoadingScreen = () => {
   return (
     <View>
@@ -33,24 +37,47 @@ function MyStack() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+              // headerLeft: () => <></>, // Hide back button
+              // title: 'kiet',
+            }}
+          />
+          <Stack.Screen
+            name="Signup"
+            component={SignupScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="SuccessfulVerify"
+            component={SuccessfulVerify}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="EmailVerify"
+            component={EmailVerify}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
             name="Home"
             component={MainScreen}
-            options={{title: 'main screen'}}
+            options={{
+              headerShown: false,
+            }}
           />
           <Stack.Screen
             name="Todo"
             component={ToDoPage}
             options={{title: 'todo screen'}}
           />
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{
-              headerLeft: () => <></>, // Hide back button
-              title: 'kiet',
-            }}
-          />
-          <Stack.Screen name="Signup" component={SignupScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
