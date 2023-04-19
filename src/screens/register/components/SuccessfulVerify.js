@@ -12,10 +12,10 @@ import IconEntypo from 'react-native-vector-icons/dist/Entypo';
 function SuccessfulVerify({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.notifications}>Verify Email</Text>
+      <Text style={styles.notifications}>Xác nhận Email</Text>
       <View>
-        <Text style={styles.text}>Congratulations!</Text>
-        <Text style={styles.text}>Your email has been verifed!</Text>
+        <Text style={styles.text}>Chúc mừng!</Text>
+        <Text style={styles.text}>Email của bạn đã được xác nhận!</Text>
       </View>
       <Image
         style={styles.logo}
@@ -27,7 +27,7 @@ function SuccessfulVerify({navigation}) {
           navigation.navigate('Home');
         }}>
         <IconEntypo name="home" size={30} color="#fff" />
-        <Text style={styles.textResend}>Go to Home</Text>
+        <Text style={styles.textResend}>Đến trang chủ</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
