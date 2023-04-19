@@ -103,7 +103,7 @@ const LoginScreen = ({navigation}) => {
           style={{
             alignItems: 'flex-end',
           }}>
-          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotScreen')}>
             <Text style={{color: '#16d5f2'}}>Quên mật khẩu</Text>
           </TouchableOpacity>
         </View>

@@ -6,9 +6,9 @@ import IconFontisto from 'react-native-vector-icons/dist/Fontisto';
 function EmailVerify({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.notifications}>Verify Email</Text>
+      <Text style={styles.notifications}>Xác nhận email</Text>
       <Text style={styles.text}>
-        Pleases check your email and verify your email!
+        Vui lòng kiểm tra email và xác nhận email của bạn!
       </Text>
       <Image
         style={styles.logo}
@@ -20,13 +20,13 @@ function EmailVerify({navigation}) {
           navigation.navigate('SuccessfulVerify');
         }}>
         <IconFontisto name="email" size={30} color="#fff" />
-        <Text style={styles.textResend}>Resend email</Text>
+        <Text style={styles.textResend}>Gửi lại email</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('SuccessfulVerify');
         }}>
-        <Text style={styles.buttonCancel}>Cancel</Text>
+        <Text style={styles.buttonCancel}>Hủy</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

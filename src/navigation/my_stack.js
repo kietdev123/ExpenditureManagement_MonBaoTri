@@ -10,6 +10,7 @@ import MainScreen from '../screens/main/index.js';
 import SignupScreen from '../screens/signup/index.js';
 import EmailVerify from '../screens/register/components/EmailVerify.js';
 import SuccessfulVerify from '../screens/register/components/SuccessfulVerify.js';
+import ForgotScreen from '../screens/forgot/index.js';
 
 const LoadingScreen = () => {
   return (
@@ -48,6 +49,13 @@ function MyStack() {
           <Stack.Screen
             name="Signup"
             component={SignupScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ForgotScreen"
+            component={ForgotScreen}
             options={{
               headerShown: false,
             }}
