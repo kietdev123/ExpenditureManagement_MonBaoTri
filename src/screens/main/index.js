@@ -61,7 +61,11 @@ const renderTabBar = ({routeName, selectedTab, navigate}) => {
   );
 };
 
-const MainScreen = () => {
+const MainScreen = ({navigation}) => {
+  function addSpendingEvent() {
+    navigation.navigate('AddSpeandingPage');
+  }
+
   return (
     <>
       <CurvedBottomBarExpo.Navigator
@@ -75,9 +79,7 @@ const MainScreen = () => {
         borderTopLeftRight
         renderCircle={({selectedTab, navigate}) => (
           <Animated.View style={styles.btnCircleUp}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => Alert.alert('Click Action')}>
+            <TouchableOpacity style={styles.button} onPress={addSpendingEvent}>
               <Icon name="plus" size={25} color="#900" />
             </TouchableOpacity>
           </Animated.View>
