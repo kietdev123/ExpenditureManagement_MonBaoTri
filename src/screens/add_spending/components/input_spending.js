@@ -7,31 +7,22 @@ const InputSpending = ({
   color,
   hintText,
   action,
+
   textInputAction,
   keyboardType,
   textCapitalization = 'none',
+  ...props
 }) => {
-  const [value, setValue] = useState('');
-
-  const handleInput = text => {
-    setValue(text);
-    if (action) {
-      action(text);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <Icon name={icon} color={color} size={30} />
       <TextInput
         style={styles.input}
         placeholder={hintText}
-        value={value}
-        onChangeText={handleInput}
         textInputAction={textInputAction}
         keyboardType={keyboardType}
         textCapitalization={textCapitalization}
-        onSubmitEditing={() => action(value)}
+        {...props}
       />
     </View>
   );
