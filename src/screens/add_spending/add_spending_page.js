@@ -10,31 +10,16 @@ import {
   ScrollView,
   Image,
   Button,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import InputMoney from './components/input_money';
 import InputSpending from './components/input_spending';
 import ItemSpending from './components/item_spending';
 import COLORS from '../../constants/colors';
-
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DatePicker from 'react-native-date-picker';
 
 const AddSpendingPage = ({navigation}) => {
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = date => {
-    console.warn('A date has been picked: ', date);
-    hideDatePicker();
-  };
-
   const [more, setMore] = useState(false);
   const [money, setMoney] = useState('');
 
@@ -43,6 +28,15 @@ const AddSpendingPage = ({navigation}) => {
     location: '',
     note: '',
   });
+
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [dobLabel, setdobLabel] = useState('Ngày');
+
+  const [timeSpending, setTimeSpending] = useState(new Date());
+  const [openTimeSpending, setOpenTimeSpending] = useState(false);
+  const [dobLabelTimeSpending, setdobLabelTimeSpending] = useState('Giờ');
+
   const [errors, setErrors] = React.useState({});
 
   function containsOnlyNumbers(str) {
@@ -65,11 +59,30 @@ const AddSpendingPage = ({navigation}) => {
       isValid = false;
     }
 
-    if (isValid) {
-      console.log(inputs.money);
+    if (isValid == false) {
+      if (dobLabel == 'Ngày') {
+        Alert.alert('Vui lòng nhập ngày');
+        isValid = false;
+        console.log('é');
+        // return;
+      }
+
+      if (dobLabelTimeSpending == 'Giờ') {
+        Alert.alert('Vui lòng nhập giờ');
+        isValid = false;
+        console.log('é');
+        // return;
+      }
+      if (isValid) {
+        console.log(inputs.money);
+      }
     }
+
+    console.log('save');
+    return isValid;
   };
   const handleOnchange = (text, input) => {
+    console.log(text + ' : ' + input);
     setInputs(prevState => ({...prevState, [input]: text}));
   };
   const handleError = (error, input) => {
@@ -78,22 +91,52 @@ const AddSpendingPage = ({navigation}) => {
 
   const addingSpending = () => {
     // Functionality to save the spending
-    validate();
+    let check = validate();
+    console.log(check);
+    if (check) {
+      console.log('money : ' + inputs.money);
+      console.log('Date spending : ' + date.toLocaleDateString('vi'));
+      console.log('Time spending : ' + date.toLocaleTimeString('vi'));
+      console.log('note : ' + inputs.note);
+      console.log('location : ' + inputs.location);
+      console.log(inputs);
+    }
   };
 
   const addSpending = () => {
     // Functionality to add spending
     return (
       <>
-        <View>
-          <Button title="Show Date Picker" onPress={showDatePicker} />
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-          />
-        </View>
+        <DatePicker
+          modal
+          mode="date"
+          open={open}
+          date={date}
+          onConfirm={date => {
+            setOpen(false);
+            setDate(date);
+            // setdobLabel(date.toDateString());
+            setdobLabel(date.toLocaleDateString('vi'));
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+        <DatePicker
+          modal
+          mode="time"
+          open={openTimeSpending}
+          date={timeSpending}
+          onConfirm={date => {
+            setOpenTimeSpending(false);
+            setTimeSpending(date);
+            // setdobLabel(date.toDateString());
+            setdobLabelTimeSpending(date.getHours() + ':' + date.getMinutes());
+          }}
+          onCancel={() => {
+            setOpenTimeSpending(false);
+          }}
+        />
         <View
           style={{
             paddingTop: 24,
@@ -129,17 +172,22 @@ const AddSpendingPage = ({navigation}) => {
 
           <Line></Line>
           <ItemSpending
+            action={() => setOpen(true)}
             color="#F4831B"
             icon="ios-calendar-outline"
-            text="30/04/2023"></ItemSpending>
+            text={dobLabel}></ItemSpending>
           <Line></Line>
 
           <ItemSpending
+            action={() => setOpenTimeSpending(true)}
             color="#F1BA05"
             icon="time-outline"
-            text="08:30"></ItemSpending>
+            text={dobLabelTimeSpending}></ItemSpending>
+
           <Line></Line>
+
           <InputSpending
+            onChangeText={text => handleOnchange(text, 'note')}
             color="#DD6000"
             icon="newspaper"
             hintText="Ghi chú"></InputSpending>
@@ -212,6 +260,8 @@ const AddSpendingPage = ({navigation}) => {
             height: 200,
           }}>
           <InputSpending
+            onChangeText={text => handleOnchange(text, 'location')}
+            text={inputs.location}
             color="#63C328"
             icon="location-outline"
             hintText="Vị trí"></InputSpending>
