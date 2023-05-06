@@ -2,7 +2,7 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Provider} from 'react-native-redux';
-import {Text, View} from 'react-native';
+import {SafeAreaView, Text, View} from 'react-native';
 
 import ToDoPage from '../screens/todo/todo_page.js';
 import LoginScreen from '../screens/login/index.js';
@@ -11,6 +11,7 @@ import SignupScreen from '../screens/signup/index.js';
 import EmailVerify from '../screens/register/components/EmailVerify.js';
 import SuccessfulVerify from '../screens/register/components/SuccessfulVerify.js';
 import ForgotScreen from '../screens/forgot/index.js';
+import Onboarding from '../screens/onboarding/index.js';
 
 const LoadingScreen = () => {
   return (
@@ -37,6 +38,13 @@ function MyStack() {
     >
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="Login"
             component={LoginScreen}
