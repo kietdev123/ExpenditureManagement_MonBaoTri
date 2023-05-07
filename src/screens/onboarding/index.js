@@ -13,38 +13,38 @@ const Onboarding = () => {
   const onboardList = [
     {
       image: require('../../assets/intro/home.jpg'),
-      title: 'Home',
-      content: 'View monthly spending summary and remaining balance',
+      title: 'Trang Chủ',
+      content: 'Xem tổng kết chi tiêu và số dư còn lại hàng tháng',
     },
     {
       image: require('../../assets/intro/calendar.jpg'),
-      title: 'Calendar',
-      content: 'Review your scheduled expenses',
+      title: 'Lịch',
+      content: 'Xem lại những chi tiêu theo lịch biểu',
     },
     {
       image: require('../../assets/intro/add.jpg'),
-      title: 'Add spending',
-      content: 'Add and edit your daily spending',
+      title: 'Thêm Chi Tiêu',
+      content: 'Thêm và chỉnh sửa chi tiêu hàng ngày của bạn',
     },
     {
       image: require('../../assets/intro/share.jpg'),
-      title: 'Share',
-      content: 'Share your spending with friends',
+      title: 'Chia sẻ',
+      content: 'Chia sẻ chi tiêu của bạn cho bạn bè',
     },
     {
       image: require('../../assets/intro/search.jpg'),
-      title: 'Search',
-      content: 'Search for your expenses',
+      title: 'Tìm kiếm',
+      content: 'Tìm kiếm các chi tiêu của bạn',
     },
     {
       image: require('../../assets/intro/analytic.jpg'),
-      title: 'Statistical',
-      content: 'View your spending and income reports through graphs',
+      title: 'Thống kê',
+      content: 'Xem báo cáo chi tiêu và thu nhập của bạn qua biểu đồ',
     },
     {
       image: require('../../assets/intro/profile.jpg'),
-      title: 'Account',
-      content: 'Edit personal information and other settings',
+      title: 'Tài khoản',
+      content: 'Chỉnh sửa thông tin cá nhân cùng các cài đặt khác',
     },
   ];
 
