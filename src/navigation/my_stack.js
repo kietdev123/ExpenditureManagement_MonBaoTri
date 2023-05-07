@@ -12,6 +12,8 @@ import EmailVerify from '../screens/register/components/EmailVerify.js';
 import SuccessfulVerify from '../screens/register/components/SuccessfulVerify.js';
 import ForgotScreen from '../screens/forgot/index.js';
 import Onboarding from '../screens/onboarding/index.js';
+import AddSpendingPage from '../screens/add_spending/add_spending_page.js';
+import EditSpendingPage from '../screens/edit_spending/edit_spending_page.js';
 
 const LoadingScreen = () => {
   return (
@@ -94,6 +96,18 @@ function MyStack() {
             component={ToDoPage}
             options={{title: 'todo screen'}}
           />
+          <Stack.Screen
+            name="AddSpeandingPage"
+            component={AddSpendingPage}
+            options={{
+              headerShown: false,
+            }}
+          />
+            <Stack.Screen
+              name="EditSpendingPage"
+              component={EditSpendingPage}
+              options={{headerShown: false}}
+            />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
