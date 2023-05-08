@@ -49,18 +49,20 @@ const Onboarding = () => {
   ];
 
   const [currentPage, setCurrentPage] = useState(0);
+  const swiperRef = useRef(null);
 
   const handleSkip = () => {
+    swiperRef.current.scrollTo(onboardList.length - 1);
     setCurrentPage(onboardList.length - 1);
   };
 
-  const handleNext = () => setCurrentPage(currentPage + 1);
-
-  const handlePaginationPress = index => {
-    setCurrentPage(index);
+  const handleNext = () => {
+    swiperRef.current.scrollTo(currentPage + 1);
+    setCurrentPage(currentPage + 1);
   };
 
-  const handlePageChange = index => {
+  const handlePaginationPress = index => {
+    swiperRef.current.scrollTo(index);
     setCurrentPage(index);
   };
 
@@ -70,8 +72,8 @@ const Onboarding = () => {
     <View style={styles.container}>
       <Swiper
         loop={false}
-        onIndexChanged={handlePageChange}
-        index={currentPage}
+        ref={swiperRef}
+        onIndexChanged={index => setCurrentPage(index)}
         showsPagination={false}>
         {onboardList.map((item, index) => (
           <ItemOnboard key={index} data={item} />
@@ -90,17 +92,18 @@ const Onboarding = () => {
               <Text style={styles.buttonText}>Bỏ qua</Text>
             </TouchableOpacity>
             <View style={styles.pagination}>
-              {Array.from({length: onboardList.length}, (_, i) => (
+              {onboardList.map((item, index) => (
                 <TouchableOpacity
-                  key={i}
-                  onPress={() => handlePaginationPress(i)}
+                  key={index}
+                  onPress={() => handlePaginationPress(index)}
                   // eslint-disable-next-line react-native/no-inline-styles
                   style={{
                     width: 10,
                     height: 10,
                     borderRadius: 5,
                     marginHorizontal: 5,
-                    backgroundColor: currentPage === i ? '#00786B' : '#B9B9B9',
+                    backgroundColor:
+                      currentPage === index ? '#00786B' : '#B9B9B9',
                   }}
                 />
               ))}

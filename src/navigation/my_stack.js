@@ -103,11 +103,11 @@ function MyStack() {
               headerShown: false,
             }}
           />
-            <Stack.Screen
-              name="EditSpendingPage"
-              component={EditSpendingPage}
-              options={{headerShown: false}}
-            />
+          <Stack.Screen
+            name="EditSpendingPage"
+            component={EditSpendingPage}
+            options={{headerShown: false}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
