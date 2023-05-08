@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import ItemOnboard from './components/ItemOnboard';
+import {useNavigation} from '@react-navigation/native';
 
 const Onboarding = () => {
   const onboardList = [
@@ -50,6 +51,7 @@ const Onboarding = () => {
 
   const [currentPage, setCurrentPage] = useState(0);
   const swiperRef = useRef(null);
+  const navigation = useNavigation();
 
   const handleSkip = () => {
     swiperRef.current.scrollTo(onboardList.length - 1);
@@ -66,7 +68,9 @@ const Onboarding = () => {
     setCurrentPage(index);
   };
 
-  const handleStart = () => {};
+  const handleStart = () => {
+    navigation.navigate('Login');
+  };
 
   return (
     <View style={styles.container}>
@@ -74,6 +78,8 @@ const Onboarding = () => {
         loop={false}
         ref={swiperRef}
         onIndexChanged={index => setCurrentPage(index)}
+        // autoplay={true}
+        // autoplayTimeout={5}
         showsPagination={false}>
         {onboardList.map((item, index) => (
           <ItemOnboard key={index} data={item} />
@@ -82,13 +88,14 @@ const Onboarding = () => {
       <SafeAreaView style={styles.bottomSheet}>
         {currentPage === onboardList.length - 1 ? (
           <TouchableOpacity
+            activeOpacity={0.8}
             style={styles.buttonTextStart}
             onPress={handleStart}>
             <Text style={styles.textStart}>Bắt đầu</Text>
           </TouchableOpacity>
         ) : (
           <View style={styles.buttonGroup}>
-            <TouchableOpacity onPress={handleSkip}>
+            <TouchableOpacity activeOpacity={0.8} onPress={handleSkip}>
               <Text style={styles.buttonText}>Bỏ qua</Text>
             </TouchableOpacity>
             <View style={styles.pagination}>
@@ -108,7 +115,7 @@ const Onboarding = () => {
                 />
               ))}
             </View>
-            <TouchableOpacity onPress={handleNext}>
+            <TouchableOpacity activeOpacity={0.8} onPress={handleNext}>
               <Text style={styles.buttonText}>Tiếp</Text>
             </TouchableOpacity>
           </View>
@@ -144,7 +151,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#3B83F6DC',
+    color: '#6D17ECEC',
   },
   slide: {
     flex: 1,

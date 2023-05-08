@@ -1,8 +1,8 @@
-import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {View, Text} from 'react-native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Provider} from 'react-native-redux';
-import {SafeAreaView, Text, View} from 'react-native';
 
 import ToDoPage from '../screens/todo/todo_page.js';
 import LoginScreen from '../screens/login/index.js';
@@ -14,6 +14,7 @@ import ForgotScreen from '../screens/forgot/index.js';
 import Onboarding from '../screens/onboarding/index.js';
 import AddSpendingPage from '../screens/add_spending/add_spending_page.js';
 import EditSpendingPage from '../screens/edit_spending/edit_spending_page.js';
+import WhiteBoarding from '../screens/onboarding/components/WhiteBoarding.js';
 
 const LoadingScreen = () => {
   return (
@@ -40,6 +41,13 @@ function MyStack() {
     >
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="WhiteBoarding"
+            component={WhiteBoarding}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="Onboarding"
             component={Onboarding}
