@@ -39,8 +39,7 @@ function MyStack() {
     >
       <NavigationContainer>
         <Stack.Navigator>
-          {
-            /* <Stack.Screen
+          <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{
@@ -95,13 +94,12 @@ function MyStack() {
             options={{
               headerShown: false,
             }}
-          /> */
-            <Stack.Screen
-              name="EditSpendingPage"
-              component={EditSpendingPage}
-              options={{headerShown: false}}
-            />
-          }
+          />
+          <Stack.Screen
+            name="EditSpendingPage"
+            component={EditSpendingPage}
+            options={{headerShown: false}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
