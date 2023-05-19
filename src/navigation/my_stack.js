@@ -13,6 +13,7 @@ import SuccessfulVerify from '../screens/register/components/SuccessfulVerify.js
 import ForgotScreen from '../screens/forgot/index.js';
 import AddSpendingPage from '../screens/add_spending/add_spending_page.js';
 import EditSpendingPage from '../screens/edit_spending/edit_spending_page.js';
+import EditProfilePage from '../screens/edit_profile/edit_profile_page.js';
 
 const LoadingScreen = () => {
   return (
@@ -39,7 +40,7 @@ function MyStack() {
     >
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{
@@ -99,6 +100,11 @@ function MyStack() {
             name="EditSpendingPage"
             component={EditSpendingPage}
             options={{headerShown: false}}
+          /> */}
+          <Stack.Screen
+            name="EditProfilePage"
+            component={EditProfilePage}
+            options={{title: 'Tài khoản', headerShown: true}}
           />
         </Stack.Navigator>
       </NavigationContainer>
