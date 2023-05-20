@@ -76,7 +76,7 @@ function MyStack() {
             options={{
               headerShown: false,
             }}
-          />
+          />*/}
           <Stack.Screen
             name="Home"
             component={MainScreen}
@@ -100,7 +100,7 @@ function MyStack() {
             name="EditSpendingPage"
             component={EditSpendingPage}
             options={{headerShown: false}}
-          /> */}
+          />
           <Stack.Screen
             name="EditProfilePage"
             component={EditProfilePage}
