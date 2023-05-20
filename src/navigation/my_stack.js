@@ -14,6 +14,7 @@ import ForgotScreen from '../screens/forgot/index.js';
 import AddSpendingPage from '../screens/add_spending/add_spending_page.js';
 import EditSpendingPage from '../screens/edit_spending/edit_spending_page.js';
 import EditProfilePage from '../screens/edit_profile/edit_profile_page.js';
+import ChangePassWordScreen from '../screens/main/profile/change_password.js';
 
 const LoadingScreen = () => {
   return (
@@ -40,7 +41,7 @@ function MyStack() {
     >
       <NavigationContainer>
         <Stack.Navigator>
-          {/* <Stack.Screen
+          <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{
@@ -76,7 +77,7 @@ function MyStack() {
             options={{
               headerShown: false,
             }}
-          />*/}
+          />
           <Stack.Screen
             name="Home"
             component={MainScreen}
@@ -105,6 +106,11 @@ function MyStack() {
             name="EditProfilePage"
             component={EditProfilePage}
             options={{title: 'Tài khoản', headerShown: true}}
+          />
+          <Stack.Screen
+            name="ChangePassWordScreen"
+            component={ChangePassWordScreen}
+            options={{headerShown: false}}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -75,7 +75,7 @@ const ProfileScreen = ({navigation}) => {
             icon_name: 'lock-closed',
             icon_background_color: 'rgba(233, 116, 81, 1.0)',
             text: 'Đổi Mật Khẩu',
-            name_back_screen: 'EditProfilePage',
+            name_back_screen: 'ChangePassWordScreen',
           })}
           {SettingItem({
             icon_name: 'moon-sharp',
