@@ -155,7 +155,9 @@ const AddSpendingPage = ({navigation}) => {
               alignItems: 'center',
               justifyContent: 'space-between',
             }}
-            onPress={() => {}}>
+            onPress={() => {
+              navigation.navigate('ChooseTypePage');
+            }}>
             {/* <View style={{flex: 1}}></View> */}
             <Image
               source={require('../../assets/icons/question_mark.png')}
@@ -280,43 +282,42 @@ const AddSpendingPage = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}>
+          <Icon name="close" size={30} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Thêm Chi Tiêu</Text>
+        <TouchableOpacity onPress={addingSpending}>
+          <Text style={styles.save}>Lưu</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.inputContainer}>
+        <InputMoney
+          onChangeText={text => handleOnchange(text, 'money')}
+          onFocus={() => handleError(null, 'money')}
+          placeholder="100.000 VND"
+          error={errors.money}></InputMoney>
+      </View>
+
+      <View style={{overflow: 'hidden', paddingBottom: 5}}>
+        <View
+          style={{
+            backgroundColor: '#fff',
+            // width: 300,
+            height: 1,
+            shadowColor: '#000',
+            shadowOffset: {width: 1, height: 1},
+            shadowOpacity: 0.4,
+            shadowRadius: 3,
+            elevation: 5,
+          }}
+        />
+      </View>
       <ScrollView>
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <Icon name="close" size={30} />
-          </TouchableOpacity>
-          <Text style={styles.title}>Thêm Chi Tiêu</Text>
-          <TouchableOpacity onPress={addingSpending}>
-            <Text style={styles.save}>Lưu</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <InputMoney
-            onChangeText={text => handleOnchange(text, 'money')}
-            onFocus={() => handleError(null, 'money')}
-            placeholder="100.000 VND"
-            error={errors.money}></InputMoney>
-        </View>
-
-        <View style={{overflow: 'hidden', paddingBottom: 5}}>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              // width: 300,
-              height: 1,
-              shadowColor: '#000',
-              shadowOffset: {width: 1, height: 1},
-              shadowOpacity: 0.4,
-              shadowRadius: 3,
-              elevation: 5,
-            }}
-          />
-        </View>
-
         <View style={styles.content}>
           {addSpending()}
           {more && moreFunction()}
