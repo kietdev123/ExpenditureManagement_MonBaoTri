@@ -15,6 +15,7 @@ import AddSpendingPage from '../screens/add_spending/add_spending_page.js';
 import EditSpendingPage from '../screens/edit_spending/edit_spending_page.js';
 import EditProfilePage from '../screens/edit_profile/edit_profile_page.js';
 import ChangePassWordScreen from '../screens/main/profile/change_password.js';
+import ChooseTypePage from '../screens/add_spending/choose_type.js';
 
 const LoadingScreen = () => {
   return (
@@ -110,6 +111,11 @@ function MyStack() {
           <Stack.Screen
             name="ChangePassWordScreen"
             component={ChangePassWordScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ChooseTypePage"
+            component={ChooseTypePage}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
