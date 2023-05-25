@@ -322,7 +322,7 @@ const ChooseTypePage = ({navigation}) => {
               <>
                 <TouchableOpacity
                   onPress={() => {
-                    setStateForKey('index_choosen', {id: index});
+                    setStateForKey('add_spending_type_choosen', {value: index});
                     navigation.goBack();
                   }}>
                   <View style={styles.typeItem}>
@@ -354,9 +354,10 @@ const ChooseTypePage = ({navigation}) => {
   return (
     <SafeAreaView>
       {AppBar()}
-      <ScrollView></ScrollView>
-      <View>{ListType()}</View>
-      <View style={{height: 200}}></View>
+      <ScrollView>
+        <View>{ListType()}</View>
+        <View style={{height: 200}}></View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
