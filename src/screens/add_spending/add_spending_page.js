@@ -20,6 +20,7 @@ import ItemSpending from './components/item_spending';
 import COLORS from '../../constants/colors';
 import DatePicker from 'react-native-date-picker';
 import {connect, useStateX} from 'react-native-redux';
+import SpendingFirebase from '../../controls/spending_firebase';
 
 const AddSpendingPage = ({navigation}) => {
   const type_index = useStateX('add_spending_type_choosen.value');
@@ -95,7 +96,7 @@ const AddSpendingPage = ({navigation}) => {
     setErrors(prevState => ({...prevState, [input]: error}));
   };
 
-  const addingSpending = () => {
+  const addingSpending = async () => {
     // Functionality to save the spending
     let check = validate();
     console.log(check);
@@ -104,14 +105,31 @@ const AddSpendingPage = ({navigation}) => {
       return;
     }
     if (check) {
+      var _money = Number(inputs.money);
+      if ([29, 30, 34, 36, 37, 40].indexOf(type_index) != -1) {
+        _money = _money * 1;
+      } else {
+        _money = _money * -1;
+      }
       console.log('money : ' + inputs.money);
       console.log('Date spending : ' + date.toLocaleDateString('vi'));
       console.log('Time spending : ' + date.toLocaleTimeString('vi'));
       console.log('note : ' + inputs.note);
       console.log('location : ' + inputs.location);
       console.log('friend : ' + friends);
-      console.log('images : ' + image);
+      console.log('image : ' + image);
       console.log(inputs);
+      await SpendingFirebase.addSpending(
+        _money,
+        date,
+        inputs.note,
+        type_index,
+        listType[type_index].vntitle,
+        inputs.location,
+        friends,
+        image,
+      );
+      navigation.goBack();
     }
   };
 
