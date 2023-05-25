@@ -17,6 +17,8 @@ import EditProfilePage from '../screens/edit_profile/edit_profile_page.js';
 import ChangePassWordScreen from '../screens/main/profile/change_password.js';
 import ChooseTypePage from '../screens/add_spending/choose_type.js';
 import AddFriendPage from '../screens/add_spending/add_friend_page.js';
+import HistoryPage from '../screens/main/profile/history_page.js';
+import COLORS from '../constants/colors.js';
 
 const LoadingScreen = () => {
   return (
@@ -45,6 +47,13 @@ function MyStack() {
     >
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="HistoryPage"
+            component={HistoryPage}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="Login"
             component={LoginScreen}
