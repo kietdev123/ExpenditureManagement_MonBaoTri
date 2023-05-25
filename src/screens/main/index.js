@@ -15,7 +15,7 @@ import CalenderScreen from './calender/index.js';
 import HomeScreen from './home/index.js';
 import ProfileScreen from './profile/index.js';
 //import styles from './styles.js';
-import {connect} from 'react-native-redux';
+import {connect, setStateForKey} from 'react-native-redux';
 
 const _renderIcon = (routeName, selectedTab) => {
   let icon = '';
@@ -63,6 +63,8 @@ const renderTabBar = ({routeName, selectedTab, navigate}) => {
 
 const MainScreen = ({navigation}) => {
   function addSpendingEvent() {
+    setStateForKey('add_spending_friends', {value: []});
+    setStateForKey('add_spending_type_choosen', {value: -1});
     navigation.navigate('AddSpeandingPage');
   }
 

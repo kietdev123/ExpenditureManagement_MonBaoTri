@@ -11,6 +11,7 @@ import {
   Image,
   Button,
   Alert,
+  FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import InputMoney from './components/input_money';
@@ -21,10 +22,12 @@ import DatePicker from 'react-native-date-picker';
 import {connect, useStateX} from 'react-native-redux';
 
 const AddSpendingPage = ({navigation}) => {
-  const type_index = useStateX('index_choosen.id');
-
+  const type_index = useStateX('add_spending_type_choosen.value');
+  const friends = useStateX('add_spending_friends.value');
   const [more, setMore] = useState(false);
   const [money, setMoney] = useState('');
+
+  const [image, setImage] = useState('');
 
   const [inputs, setInputs] = React.useState({
     money: '',
@@ -96,7 +99,7 @@ const AddSpendingPage = ({navigation}) => {
     // Functionality to save the spending
     let check = validate();
     console.log(check);
-    if (type_index == null) {
+    if (type_index == -1) {
       Alert.alert('Vui lòng chọn loại');
       return;
     }
@@ -106,6 +109,8 @@ const AddSpendingPage = ({navigation}) => {
       console.log('Time spending : ' + date.toLocaleTimeString('vi'));
       console.log('note : ' + inputs.note);
       console.log('location : ' + inputs.location);
+      console.log('friend : ' + friends);
+      console.log('images : ' + image);
       console.log(inputs);
     }
   };
@@ -165,7 +170,7 @@ const AddSpendingPage = ({navigation}) => {
             onPress={() => {
               navigation.navigate('ChooseTypePage');
             }}>
-            {type_index == null ? (
+            {type_index == -1 ? (
               <>
                 <Image
                   source={require('../../assets/icons/question_mark.png')}
@@ -286,7 +291,45 @@ const AddSpendingPage = ({navigation}) => {
             icon="location-outline"
             hintText="Vị trí"></InputSpending>
           <Line></Line>
-          <Text style={{paddingTop: 24}}>Thêm bạn bè</Text>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('AddFriendPage');
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingTop: 16,
+              }}>
+              <Icon
+                name="people"
+                color="orange"
+                size={30}
+                style={{marginRight: 12}}
+              />
+              {friends.length == 0 ? (
+                <View style={{paddingLeft: 24}}>
+                  <Text>Thêm bạn bè</Text>
+                </View>
+              ) : (
+                <>
+                  <View>
+                    <FlatList
+                      horizontal={true}
+                      style={{flexDirection: 'row'}}
+                      data={friends}
+                      renderItem={({item}) => (
+                        <Text style={{fontSize: 20, marginRight: 12}}>
+                          {item},
+                        </Text>
+                      )}
+                    />
+                  </View>
+                </>
+              )}
+            </View>
+          </TouchableOpacity>
         </View>
         <ImageComponent></ImageComponent>
         <View style={{height: 36}}></View>

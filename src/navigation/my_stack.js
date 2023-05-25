@@ -16,6 +16,7 @@ import EditSpendingPage from '../screens/edit_spending/edit_spending_page.js';
 import EditProfilePage from '../screens/edit_profile/edit_profile_page.js';
 import ChangePassWordScreen from '../screens/main/profile/change_password.js';
 import ChooseTypePage from '../screens/add_spending/choose_type.js';
+import AddFriendPage from '../screens/add_spending/add_friend_page.js';
 
 const LoadingScreen = () => {
   return (
@@ -32,6 +33,8 @@ const myInitialState = {
     id: 'user_id_1234',
     name: 'Nguyen Hoang Kiet',
   },
+  add_spending_friends_: {value: []},
+  add_spending_type_choosen: {value: -1},
 };
 
 function MyStack() {
@@ -117,6 +120,13 @@ function MyStack() {
             name="ChooseTypePage"
             component={ChooseTypePage}
             options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="AddFriendPage"
+            component={AddFriendPage}
+            options={{
+              headerShown: false,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

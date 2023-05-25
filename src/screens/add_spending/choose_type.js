@@ -322,7 +322,7 @@ const ChooseTypePage = ({navigation}) => {
               <>
                 <TouchableOpacity
                   onPress={() => {
-                    setStateForKey('index_choosen', {id: index});
+                    setStateForKey('add_spending_type_choosen', {value: index});
                     navigation.goBack();
                   }}>
                   <View style={styles.typeItem}>
