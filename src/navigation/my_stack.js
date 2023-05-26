@@ -19,6 +19,7 @@ import ChooseTypePage from '../screens/add_spending/choose_type.js';
 import AddFriendPage from '../screens/add_spending/add_friend_page.js';
 import HistoryPage from '../screens/main/profile/history_page.js';
 import COLORS from '../constants/colors.js';
+import CurrencyExchangeRatePage from '../screens/main/profile/currency_exchange_rate.js';
 
 const LoadingScreen = () => {
   return (
@@ -47,6 +48,13 @@ function MyStack() {
     >
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="CurrencyExchangeRatePage"
+            component={CurrencyExchangeRatePage}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="Login"
             component={LoginScreen}
