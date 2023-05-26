@@ -36,7 +36,28 @@ const SpendingFirebase = {
   },
   updateSpending: async () => {},
   deleteSpending: async () => {},
-  getSpendingList: async () => {},
+  getSpendingList: async () => {
+    const ref = firestore().collection('spendings');
+    const list = [];
+    ref.onSnapshot(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        const {money, dateTime, note, type, typeName, location, friend, image} =
+          doc.data();
+        list.push({
+          id: doc.id,
+          money,
+          dateTime,
+          note,
+          type,
+          typeName,
+          location,
+          friend,
+          image,
+        });
+      });
+    });
+    return list;
+  },
   updateInfo: async () => {},
   updateWalletMoney: async () => {},
   addWalletMoney: async () => {},

@@ -93,7 +93,7 @@ const ProfileScreen = ({navigation}) => {
             icon_name: 'timer-outline',
             icon_background_color: 'rgba(121, 189, 161, 1.0)',
             text: 'Lịch Sử',
-            name_back_screen: 'EditProfilePage',
+            name_back_screen: 'HistoryPage',
           })}
           {SettingItem({
             icon_name: 'ios-archive',

@@ -7,8 +7,10 @@ import {
   View,
   Keyboard,
   StyleSheet,
+  ActivityIndicator,
+  FlatList,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-native-redux';
 
 import COLORS from '../../../constants/colors.js';
@@ -16,9 +18,41 @@ import COLORS from '../../../constants/colors.js';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import Input from '../../signup/components/input.js';
 import Button from '../../signup/components/button.js';
+import SpendingFirebase from '../../../controls/spending_firebase.js';
+import firestore from '@react-native-firebase/firestore';
 
 const HistoryPage = ({navigation}) => {
-  const spendings = [];
+  const [loading, setLoading] = useState(true);
+  const [spendings, setSpendings] = useState([]);
+
+  const ref = firestore().collection('spendings');
+
+  useEffect(() => {
+    return ref.onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        const {money, dateTime, note, type, typeName, location, friend, image} =
+          doc.data();
+        list.push({
+          id: doc.id,
+          money,
+          dateTime,
+          note,
+          type,
+          typeName,
+          location,
+          friend,
+          image,
+        });
+      });
+
+      setSpendings(list);
+      console.log(list);
+      if (loading) {
+        setLoading(false);
+      }
+    });
+  }, []);
 
   const AppBar = () => {
     return (
@@ -66,7 +100,8 @@ const HistoryPage = ({navigation}) => {
     );
   };
 
-  const Item_Spending_Day = () => {
+  const Item_Spending_Day = spending => {
+    var date = new Date(spending.dateTime.toDate());
     return (
       <View
         style={{
@@ -89,15 +124,19 @@ const HistoryPage = ({navigation}) => {
             style={{
               flexDirection: 'row',
             }}>
-            <Text style={{alignSelf: 'center', fontSize: 30}}>25</Text>
+            <Text style={{alignSelf: 'center', fontSize: 30}}>
+              {date.getDate()}
+            </Text>
             <View style={{marginLeft: 10}}>
-              <Text>Thứ Năm</Text>
-              <Text>tháng 5 năm 2023</Text>
+              <Text>Thứ {date.getDay()}</Text>
+              <Text>
+                tháng {date.getMonth()} năm {date.getFullYear()}{' '}
+              </Text>
             </View>
           </View>
 
           <Text style={{fontWeight: 'bold', alignSelf: 'center'}}>
-            -100.000 VNĐ
+            {spending.money} VNĐ
           </Text>
         </View>
 
@@ -117,11 +156,6 @@ const HistoryPage = ({navigation}) => {
             marginLeft: 12,
             marginRight: 12,
           }}>
-          {/* <Image
-            source={require('../../../assets/icons/question_mark.png')}
-            resizeMode="contain"
-            style={{width: 50}}
-          /> */}
           <View
             style={{
               flexDirection: 'row',
@@ -131,33 +165,60 @@ const HistoryPage = ({navigation}) => {
             }}>
             <View style={{}}>
               <Image
-                source={require('../../../assets/icons/question_mark.png')}
+                source={listType[spending.type].image}
                 resizeMode="contain"
                 style={{width: 30}}
               />
             </View>
             <View>
-              <Text style={{fontWeight: 'bold', marginLeft: 8}}>Ăn uống</Text>
+              <Text style={{fontWeight: 'bold', marginLeft: 8}}>
+                {spending.typeName}
+              </Text>
             </View>
           </View>
 
           <View style={{alignSelf: 'center'}}>
-            <Text>-30.000 VND</Text>
+            <Text>{spending.money} VND</Text>
           </View>
         </View>
       </View>
     );
   };
+
+  const History_Body = () => {
+    return (
+      <>
+        <FlatList
+          data={spendings}
+          renderItem={({item, index}) => {
+            return <>{Item_Spending_Day(item)}</>;
+          }}
+        />
+      </>
+    );
+  };
+
+  const Loading_Body = () => {
+    return (
+      <>
+        <View style={{alignItems: 'center', alignSelf: 'center'}}>
+          <ActivityIndicator size="large" color="grey"></ActivityIndicator>
+        </View>
+      </>
+    );
+  };
+
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
       {AppBar()}
-      <ScrollView
-        contentContainerStyle={{paddingTop: 20, paddingHorizontal: 20}}>
-        {Item_Spending_Day()}
-        {Item_Spending_Day()}
-        {Item_Spending_Day()}
-        {Item_Spending_Day()}
-      </ScrollView>
+      {/* <ScrollView
+        contentContainerStyle={{
+          paddingTop: 20,
+          paddingHorizontal: 20,
+        }}></ScrollView> */}
+      <View style={{paddingTop: 20, paddingHorizontal: 20}}>
+        {loading ? Loading_Body() : History_Body()}
+      </View>
     </SafeAreaView>
   );
 };
