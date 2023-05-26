@@ -49,13 +49,6 @@ function MyStack() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="CurrencyExchangeRatePage"
-            component={CurrencyExchangeRatePage}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{
@@ -141,6 +134,13 @@ function MyStack() {
           <Stack.Screen
             name="HistoryPage"
             component={HistoryPage}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="CurrencyExchangeRatePage"
+            component={CurrencyExchangeRatePage}
             options={{
               headerShown: false,
             }}

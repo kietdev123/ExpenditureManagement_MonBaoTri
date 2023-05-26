@@ -2763,9 +2763,15 @@ const EXCHANGE = {
       var symbol = listSymbol.filter(function (element) {
         return element['abbreviation'] == e['currencyCode'];
       });
+      // console.log(symbol);
       item['countryName'] = e['countryName'];
       item['currencyCode'] = e['currencyCode'];
-      item['symbol'] = symbol.isNotEmpty ? symbol[0]['symbol'] : '';
+      if (symbol.length > 0) {
+        item['symbol'] = symbol[0]['symbol'];
+      } else {
+        item['symbol'] = '';
+      }
+
       if (item['symbol'] == null) item['symbol'] = '';
       list.push(item);
     });
