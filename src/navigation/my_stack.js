@@ -17,6 +17,9 @@ import EditProfilePage from '../screens/edit_profile/edit_profile_page.js';
 import ChangePassWordScreen from '../screens/main/profile/change_password.js';
 import ChooseTypePage from '../screens/add_spending/choose_type.js';
 import AddFriendPage from '../screens/add_spending/add_friend_page.js';
+import HistoryPage from '../screens/main/profile/history_page.js';
+import COLORS from '../constants/colors.js';
+import CurrencyExchangeRatePage from '../screens/main/profile/currency_exchange_rate.js';
 
 const LoadingScreen = () => {
   return (
@@ -124,6 +127,20 @@ function MyStack() {
           <Stack.Screen
             name="AddFriendPage"
             component={AddFriendPage}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="HistoryPage"
+            component={HistoryPage}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="CurrencyExchangeRatePage"
+            component={CurrencyExchangeRatePage}
             options={{
               headerShown: false,
             }}

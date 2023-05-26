@@ -93,7 +93,7 @@ const ProfileScreen = ({navigation}) => {
             icon_name: 'timer-outline',
             icon_background_color: 'rgba(121, 189, 161, 1.0)',
             text: 'Lịch Sử',
-            name_back_screen: 'EditProfilePage',
+            name_back_screen: 'HistoryPage',
           })}
           {SettingItem({
             icon_name: 'ios-archive',
@@ -105,7 +105,7 @@ const ProfileScreen = ({navigation}) => {
             icon_name: 'ios-logo-usd',
             icon_background_color: 'rgba(255, 192, 0, 1.0)',
             text: 'Tỷ Giá Tiền Tệ',
-            name_back_screen: 'EditProfilePage',
+            name_back_screen: 'CurrencyExchangeRatePage',
           })}
           {SettingItem({
             icon_name: 'information-circle',
