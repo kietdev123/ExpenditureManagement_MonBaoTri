@@ -15,6 +15,7 @@ import Onboarding from '../screens/onboarding/index.js';
 import AddSpendingPage from '../screens/add_spending/add_spending_page.js';
 import EditSpendingPage from '../screens/edit_spending/edit_spending_page.js';
 import WhiteBoarding from '../screens/onboarding/components/WhiteBoarding.js';
+import CurrencyExchangeRate from '../screens/profile/current_exchange_rate/CurrencyExchangeRate.js';
 
 const LoadingScreen = () => {
   return (
@@ -41,6 +42,15 @@ function MyStack() {
     >
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Current"
+            component={CurrencyExchangeRate}
+            options={{
+              headerLeft: () => null,
+              headerRight: () => null,
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="WhiteBoarding"
             component={WhiteBoarding}
