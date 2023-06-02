@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   SafeAreaView,
   ScrollView,
@@ -6,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Keyboard,
+  StyleSheet,
 } from 'react-native';
 import React, {useState} from 'react';
 import DatePicker from 'react-native-date-picker';
@@ -72,6 +74,7 @@ const EditProfilePage = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [dobLabel, setdobLabel] = useState('Ngày sinh');
+  const [isMale, setIsMale] = useState(true);
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
       <ScrollView
@@ -86,18 +89,21 @@ const EditProfilePage = ({navigation}) => {
           <Avatar></Avatar>
         </View>
         {/* <Avatar avatarSource="../../assets/images/vietnam.png"></Avatar> */}
+        <Text style={{fontWeight: 'bold'}}>Họ và tên</Text>
         <Input
           onChangeText={text => handleOnchange(text, 'fullname')}
           onFocus={() => handleError(null, 'fullname')}
           placeholder="Họ tên"
           error={errors.fullname}
         />
+        <Text style={{fontWeight: 'bold'}}>Tiền hằng tháng</Text>
         <Input
           onChangeText={text => handleOnchange(text, 'moneyRange')}
           onFocus={() => handleError(null, 'moneyRange')}
           placeholder="Tiền hằng tháng"
           error={errors.fullname}
         />
+        <Text style={{fontWeight: 'bold'}}>Ngày sinh</Text>
         <View
           style={{
             paddingHorizontal: 5,
@@ -148,26 +154,48 @@ const EditProfilePage = ({navigation}) => {
             alignItems: 'center',
             flexDirection: 'row',
           }}>
-          <View
-            style={{
-              flexDirection: 'column',
-              alignContent: 'center',
-              alignItems: 'center',
-              paddingBottom: 10,
-            }}>
-            <Text style={{marginVertical: 10, fontWeight: '700'}}>Nam</Text>
-            <Image
-              source={require('../../assets/images/male.png')}
-              style={{width: 100, height: 100, marginBottom: 10}}
-              resizeMode="contain"></Image>
-          </View>
-          <View style={{flexDirection: 'column', alignItems: 'center'}}>
-            <Text style={{marginVertical: 10, fontWeight: '700'}}>Nữ</Text>
-            <Image
-              source={require('../../assets/images/female.png')}
-              style={{width: 100, height: 100, marginBottom: 10}}
-              resizeMode="contain"></Image>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              setIsMale(true);
+            }}
+            activeOpacity={1}>
+            <View
+              style={[
+                isMale ? styles.isSelected : '',
+                {
+                  alignItems: 'center',
+                  padding: 10,
+                },
+              ]}>
+              <Text style={{marginBottom: 10, fontWeight: '700'}}>Nam</Text>
+              <Image
+                source={require('../../assets/images/male.png')}
+                style={{width: 100, height: 100}}
+                resizeMode="contain"
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setIsMale(false);
+            }}
+            activeOpacity={1}>
+            <View
+              style={[
+                !isMale ? styles.isSelected : '',
+                {
+                  alignItems: 'center',
+                  padding: 10,
+                },
+              ]}>
+              <Text style={{marginBottom: 10, fontWeight: '700'}}>Nữ</Text>
+              <Image
+                source={require('../../assets/images/female.png')}
+                style={{width: 100, height: 100}}
+                resizeMode="contain"
+              />
+            </View>
+          </TouchableOpacity>
         </View>
         <Button title="Lưu" onPress={validate} />
         <View
@@ -176,10 +204,22 @@ const EditProfilePage = ({navigation}) => {
             marginTop: 30,
             marginBottom: 20,
             justifyContent: 'center',
-          }}></View>
+          }}
+        />
       </ScrollView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  isSelected: {
+    borderRadius: 10,
+    elevation: 1,
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+  },
+});
 
 export default EditProfilePage;
