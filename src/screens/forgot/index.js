@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   SafeAreaView,
   ScrollView,
@@ -72,13 +73,14 @@ const ForgotScreen = ({navigation}) => {
           </Text>
           <Text
             style={{
-              fontSize: 20,
-              fontWeight: '300',
+              fontSize: 18,
               color: 'black',
+              paddingTop: 20,
               paddingBottom: 30,
+              textAlign: 'center',
             }}>
             Đừng lo! Nó xảy ra. Vui lòng nhập địa chỉ email với tài khoản của
-            ban!
+            bạn!
           </Text>
         </View>
 

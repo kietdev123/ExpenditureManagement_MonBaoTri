@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   SafeAreaView,
   ScrollView,
@@ -7,7 +8,7 @@ import {
   View,
   Keyboard,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-native-redux';
 
 import COLORS from '../../constants/colors.js';
@@ -16,8 +17,11 @@ import Icon from 'react-native-vector-icons/Ionicons.js';
 import Input from '../signup/components/input.js';
 import Button from '../signup/components/button.js';
 import TextContinue from './components/text_continue.js';
+import auth from '@react-native-firebase/auth';
+// import {useNavigation} from '@react-navigation/native';
 
 const LoginScreen = ({navigation}) => {
+  // const navigation = useNavigation();
   const [inputs, setInputs] = React.useState({
     fullname: '',
     email: '',
@@ -30,27 +34,23 @@ const LoginScreen = ({navigation}) => {
 
   const validate = () => {
     Keyboard.dismiss();
-    let isValid = true;
 
     if (!inputs.email) {
       handleError('Vui lòng nhập email', 'email');
-      isValid = false;
+      return false;
     } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
       handleError('Hãy nhập email hợp lệ', 'email');
-      isValid = false;
+      return false;
     }
 
     if (!inputs.password) {
       handleError('Vui lòng nhập mật khẩu', 'password');
-      isValid = false;
+      return false;
     } else if (inputs.password.length < 5) {
       handleError('Mật khẩu quá ngắn', 'password');
-      isValid = false;
+      return false;
     }
-
-    if (isValid == true) {
-      navigation.navigate('Home');
-    }
+    return true;
   };
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({...prevState, [input]: text}));
@@ -59,6 +59,27 @@ const LoginScreen = ({navigation}) => {
     setErrors(prevState => ({...prevState, [input]: error}));
   };
 
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loginError, setLoginError] = useState('');
+  const handleLogin = () => {
+    setLoginError('');
+    // kiểm tra email và password có hợp lệ hay chưa
+    if (validate()) {
+      auth()
+        .signInWithEmailAndPassword(inputs.email, inputs.password)
+        .then(userCredential => {
+          // lưu thông tin người dùng nếu đăng nhập thành công
+          const user = userCredential.user;
+          console.log('user: ', user);
+          navigation.navigate('Home');
+        })
+        .catch(error => {
+          // Xử lý lỗi đăng nhập
+          setErrorMessage(error.message);
+          setLoginError('Email hoặc mật khẩu không chính xác!');
+        });
+    }
+  };
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
       <ScrollView
@@ -99,6 +120,12 @@ const LoginScreen = ({navigation}) => {
           password
         />
 
+        {loginError !== '' && (
+          <View style={{padding: 5}}>
+            <Text style={{color: 'red'}}>{loginError}</Text>
+          </View>
+        )}
+
         <View
           style={{
             alignItems: 'flex-end',
@@ -108,7 +135,7 @@ const LoginScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
 
-        <Button title="Đăng nhập" onPress={validate} />
+        <Button title="Đăng nhập" onPress={handleLogin} />
 
         <TextContinue></TextContinue>
 

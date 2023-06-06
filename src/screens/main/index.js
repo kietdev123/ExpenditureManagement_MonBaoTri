@@ -1,11 +1,12 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
 import {
-  Alert,
   Animated,
+  BackHandler,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  ToastAndroid,
 } from 'react-native';
 import {CurvedBottomBarExpo} from 'react-native-curved-bottom-bar';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -65,62 +66,90 @@ const MainScreen = ({navigation}) => {
   function addSpendingEvent() {
     setStateForKey('add_spending_friends', {value: []});
     setStateForKey('add_spending_type_choosen', {value: -1});
-    navigation.navigate('AddSpeandingPage');
+    navigation.navigate('AddSpendingPage');
   }
+  //Back để thoát ứng dụng
+  const [backPressedOnce, setBackPressedOnce] = useState(false);
+  useEffect(() => {
+    const handleBackPress = () => {
+      if (!backPressedOnce) {
+        setBackPressedOnce(true);
+        ToastAndroid.showWithGravity(
+          'Nhấn thêm lần nữa để thoát',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+        setTimeout(() => {
+          setBackPressedOnce(false);
+        }, 2000);
+        return true;
+      } else {
+        BackHandler.exitApp();
+        return false;
+      }
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => {
+      backHandler.remove();
+    };
+  }, [backPressedOnce]);
 
   return (
-    <>
-      <CurvedBottomBarExpo.Navigator
-        type="DOWN"
-        style={styles.bottomBar}
-        shadowStyle={styles.shawdow}
-        height={55}
-        circleWidth={50}
-        bgColor="white"
-        initialRouteName="home"
-        borderTopLeftRight
-        renderCircle={({selectedTab, navigate}) => (
-          <Animated.View style={styles.btnCircleUp}>
-            <TouchableOpacity style={styles.button} onPress={addSpendingEvent}>
-              <Icon name="plus" size={25} color="#900" />
-            </TouchableOpacity>
-          </Animated.View>
-        )}
-        tabBar={renderTabBar}>
-        <CurvedBottomBarExpo.Screen
-          name="home"
-          position="LEFT"
-          component={HomeScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <CurvedBottomBarExpo.Screen
-          name="calendar"
-          position="LEFT"
-          component={CalenderScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <CurvedBottomBarExpo.Screen
-          name="analytic"
-          component={AnalyticScreen}
-          position="RIGHT"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <CurvedBottomBarExpo.Screen
-          name="profile"
-          component={ProfileScreen}
-          position="RIGHT"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </CurvedBottomBarExpo.Navigator>
-    </>
+    <CurvedBottomBarExpo.Navigator
+      type="DOWN"
+      style={styles.bottomBar}
+      shadowStyle={styles.shawdow}
+      height={55}
+      circleWidth={50}
+      bgColor="white"
+      initialRouteName="home"
+      borderTopLeftRight
+      renderCircle={({selectedTab, navigate}) => (
+        <Animated.View style={styles.btnCircleUp}>
+          <TouchableOpacity style={styles.button} onPress={addSpendingEvent}>
+            <Icon name="plus" size={25} color="#900" />
+          </TouchableOpacity>
+        </Animated.View>
+      )}
+      tabBar={renderTabBar}>
+      <CurvedBottomBarExpo.Screen
+        name="home"
+        position="LEFT"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <CurvedBottomBarExpo.Screen
+        name="calendar"
+        position="LEFT"
+        component={CalenderScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <CurvedBottomBarExpo.Screen
+        name="analytic"
+        component={AnalyticScreen}
+        position="RIGHT"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <CurvedBottomBarExpo.Screen
+        name="profile"
+        component={ProfileScreen}
+        position="RIGHT"
+        options={{
+          headerShown: false,
+        }}
+      />
+    </CurvedBottomBarExpo.Navigator>
   );
 };
 

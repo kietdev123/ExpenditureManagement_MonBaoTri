@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {React, useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Provider} from 'react-native-redux';
@@ -21,6 +21,8 @@ import HistoryPage from '../screens/main/profile/history_page.js';
 import COLORS from '../constants/colors.js';
 import CurrencyExchangeRatePage from '../screens/main/profile/currency_exchange_rate.js';
 import AboutPage from '../screens/main/profile/about_page.js';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 const LoadingScreen = () => {
   return (
@@ -40,7 +42,6 @@ const myInitialState = {
   add_spending_friends_: {value: []},
   add_spending_type_choosen: {value: -1},
 };
-
 function MyStack() {
   return (
     <Provider
@@ -99,7 +100,7 @@ function MyStack() {
             options={{title: 'todo screen'}}
           />
           <Stack.Screen
-            name="AddSpeandingPage"
+            name="AddSpendingPage"
             component={AddSpendingPage}
             options={{
               headerShown: false,
