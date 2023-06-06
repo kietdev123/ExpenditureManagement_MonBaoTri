@@ -18,10 +18,8 @@ import Input from '../signup/components/input.js';
 import Button from '../signup/components/button.js';
 import TextContinue from './components/text_continue.js';
 import auth from '@react-native-firebase/auth';
-// import {useNavigation} from '@react-navigation/native';
 
 const LoginScreen = ({navigation}) => {
-  // const navigation = useNavigation();
   const [inputs, setInputs] = React.useState({
     fullname: '',
     email: '',
@@ -39,7 +37,7 @@ const LoginScreen = ({navigation}) => {
       handleError('Vui lòng nhập email', 'email');
       return false;
     } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
-      handleError('Hãy nhập email hợp lệ', 'email');
+      handleError('Hãy nhập email hợp lệ!', 'email');
       return false;
     }
 
@@ -47,7 +45,7 @@ const LoginScreen = ({navigation}) => {
       handleError('Vui lòng nhập mật khẩu', 'password');
       return false;
     } else if (inputs.password.length < 5) {
-      handleError('Mật khẩu quá ngắn', 'password');
+      handleError('Mật khẩu quá ngắn!', 'password');
       return false;
     }
     return true;
@@ -58,7 +56,7 @@ const LoginScreen = ({navigation}) => {
   const handleError = (error, input) => {
     setErrors(prevState => ({...prevState, [input]: error}));
   };
-
+  // Xử lý sự kiện đăng nhập bằng email và password
   const [errorMessage, setErrorMessage] = useState(null);
   const [loginError, setLoginError] = useState('');
   const handleLogin = () => {
@@ -80,6 +78,9 @@ const LoginScreen = ({navigation}) => {
         });
     }
   };
+
+  // Xử lý sự kiện đăng nhập bằng tài khoản Google
+  // Xử lý sự kiện đăng nhập bằng tài khoản Facebook
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
       <ScrollView

@@ -7,15 +7,15 @@ import {
   TouchableOpacity,
   View,
   Keyboard,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {connect} from 'react-native-redux';
-
 import COLORS from '../../constants/colors.js';
-
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import Input from '../signup/components/input.js';
 import Button from '../signup/components/button.js';
+import auth from '@react-native-firebase/auth';
 
 const ForgotScreen = ({navigation}) => {
   const [inputs, setInputs] = React.useState({
@@ -33,16 +33,18 @@ const ForgotScreen = ({navigation}) => {
     let isValid = true;
 
     if (!inputs.email) {
-      handleError('Vui lòng nhập email', 'email');
+      handleError('Vui lòng nhập email!', 'email');
       isValid = false;
     } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
-      handleError('Hãy nhập email hợp lệ', 'email');
+      handleError('Hãy nhập email hợp lệ!', 'email');
       isValid = false;
     }
 
-    if (isValid == true) {
-      navigation.navigate('EmailVerify');
-    }
+    return isValid;
+
+    // if (isValid == true) {
+    //   navigation.navigate('EmailVerify');
+    // }
   };
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({...prevState, [input]: text}));
@@ -51,6 +53,38 @@ const ForgotScreen = ({navigation}) => {
     setErrors(prevState => ({...prevState, [input]: error}));
   };
 
+  //Sự kiện gửi token quên mật khẩu
+  const [forgotError, setForgotError] = useState('');
+  const handleForgot = async () => {
+    setForgotError('');
+
+    if (validate()) {
+      try {
+        const signInMethods = await auth().fetchSignInMethodsForEmail(
+          inputs.email,
+        );
+        if (signInMethods.length > 0) {
+          await auth().sendPasswordResetEmail(inputs.email);
+          Alert.alert(
+            'Thông báo',
+            'Liên kết đặt lại mật khẩu đã được gửi cho bạn. Vui lòng kiểm tra email và tiến hành đặt lại mật khẩu.',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  navigation.navigate('Login');
+                },
+              },
+            ],
+          );
+        } else {
+          setForgotError('Email chưa đăng kí tài khoản!');
+        }
+      } catch (error) {
+        console.log('Lỗi khi gửi yêu cầu đặt lại mật khẩu:', error);
+      }
+    }
+  };
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
       <ScrollView
@@ -90,8 +124,12 @@ const ForgotScreen = ({navigation}) => {
           placeholder="Email"
           error={errors.email}
         />
-
-        <Button title="Gửi" onPress={validate} />
+        {forgotError !== '' && (
+          <View style={{padding: 5}}>
+            <Text style={{color: 'red'}}>{forgotError}</Text>
+          </View>
+        )}
+        <Button title="Gửi" onPress={handleForgot} />
       </ScrollView>
     </SafeAreaView>
   );
