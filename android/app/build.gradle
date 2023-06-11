@@ -153,12 +153,13 @@ dependencies {
     // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:31.3.0')
     implementation project(':react-native-vector-icons')
+    implementation project(':react-native-fbsdk-next')
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
 
     // Add the dependency for the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
-
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 

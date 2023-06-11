@@ -7,19 +7,22 @@ import {
   TouchableOpacity,
   View,
   Keyboard,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-native-redux';
-
 import COLORS from '../../constants/colors.js';
-
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import Input from '../signup/components/input.js';
 import Button from '../signup/components/button.js';
 import TextContinue from './components/text_continue.js';
+import Spinner from 'react-native-loading-spinner-overlay';
 import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 
 const LoginScreen = ({navigation}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = React.useState({
     fullname: '',
     email: '',
@@ -57,32 +60,132 @@ const LoginScreen = ({navigation}) => {
     setErrors(prevState => ({...prevState, [input]: error}));
   };
   // Xử lý sự kiện đăng nhập bằng email và password
-  const [errorMessage, setErrorMessage] = useState(null);
   const [loginError, setLoginError] = useState('');
   const handleLogin = () => {
     setLoginError('');
     // kiểm tra email và password có hợp lệ hay chưa
     if (validate()) {
+      setIsLoading(true);
       auth()
         .signInWithEmailAndPassword(inputs.email, inputs.password)
         .then(userCredential => {
           // lưu thông tin người dùng nếu đăng nhập thành công
           const user = userCredential.user;
-          console.log('user: ', user);
-          navigation.navigate('Home');
+          if (!user.emailVerified) {
+            Alert.alert(
+              'Thông báo',
+              'Vui lòng xác thực email',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => {
+                    user
+                      .sendEmailVerification()
+                      .then(() => {
+                        // Chuyển đến trang đợi xác thực
+                        navigation.navigate('EmailVerify');
+                      })
+                      .catch(error => {
+                        console.log(
+                          'Lỗi khi gửi email xác thực ở màn hình Login:',
+                          error,
+                        );
+                      });
+                  },
+                },
+              ],
+              {cancelable: false},
+            );
+          } else {
+            console.log('Đăng nhập thành công, user hiện tại: ', user);
+            navigation.navigate('Home');
+          }
+          setIsLoading(false);
         })
         .catch(error => {
-          // Xử lý lỗi đăng nhập
-          setErrorMessage(error.message);
-          setLoginError('Email hoặc mật khẩu không chính xác!');
+          // Kiểm tra lỗi trả về
+          if (error.code === 'auth/wrong-password') {
+            setLoginError('Mật khẩu không đúng');
+            console.log('Mật khẩu không đúng');
+          } else if (error.code === 'auth/user-not-found') {
+            setLoginError('Email không tồn tại');
+          } else {
+            setLoginError('Lỗi đăng nhập: ' + error);
+          }
+          setIsLoading(false);
         });
     }
   };
-
   // Xử lý sự kiện đăng nhập bằng tài khoản Google
+  const handleGoogleLogin = async () => {
+    // Yêu cầu người dùng đăng nhập bằng Google
+    const hasPlayServices = await GoogleSignin.hasPlayServices();
+    if (hasPlayServices) {
+      const {idToken} = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      auth()
+        .signInWithCredential(googleCredential)
+        .then(userCredential => {
+          const user = userCredential.user;
+          console.log('Thông tin người dùng:', user);
+          navigation.navigate('Home');
+        })
+        .catch(error => {
+          Alert.alert('Đăng nhập thất bại', 'Lỗi: ' + error.message);
+        });
+    } else {
+      Alert.alert(
+        'Thông báo',
+        'Google Play Services chưa được cài đặt hoặc không khả dụng',
+        [
+          {
+            text: 'Ok',
+            onPress: () => {},
+          },
+        ],
+      );
+    }
+  };
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '367968834061-vv83cthoqk8bbq589772o1e8hr85vbgn.apps.googleusercontent.com',
+    });
+  });
+
   // Xử lý sự kiện đăng nhập bằng tài khoản Facebook
+  const handleFacebookLogin = async () => {
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+
+    // Once signed in, get the users AccesToken
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      throw 'Something went wrong obtaining access token';
+    }
+
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(
+      data.accessToken,
+    );
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(facebookCredential);
+  };
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={{color: '#FFF'}}
+      />
       <ScrollView
         contentContainerStyle={{paddingTop: 20, paddingHorizontal: 20}}>
         <View
@@ -143,7 +246,7 @@ const LoginScreen = ({navigation}) => {
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <View style={{flex: 1}}>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={handleGoogleLogin}
               style={{
                 height: 50,
                 backgroundColor: 'white',
@@ -163,7 +266,7 @@ const LoginScreen = ({navigation}) => {
           <View style={{width: 30}} />
           <View style={{flex: 1}}>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={handleFacebookLogin}
               style={{
                 height: 50,
                 backgroundColor: '#4270b2',

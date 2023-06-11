@@ -1,4 +1,9 @@
 {
   "name": "TodoApp",
-  "displayName": "TodoApp"
+  "displayName": "TodoApp",
+  "extra": {
+    "eas": {
+      "projectId": "ec6b63c0-12ce-419d-ba39-790052e482f1"
+    }
+  }
 }

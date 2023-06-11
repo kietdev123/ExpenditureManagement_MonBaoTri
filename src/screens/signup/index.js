@@ -174,6 +174,7 @@ const SignupScreen = ({navigation}) => {
         {/* Giới tính */}
         <View
           style={{
+            marginVertical: 20,
             justifyContent: 'space-evenly',
             alignContent: 'center',
             alignItems: 'center',

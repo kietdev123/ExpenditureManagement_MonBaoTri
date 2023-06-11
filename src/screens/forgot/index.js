@@ -2,7 +2,6 @@
 import {
   SafeAreaView,
   ScrollView,
-  Image,
   Text,
   TouchableOpacity,
   View,
