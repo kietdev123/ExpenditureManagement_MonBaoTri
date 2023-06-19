@@ -4,7 +4,6 @@ import {useStateX} from 'react-native-redux';
 
 const HomeScreen = () => {
   const userName = useStateX('user.name');
-
   return (
     <>
       <View>

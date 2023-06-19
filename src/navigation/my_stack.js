@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {React, useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Provider} from 'react-native-redux';
@@ -8,8 +8,8 @@ import ToDoPage from '../screens/todo/todo_page.js';
 import LoginScreen from '../screens/login/index.js';
 import MainScreen from '../screens/main/index.js';
 import SignupScreen from '../screens/signup/index.js';
-import EmailVerify from '../screens/register/components/EmailVerify.js';
-import SuccessfulVerify from '../screens/register/components/SuccessfulVerify.js';
+import EmailVerify from '../screens/signup/components/EmailVerify.js';
+import SuccessfulVerify from '../screens/signup/components/SuccessfulVerify.js';
 import ForgotScreen from '../screens/forgot/index.js';
 import AddSpendingPage from '../screens/add_spending/add_spending_page.js';
 import EditSpendingPage from '../screens/edit_spending/edit_spending_page.js';
@@ -20,6 +20,9 @@ import AddFriendPage from '../screens/add_spending/add_friend_page.js';
 import HistoryPage from '../screens/main/profile/history_page.js';
 import COLORS from '../constants/colors.js';
 import CurrencyExchangeRatePage from '../screens/main/profile/currency_exchange_rate.js';
+import AboutPage from '../screens/main/profile/about_page.js';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 const LoadingScreen = () => {
   return (
@@ -39,7 +42,6 @@ const myInitialState = {
   add_spending_friends_: {value: []},
   add_spending_type_choosen: {value: -1},
 };
-
 function MyStack() {
   return (
     <Provider
@@ -98,7 +100,7 @@ function MyStack() {
             options={{title: 'todo screen'}}
           />
           <Stack.Screen
-            name="AddSpeandingPage"
+            name="AddSpendingPage"
             component={AddSpendingPage}
             options={{
               headerShown: false,
@@ -112,7 +114,11 @@ function MyStack() {
           <Stack.Screen
             name="EditProfilePage"
             component={EditProfilePage}
-            options={{title: 'Tài khoản', headerShown: true}}
+            options={{
+              title: 'Tài khoản',
+              headerShown: true,
+              headerTitleAlign: 'center',
+            }}
           />
           <Stack.Screen
             name="ChangePassWordScreen"
@@ -143,6 +149,14 @@ function MyStack() {
             component={CurrencyExchangeRatePage}
             options={{
               headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AboutPage"
+            component={AboutPage}
+            options={{
+              headerShown: true,
+              title: '',
             }}
           />
         </Stack.Navigator>
