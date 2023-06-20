@@ -133,6 +133,7 @@ const ProfileScreen = ({navigation}) => {
                   Đăng xuất
                 </Text>
               </TouchableOpacity>
+              <View style={{height:100}}></View>
             </View>
           </ScrollView>
         </View>

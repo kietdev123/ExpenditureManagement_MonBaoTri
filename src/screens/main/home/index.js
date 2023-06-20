@@ -11,8 +11,8 @@ import {
   FlatList,
 } from 'react-native';
 import React, {useState, useEffect , useRef} from 'react';
-import {connect} from 'react-native-redux';
-
+import {connect, setStateForKey} from 'react-native-redux';
+import { useIsFocused } from "@react-navigation/native";
 import COLORS from '../../../constants/colors.js';
 
 import Icon from 'react-native-vector-icons/Ionicons.js';
@@ -25,6 +25,8 @@ let datas = [{key: 0, text: "Hello"}, {key: 1, text: "World"}]
 
 
 const HomeScreen = ({navigation}) => {
+  const isFocused = useIsFocused();
+
   const flatlistRef = useRef<FlatList<Date>>(null);
   let scrollRef = useRef(null)
 
@@ -58,9 +60,11 @@ const HomeScreen = ({navigation}) => {
     }
     setOutputValue(temp_output_value);
     setSpendings(temp_spendings);
+    setSpendings(temp_spendings);
   }
 
   useEffect(() => {
+    console.log('Home redener');
     var now = new Date();
 
     next_month = new Date(now.getFullYear(), now.getMonth()+1, 1);
@@ -72,7 +76,7 @@ const HomeScreen = ({navigation}) => {
     }
 
     setMonths(temp_months);
-    
+    setLoading(true);
     return ref.onSnapshot(querySnapshot => {
       const list = [];
       querySnapshot.forEach(doc => {
@@ -93,11 +97,9 @@ const HomeScreen = ({navigation}) => {
       setSpendingsOrigin(list);
       filter(_monthSelected);
       console.log(list);
-      if (loading) {
-        setLoading(false);
-      }
+      setLoading(false);
     });
-  }, []);
+  }, [navigation, isFocused]);
 
   const AppBar = () => {
     return (
@@ -196,58 +198,90 @@ const HomeScreen = ({navigation}) => {
           borderRadius: 20,
           marginBottom: 20,
         }}>
- 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems : 'center',
-            marginLeft: 12,
-            marginRight: 12,
-            height : 60,
-            // backgroundColor : 'yellow'
-          }}>
+        <TouchableOpacity
+            onPress={() => {       
+              setStateForKey('spending_selected_dateTime', {
+                value: spending.dateTime
+              });
+              setStateForKey('spending_selected_friend', {
+                value: spending.friend
+              });
+              setStateForKey('spending_selected_id', {
+                value: spending.id
+              });
+              setStateForKey('spending_selected_image', {
+                value: spending.image
+              });
+              setStateForKey('spending_selected_location', {
+                value: spending.location
+              });
+              setStateForKey('spending_selected_money', {
+                value: spending.money
+              });
+              setStateForKey('spending_selected_note', {
+                value: spending.note
+              });
+              setStateForKey('spending_selected_type', {
+                value: spending.type
+              });
+              setStateForKey('spending_selected_typeName', {
+                value: spending.typeName
+              });
+              navigation.navigate('ViewListSpendingPage');
+            }}
+        >
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'center',
-
-              height: 30,
+              justifyContent: 'space-between',
+              alignItems : 'center',
+              marginLeft: 12,
+              marginRight: 12,
+              height : 60,
+              // backgroundColor : 'yellow'
             }}>
-            <View style={{}}>
-              <Image
-                source={listType[spending.type].image}
-                resizeMode="contain"
-                style={{width: 30}}
-              />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+
+                height: 30,
+              }}>
+              <View style={{}}>
+                <Image
+                  source={listType[spending.type].image}
+                  resizeMode="contain"
+                  style={{width: 30}}
+                />
+              </View>
+              <View>
+                <Text style={{fontWeight: 'bold', marginLeft: 8}}>
+                  {spending.typeName}
+                </Text>
+              </View>
             </View>
-            <View>
-              <Text style={{fontWeight: 'bold', marginLeft: 8}}>
-                {spending.typeName}
-              </Text>
+            
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+
+                height: 30,
+              }}>
+              <View style={{alignSelf: 'center'}}>
+                <Text>{spending.money} VND</Text>
+              </View>
+              <Icon
+                  color="black"
+                  name="md-chevron-forward-outline"
+                  style={{color: 'black', fontSize: 26, marginLeft: 10}}
+                />
             </View>
-          </View>
           
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
+      
 
-              height: 30,
-            }}>
-             <View style={{alignSelf: 'center'}}>
-              <Text>{spending.money} VND</Text>
-            </View>
-            <Icon
-                color="black"
-                name="md-chevron-forward-outline"
-                style={{color: 'black', fontSize: 26, marginLeft: 10}}
-              />
           </View>
-         
-    
-
-        </View>
+        </TouchableOpacity>
       </View>
     );
   };
