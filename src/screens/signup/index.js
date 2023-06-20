@@ -18,6 +18,7 @@ import Button from './components/button.js';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import moment from 'moment';
 import auth from '@react-native-firebase/auth';
+import {StackActions} from '@react-navigation/native';
 
 const SignupScreen = ({navigation}) => {
   const [inputs, setInputs] = React.useState({
@@ -123,7 +124,7 @@ const SignupScreen = ({navigation}) => {
       .sendEmailVerification()
       .then(() => {
         // Chuyển đến trang đợi xác thực
-        navigation.navigate('EmailVerify');
+        navigation.replace('EmailVerify');
       })
       .catch(error => {
         console.log('Lỗi khi gửi email xác thực ở màn hình Signup:', error);
@@ -303,7 +304,10 @@ const SignupScreen = ({navigation}) => {
             justifyContent: 'center',
           }}>
           <Text> Đã có tài khoản?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
             <Text style={{color: '#16d5f2'}}> Đăng nhập ngay</Text>
           </TouchableOpacity>
         </View>

@@ -128,7 +128,7 @@ const LoginScreen = ({navigation}) => {
         .then(userCredential => {
           const user = userCredential.user;
           console.log('Thông tin người dùng:', user);
-          navigation.navigate('Home');
+          navigation.replace('Home');
         })
         .catch(error => {
           Alert.alert('Đăng nhập thất bại', 'Lỗi: ' + error.message);
@@ -150,7 +150,7 @@ const LoginScreen = ({navigation}) => {
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
-        '367968834061-vv83cthoqk8bbq589772o1e8hr85vbgn.apps.googleusercontent.com',
+        '452597848432-p4li0pnjo58p6b8h4bv1pg0ki6adiqsi.apps.googleusercontent.com',
     });
   });
 
