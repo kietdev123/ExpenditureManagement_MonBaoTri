@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, TouchableOpacity, Image, StyleSheet, Alert} from 'react-native';
 var ImagePicker = require('react-native-image-picker');
+import PlusIcon from 'react-native-vector-icons/FontAwesome';
 import firestore from '@react-native-firebase/firestore';
 
 const Avatar = () => {
@@ -55,7 +56,7 @@ const Avatar = () => {
         <Image source={avatarSource} style={styles.avatar} />
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={changeAvatar}>
-            {/* You can customize the button's appearance */}
+            <PlusIcon name="plus" size={18} color={'white'} />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -72,8 +73,8 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   avatar: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     borderRadius: 50,
   },
   buttonContainer: {
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: 'red',
+    backgroundColor: '#1788E6',
     justifyContent: 'center',
     alignItems: 'center',
   },

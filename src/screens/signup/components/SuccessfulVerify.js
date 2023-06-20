@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Image,
   TouchableOpacity,
@@ -6,10 +7,42 @@ import {
   Text,
   SafeAreaView,
   StyleSheet,
+  BackHandler,
+  ToastAndroid,
 } from 'react-native';
 import IconEntypo from 'react-native-vector-icons/dist/Entypo';
+import auth from '@react-native-firebase/auth';
 
 function SuccessfulVerify({navigation}) {
+  const [backPressedOnce, setBackPressedOnce] = useState(false);
+  useEffect(() => {
+    const handleBackPress = () => {
+      if (!backPressedOnce) {
+        setBackPressedOnce(true);
+        ToastAndroid.showWithGravity(
+          'Nhấn thêm lần nữa để thoát',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+        setTimeout(() => {
+          setBackPressedOnce(false);
+        }, 2000);
+        return true;
+      } else {
+        BackHandler.exitApp();
+        return false;
+      }
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => {
+      backHandler.remove();
+    };
+  }, [backPressedOnce]);
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.notifications}>Xác nhận Email</Text>

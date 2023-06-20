@@ -11,6 +11,7 @@ import {
 import {connect} from 'react-native-redux';
 import COLORS from '../../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons.js';
+import {Header} from 'react-native-elements';
 
 const ProfileScreen = ({navigation}) => {
   const SettingItem = ({
@@ -49,93 +50,93 @@ const ProfileScreen = ({navigation}) => {
   };
   return (
     <SafeAreaView>
-      <View style={styles.appBar}>
-        <Text style={styles.info_component_money}>Profile Screen</Text>
-      </View>
-      <View style={styles.info_component}>
-        <Image
-          source={{
-            uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png',
-          }}
-          style={styles.info_component_image}
-        />
-        <Text>Tiền hàng tháng</Text>
-        <Text style={styles.info_component_money}>1,000,000 VND</Text>
-      </View>
+      <View>
+        <View style={styles.appBar}>
+          <Text style={styles.info_component_money}>Profile Screen</Text>
+        </View>
+        <View style={styles.info_component}>
+          <Image
+            source={{
+              uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png',
+            }}
+            style={styles.info_component_image}
+          />
+          <Text>Tiền hàng tháng</Text>
+          <Text style={styles.info_component_money}>1,000,000 VND</Text>
+        </View>
 
-      <View style={{height: 300}}>
-        <ScrollView>
-          {SettingItem({
-            icon_name: 'ios-person-sharp',
-            icon_background_color: 'rgba(0, 150, 255, 1.0)',
-            text: 'Tài Khoản',
-            name_back_screen: 'EditProfilePage',
-          })}
-          {SettingItem({
-            icon_name: 'lock-closed',
-            icon_background_color: 'rgba(233, 116, 81, 1.0)',
-            text: 'Đổi Mật Khẩu',
-            name_back_screen: 'ChangePassWordScreen',
-          })}
-          {SettingItem({
-            icon_name: 'moon-sharp',
-            icon_background_color: 'black',
-            text: 'Chế Độ Tối',
-            name_back_screen: 'EditProfilePage',
-          })}
-          {SettingItem({
-            icon_name: 'language',
-            icon_background_color: 'rgba(218, 165, 32, 1.0)',
-            text: 'Ngôn Ngữ',
-            name_back_screen: 'EditProfilePage',
-          })}
-          {SettingItem({
-            icon_name: 'timer-outline',
-            icon_background_color: 'rgba(121, 189, 161, 1.0)',
-            text: 'Lịch Sử',
-            name_back_screen: 'HistoryPage',
-          })}
-          {SettingItem({
-            icon_name: 'ios-archive',
-            icon_background_color: 'rgba(137, 207, 240, 1.0)',
-            text: 'Xuất CSV',
-            name_back_screen: 'EditProfilePage',
-          })}
-          {SettingItem({
-            icon_name: 'ios-logo-usd',
-            icon_background_color: 'rgba(255, 192, 0, 1.0)',
-            text: 'Tỷ Giá Tiền Tệ',
-            name_back_screen: 'CurrencyExchangeRatePage',
-          })}
-          {SettingItem({
-            icon_name: 'information-circle',
-            icon_background_color: 'rgba(79, 121, 66, 1.0)',
-            text: 'Thông Tin',
-            name_back_screen: 'EditProfilePage',
-          })}
+        <View style={{height: 400}}>
+          <ScrollView>
+            <View>
+              {SettingItem({
+                icon_name: 'ios-person-sharp',
+                icon_background_color: 'rgba(0, 150, 255, 1.0)',
+                text: 'Tài Khoản',
+                name_back_screen: 'EditProfilePage',
+              })}
+              {SettingItem({
+                icon_name: 'lock-closed',
+                icon_background_color: 'rgba(233, 116, 81, 1.0)',
+                text: 'Đổi Mật Khẩu',
+                name_back_screen: 'ChangePassWordScreen',
+              })}
+              {SettingItem({
+                icon_name: 'moon-sharp',
+                icon_background_color: 'black',
+                text: 'Chế Độ Tối',
+                name_back_screen: 'EditProfilePage',
+              })}
+              {SettingItem({
+                icon_name: 'language',
+                icon_background_color: 'rgba(218, 165, 32, 1.0)',
+                text: 'Ngôn Ngữ',
+                name_back_screen: 'EditProfilePage',
+              })}
+              {SettingItem({
+                icon_name: 'timer-outline',
+                icon_background_color: 'rgba(121, 189, 161, 1.0)',
+                text: 'Lịch Sử',
+                name_back_screen: 'HistoryPage',
+              })}
+              {SettingItem({
+                icon_name: 'ios-archive',
+                icon_background_color: 'rgba(137, 207, 240, 1.0)',
+                text: 'Xuất CSV',
+                name_back_screen: 'EditProfilePage',
+              })}
+              {SettingItem({
+                icon_name: 'ios-logo-usd',
+                icon_background_color: 'rgba(255, 192, 0, 1.0)',
+                text: 'Tỷ Giá Tiền Tệ',
+                name_back_screen: 'CurrencyExchangeRatePage',
+              })}
+              {SettingItem({
+                icon_name: 'information-circle',
+                icon_background_color: 'rgba(79, 121, 66, 1.0)',
+                text: 'Thông Tin',
+                name_back_screen: 'EditProfilePage',
+              })}
 
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
-            activeOpacity={0.7}
-            style={{
-              flex: 1,
-              height: 55,
-              // width: '100%',
-              backgroundColor: COLORS.pink,
-              borderRadius: 10,
-
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginLeft: 24,
-              marginRight: 24,
-              marginBottom: 24,
-            }}>
-            <Text
-              style={{color: COLORS.white, fontWeight: 'bold', fontSize: 18}}>
-              Đăng xuất
-            </Text>
-          </TouchableOpacity>
-        </ScrollView>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Login')}
+                activeOpacity={0.7}
+                style={{
+                  height: 55,
+                  backgroundColor: '#f54260',
+                  borderRadius: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginHorizontal: 24,
+                  marginVertical: 24,
+                }}>
+                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
+                  Đăng xuất
+                </Text>
+              </TouchableOpacity>
+              <View style={{height:100}}></View>
+            </View>
+          </ScrollView>
+        </View>
       </View>
     </SafeAreaView>
   );
