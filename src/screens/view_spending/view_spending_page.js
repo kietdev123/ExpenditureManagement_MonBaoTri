@@ -199,7 +199,7 @@ import {
              
    
               <View style={{marginLeft: 10}}>
-                <Text>{date.getDay()}/{date.getMonth()+1}/{date.getFullYear()} - {date.getHours()}:{date.getMinutes()}</Text>
+                <Text>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()} - {date.getHours()}:{date.getMinutes()}</Text>
                
               </View>
        

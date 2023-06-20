@@ -20,8 +20,6 @@ import Input from '../../signup/components/input.js';
 import Button from '../../signup/components/button.js';
 import SpendingFirebase from '../../../controls/spending_firebase.js';
 import firestore from '@react-native-firebase/firestore';
-import {Dimensions} from 'react-native';
-let datas = [{key: 0, text: "Hello"}, {key: 1, text: "World"}]
 
 
 const HomeScreen = ({navigation}) => {
@@ -44,23 +42,26 @@ const HomeScreen = ({navigation}) => {
 
   const ref = firestore().collection('spendings');
 
-  function filter(month_index) {
+  function filter(_month, origin) {
+    console.log(_month)
     var temp_spendings = [];
     var temp_output_value = inputValue;
 
-    for (var index in spendingsOrigin){
-      var item = spendingsOrigin[index];
+    for (var index in origin){
+      var item = origin[index];
 
       var date = new Date(item.dateTime.toDate());
-
-      if (months[month_index].getMonth() == date.getMonth()){
+      console.log([_month, date])
+      if (_month.getMonth() == date.getMonth()){
         temp_spendings.push(item);
         temp_output_value += item.money;
       }
     }
     setOutputValue(temp_output_value);
+    console.log("value");
+    console.log(temp_spendings);
     setSpendings(temp_spendings);
-    setSpendings(temp_spendings);
+    // setSpendings(temp_spendings);
   }
 
   useEffect(() => {
@@ -95,8 +96,8 @@ const HomeScreen = ({navigation}) => {
         });
       });
       setSpendingsOrigin(list);
-      filter(_monthSelected);
-      console.log(list);
+      filter(new Date(), list);
+      // console.log(list);
       setLoading(false);
     });
   }, [navigation, isFocused]);
@@ -164,7 +165,7 @@ const HomeScreen = ({navigation}) => {
                   <TouchableOpacity onPress={
                     () => {
                       setMonthSelected(index); 
-                      filter(index);          
+                      filter(months[index], spendingsOrigin);          
                     }
                   }>
                     <View style={{width: 140, marginVertical: 8}}>
@@ -347,7 +348,7 @@ const HomeScreen = ({navigation}) => {
             }}
          />
         )}
-
+        <View style={{height:300}}></View>
       </>
     );
   };
