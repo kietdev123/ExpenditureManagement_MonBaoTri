@@ -130,7 +130,7 @@ const HistoryPage = ({navigation}) => {
             <View style={{marginLeft: 10}}>
               <Text>Thứ {date.getDay()}</Text>
               <Text>
-                tháng {date.getMonth()} năm {date.getFullYear()}{' '}
+                tháng {date.getMonth() + 1} năm {date.getFullYear()}{' '}
               </Text>
             </View>
           </View>
