@@ -1,32 +1,24 @@
 import {
   SafeAreaView,
-  ScrollView,
   Image,
   Text,
   TouchableOpacity,
   View,
-  Keyboard,
-  StyleSheet,
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import React, {useState, useEffect , useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {connect, setStateForKey} from 'react-native-redux';
-import { useIsFocused } from "@react-navigation/native";
+import {useIsFocused} from '@react-navigation/native';
 import COLORS from '../../../constants/colors.js';
-
 import Icon from 'react-native-vector-icons/Ionicons.js';
-import Input from '../../signup/components/input.js';
-import Button from '../../signup/components/button.js';
-import SpendingFirebase from '../../../controls/spending_firebase.js';
 import firestore from '@react-native-firebase/firestore';
-
 
 const HomeScreen = ({navigation}) => {
   const isFocused = useIsFocused();
 
-  const flatlistRef = useRef<FlatList<Date>>(null);
-  let scrollRef = useRef(null)
+  const flatlistRef = useRef < FlatList < Date >> null;
+  let scrollRef = useRef(null);
 
   const [inputValue, setInputValue] = useState(1000000);
   const [outputValue, setOutputValue] = useState(0);
@@ -36,29 +28,29 @@ const HomeScreen = ({navigation}) => {
   const [spendings, setSpendings] = useState([]);
   const [spendingsOrigin, setSpendingsOrigin] = useState([]);
 
-  const [_monthSelected, setMonthSelected]  = useState(18);
+  const [_monthSelected, setMonthSelected] = useState(18);
   const [refFlatList, setRefFlatList] = useState();
-  const [months, setMonths ] = useState([]);
+  const [months, setMonths] = useState([]);
 
   const ref = firestore().collection('spendings');
 
   function filter(_month, origin) {
-    console.log(_month)
+    console.log(_month);
     var temp_spendings = [];
     var temp_output_value = inputValue;
 
-    for (var index in origin){
+    for (var index in origin) {
       var item = origin[index];
 
       var date = new Date(item.dateTime.toDate());
-      console.log([_month, date])
-      if (_month.getMonth() == date.getMonth()){
+      console.log([_month, date]);
+      if (_month.getMonth() == date.getMonth()) {
         temp_spendings.push(item);
         temp_output_value += item.money;
       }
     }
     setOutputValue(temp_output_value);
-    console.log("value");
+    console.log('value');
     console.log(temp_spendings);
     setSpendings(temp_spendings);
     // setSpendings(temp_spendings);
@@ -68,12 +60,12 @@ const HomeScreen = ({navigation}) => {
     console.log('Home redener');
     var now = new Date();
 
-    next_month = new Date(now.getFullYear(), now.getMonth()+1, 1);
+    next_month = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     var temp_months = [now, next_month];
-    for (var i = 1 ; i < 19; i ++){
+    for (var i = 1; i < 19; i++) {
       var current = new Date();
       current.setMonth(now.getMonth() - i);
-      temp_months.unshift(current)
+      temp_months.unshift(current);
     }
 
     setMonths(temp_months);
@@ -136,53 +128,74 @@ const HomeScreen = ({navigation}) => {
               elevation: 5,
             }}
           />
-        </View >
-  
+        </View>
+
         <View style={{}}>
-        <FlatList
-            ref={(it) => (scrollRef.current = it)}
+          <FlatList
+            ref={it => (scrollRef.current = it)}
             onContentSizeChange={() =>
-                scrollRef.current?.scrollToEnd({animated: true})
+              scrollRef.current?.scrollToEnd({animated: true})
             }
             horizontal
             data={months}
             // initialScrollIndex={15}
             renderItem={({item, index}) => {
-              return <>{index == _monthSelected ? 
-                (<>
-                <View style={{width: 140 , marginVertical: 8}}>
-                  <Text style={{color: 'black', textAlign: 'center', fontSize : 18}}>
-                    {index == 18 ? 'Tháng này' : ''}
-                    {index == 19 ? 'Tháng sau' : ''}
-                    {index == 17 ? 'Tháng trước' : ''}
-                    {index < 17 ? `${item.getMonth() + 1 }/${item.getFullYear()}` : ''}
-                  </Text>
-                  <View style={{height: 1, backgroundColor: 'green', marginTop: 8}}></View>
-                </View>
-                
-                </>) : 
-                (<>
-                  <TouchableOpacity onPress={
-                    () => {
-                      setMonthSelected(index); 
-                      filter(months[index], spendingsOrigin);          
-                    }
-                  }>
-                    <View style={{width: 140, marginVertical: 8}}>
-                      <Text style={{color: 'blue', textAlign: 'center' , fontSize : 18}}>
-                      {index == 18 ? 'Tháng này' : ''}
-                      {index == 19 ? 'Tháng sau' : ''}
-                      {index == 17 ? 'Tháng trước' : ''}
-                      {index < 17 ? `${item.getMonth() + 1 }/${item.getFullYear()}` : ''}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>           
-                  
-                </>) }</>;
+              return (
+                <>
+                  {index == _monthSelected ? (
+                    <>
+                      <View style={{width: 140, marginVertical: 8}}>
+                        <Text
+                          style={{
+                            color: 'black',
+                            textAlign: 'center',
+                            fontSize: 18,
+                          }}>
+                          {index == 18 ? 'Tháng này' : ''}
+                          {index == 19 ? 'Tháng sau' : ''}
+                          {index == 17 ? 'Tháng trước' : ''}
+                          {index < 17
+                            ? `${item.getMonth() + 1}/${item.getFullYear()}`
+                            : ''}
+                        </Text>
+                        <View
+                          style={{
+                            height: 1,
+                            backgroundColor: 'green',
+                            marginTop: 8,
+                          }}></View>
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setMonthSelected(index);
+                          filter(months[index], spendingsOrigin);
+                        }}>
+                        <View style={{width: 140, marginVertical: 8}}>
+                          <Text
+                            style={{
+                              color: 'blue',
+                              textAlign: 'center',
+                              fontSize: 18,
+                            }}>
+                            {index == 18 ? 'Tháng này' : ''}
+                            {index == 19 ? 'Tháng sau' : ''}
+                            {index == 17 ? 'Tháng trước' : ''}
+                            {index < 17
+                              ? `${item.getMonth() + 1}/${item.getFullYear()}`
+                              : ''}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </>
+                  )}
+                </>
+              );
             }}
-         />
+          />
         </View>
-       
       </View>
     );
   };
@@ -200,45 +213,44 @@ const HomeScreen = ({navigation}) => {
           marginBottom: 20,
         }}>
         <TouchableOpacity
-            onPress={() => {       
-              setStateForKey('spending_selected_dateTime', {
-                value: spending.dateTime
-              });
-              setStateForKey('spending_selected_friend', {
-                value: spending.friend
-              });
-              setStateForKey('spending_selected_id', {
-                value: spending.id
-              });
-              setStateForKey('spending_selected_image', {
-                value: spending.image
-              });
-              setStateForKey('spending_selected_location', {
-                value: spending.location
-              });
-              setStateForKey('spending_selected_money', {
-                value: spending.money
-              });
-              setStateForKey('spending_selected_note', {
-                value: spending.note
-              });
-              setStateForKey('spending_selected_type', {
-                value: spending.type
-              });
-              setStateForKey('spending_selected_typeName', {
-                value: spending.typeName
-              });
-              navigation.navigate('ViewListSpendingPage');
-            }}
-        >
+          onPress={() => {
+            setStateForKey('spending_selected_dateTime', {
+              value: spending.dateTime,
+            });
+            setStateForKey('spending_selected_friend', {
+              value: spending.friend,
+            });
+            setStateForKey('spending_selected_id', {
+              value: spending.id,
+            });
+            setStateForKey('spending_selected_image', {
+              value: spending.image,
+            });
+            setStateForKey('spending_selected_location', {
+              value: spending.location,
+            });
+            setStateForKey('spending_selected_money', {
+              value: spending.money,
+            });
+            setStateForKey('spending_selected_note', {
+              value: spending.note,
+            });
+            setStateForKey('spending_selected_type', {
+              value: spending.type,
+            });
+            setStateForKey('spending_selected_typeName', {
+              value: spending.typeName,
+            });
+            navigation.navigate('ViewListSpendingPage');
+          }}>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              alignItems : 'center',
+              alignItems: 'center',
               marginLeft: 12,
               marginRight: 12,
-              height : 60,
+              height: 60,
               // backgroundColor : 'yellow'
             }}>
             <View
@@ -261,7 +273,7 @@ const HomeScreen = ({navigation}) => {
                 </Text>
               </View>
             </View>
-            
+
             <View
               style={{
                 flexDirection: 'row',
@@ -273,14 +285,11 @@ const HomeScreen = ({navigation}) => {
                 <Text>{spending.money} VND</Text>
               </View>
               <Icon
-                  color="black"
-                  name="md-chevron-forward-outline"
-                  style={{color: 'black', fontSize: 26, marginLeft: 10}}
-                />
+                color="black"
+                name="md-chevron-forward-outline"
+                style={{color: 'black', fontSize: 26, marginLeft: 10}}
+              />
             </View>
-          
-      
-
           </View>
         </TouchableOpacity>
       </View>
@@ -290,65 +299,89 @@ const HomeScreen = ({navigation}) => {
   const Home_Body = () => {
     return (
       <>
-
-        <View style={{backgroundColor: 'white', height: 120, borderRadius: 12, padding: 12}}>
-          <View style={{
-              display: 'flex', 
-              flexDirection: 'row', 
-              justifyContent: 'space-between'}}>
+        <View
+          style={{
+            backgroundColor: 'white',
+            height: 120,
+            borderRadius: 12,
+            padding: 12,
+          }}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
             <Text style={{fontSize: 20}}>Số dư đầu</Text>
             <Text style={{fontSize: 20}}>{inputValue} VND</Text>
           </View>
-          <View style={{
-              display: 'flex', 
-              flexDirection: 'row', 
-              justifyContent: 'space-between'}}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
             <Text style={{fontSize: 20}}>Số dư cuối</Text>
             <Text style={{fontSize: 20}}>{outputValue} VND</Text>
           </View>
-          <View style={{height:1, backgroundColor: 'black', marginTop: 8, marginBottom: 8}}>
-          </View>
-          <View style={{
-              display: 'flex', 
-              flexDirection: 'row', 
-              justifyContent: 'flex-end'}}>
+          <View
+            style={{
+              height: 1,
+              backgroundColor: 'black',
+              marginTop: 8,
+              marginBottom: 8,
+            }}></View>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+            }}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-            {(outputValue - inputValue) > 0 ? 'Bạn có thêm ' : ''}
-            {(outputValue - inputValue) < 0 ? 'Bạn đã chi ' : ''}
-              {Math.abs(outputValue - inputValue)} VND</Text>
-
+              {outputValue - inputValue > 0 ? 'Bạn có thêm ' : ''}
+              {outputValue - inputValue < 0 ? 'Bạn đã chi ' : ''}
+              {Math.abs(outputValue - inputValue)} VND
+            </Text>
           </View>
         </View>
-
 
         <View style={{paddingTop: 24, paddingBottom: 24}}>
-          <Text style={{
-            fontSize: 20, 
-            color: '#a09fa1', 
-            fontWeight : 'bold', 
-            textAlign : 'center'}}>Danh sách chi tiêu {months[_monthSelected].getMonth() + 1 }/{months[_monthSelected].getFullYear()}</Text>
-        </View>
-        
-        {spendings.length == 0 ? 
-          (<>
-            <View style={{
-              height: 300,
-              alignItems: 'center',          
-              justifyContent: 'center'
+          <Text
+            style={{
+              fontSize: 20,
+              color: '#a09fa1',
+              fontWeight: 'bold',
+              textAlign: 'center',
             }}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>Không có dữ liệu {months[_monthSelected].getMonth() + 1 }/{months[_monthSelected].getFullYear()}!</Text>
-          </View>
-          </>) 
-          : 
-          (
+            Danh sách chi tiêu {months[_monthSelected].getMonth() + 1}/
+            {months[_monthSelected].getFullYear()}
+          </Text>
+        </View>
+
+        {spendings.length == 0 ? (
+          <>
+            <View
+              style={{
+                height: 300,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>
+                Không có dữ liệu {months[_monthSelected].getMonth() + 1}/
+                {months[_monthSelected].getFullYear()}!
+              </Text>
+            </View>
+          </>
+        ) : (
           <FlatList
             data={spendings}
             renderItem={({item, index}) => {
               return <>{Item_Spending_Day(item)}</>;
             }}
-         />
+          />
         )}
-        <View style={{height:300}}></View>
+        <View style={{height: 300}}></View>
       </>
     );
   };
@@ -362,7 +395,6 @@ const HomeScreen = ({navigation}) => {
       </>
     );
   };
-
 
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
