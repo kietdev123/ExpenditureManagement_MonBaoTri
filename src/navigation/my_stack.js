@@ -48,16 +48,16 @@ const myInitialState = {
   },
   add_spending_friends: {value: []},
   add_spending_type_choosen: {value: -1},
-  
-  spending_selected_dateTime : {value: ""},
-  spending_selected_friend : {value: []},
-  spending_selected_id : {value: ""},
-  spending_selected_image : {value: ""},
-  spending_selected_location : {value: ""},
-  spending_selected_money :{value: 0},
-  spending_selected_note : {value: ""},
-  spending_selected_type : {value: 0},
-  spending_selected_typeName : {value: ""},
+
+  spending_selected_dateTime: {value: ''},
+  spending_selected_friend: {value: []},
+  spending_selected_id: {value: ''},
+  spending_selected_image: {value: ''},
+  spending_selected_location: {value: ''},
+  spending_selected_money: {value: 0},
+  spending_selected_note: {value: ''},
+  spending_selected_type: {value: 0},
+  spending_selected_typeName: {value: ''},
 };
 function MyStack() {
   return (
@@ -66,12 +66,15 @@ function MyStack() {
       // loading={() => <LoadingScreen />}
     >
       <NavigationContainer>
-        <Stack.Navigator>      
+        <Stack.Navigator>
           <Stack.Screen
-            name="AnalyticScreen"
-            component={AnalyticPage}
-            options={{headerShown: false}}
+            name="Home"
+            component={MainScreen}
+            options={{
+              headerShown: false,
+            }}
           />
+          <Stack.Screen name="AnalyticScreen" component={AnalyticPage} />
           <Stack.Screen
             name="SearchSpendingPage"
             component={SearchSpendingPage}
@@ -83,13 +86,6 @@ function MyStack() {
               headerShown: false,
               // headerLeft: () => <></>, // Hide back button
               // title: 'kiet',
-            }}
-          />
-          <Stack.Screen
-            name="Home"
-            component={MainScreen}
-            options={{
-              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -120,7 +116,7 @@ function MyStack() {
               headerShown: false,
             }}
           />
-          
+
           <Stack.Screen
             name="Todo"
             component={ToDoPage}
@@ -186,7 +182,7 @@ function MyStack() {
               title: '',
             }}
           />
-        <Stack.Screen
+          <Stack.Screen
             name="EditAddFriendPage"
             component={EditAddFriendPage}
             options={{
@@ -199,14 +195,14 @@ function MyStack() {
             options={{
               headerShown: false,
             }}
-          />         
+          />
           <Stack.Screen
             name="ViewListSpendingPage"
             component={ViewListSpendingPage}
             options={{
               headerShown: false,
             }}
-          />     
+          />
           <Stack.Screen
             name="ViewSpendingPage"
             component={ViewSpendingPage}
