@@ -4,9 +4,7 @@ var ImagePicker = require('react-native-image-picker');
 import PlusIcon from 'react-native-vector-icons/FontAwesome';
 
 const Avatar = ({inputs, handleAvatarChange}) => {
-  const [localSource, setLocalSource] = useState(
-    require('../../../assets/images/male.png'),
-  );
+  const [localSource, setLocalSource] = useState(null);
 
   const changeAvatar = async () => {
     try {
@@ -46,10 +44,14 @@ const Avatar = ({inputs, handleAvatarChange}) => {
         <Image
           source={
             inputs.avatarURL === null
-              ? inputs.gender === 'male'
-                ? require('../../../assets/images/male.png')
-                : require('../../../assets/images/female.png')
+              ? localSource === null
+                ? inputs.gender === 'male'
+                  ? require('../../../assets/images/male.png')
+                  : require('../../../assets/images/female.png')
+                : localSource
               : localSource
+              ? localSource
+              : require('../../../assets/images/male.png')
           }
           style={styles.avatar}
         />

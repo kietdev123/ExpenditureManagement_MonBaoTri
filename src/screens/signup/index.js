@@ -30,7 +30,6 @@ const SignupScreen = ({navigation}) => {
     passwordConfirm: '',
   });
   const [errors, setErrors] = React.useState({});
-  const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const validate = () => {
     Keyboard.dismiss();
@@ -106,7 +105,7 @@ const SignupScreen = ({navigation}) => {
                   .then(documentSnapshot => {
                     if (!documentSnapshot.exists) {
                       const userData = {
-                        fullname: displayName ? displayName : '',
+                        fullname: inputs.fullname,
                         moneyRange: 0,
                         gender: inputs.gender,
                         dateofbirth: moment(inputs.dateOfBirth)
