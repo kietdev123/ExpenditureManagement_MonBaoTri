@@ -110,13 +110,13 @@ const ProfileScreen = ({navigation}) => {
                 icon_name: 'moon-sharp',
                 icon_background_color: 'black',
                 text: 'Chế Độ Tối',
-                name_back_screen: 'EditProfilePage',
+                name_back_screen: 'ChangeModePage',
               })}
               {SettingItem({
                 icon_name: 'language',
                 icon_background_color: 'rgba(218, 165, 32, 1.0)',
                 text: 'Ngôn Ngữ',
-                name_back_screen: 'EditProfilePage',
+                name_back_screen: 'ChangeLanguagePage',
               })}
               {SettingItem({
                 icon_name: 'timer-outline',
@@ -140,7 +140,7 @@ const ProfileScreen = ({navigation}) => {
                 icon_name: 'information-circle',
                 icon_background_color: 'rgba(79, 121, 66, 1.0)',
                 text: 'Thông Tin',
-                name_back_screen: 'EditProfilePage',
+                name_back_screen: 'AboutPage',
               })}
 
               <TouchableOpacity

@@ -20,6 +20,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
+import firestore from '@react-native-firebase/firestore';
+import moment from 'moment';
 
 const LoginScreen = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -127,6 +129,40 @@ const LoginScreen = ({navigation}) => {
         .signInWithCredential(googleCredential)
         .then(userCredential => {
           const user = userCredential.user;
+          const {uid, displayName, photoURL} = user;
+          firestore()
+            .collection('users')
+            .doc(uid)
+            .get()
+            .then(documentSnapshot => {
+              if (!documentSnapshot.exists) {
+                // Người dùng chưa được thiết lập thông tin trước đó
+                const userData = {
+                  fullname: displayName ? displayName : '',
+                  moneyRange: 0,
+                  gender: 'male',
+                  dateofbirth: moment().format('YYYY-MM-DD').toString(),
+                  avatarURL: photoURL,
+                };
+
+                // Lưu trữ thông tin người dùng vào Firestore
+                firestore()
+                  .collection('users')
+                  .doc(uid)
+                  .set(userData)
+                  .then(() => {
+                    console.log(
+                      'Thông tin người dùng ban đầu đã được thiết lập thành công.',
+                    );
+                  })
+                  .catch(error => {
+                    console.log('Lỗi khi lưu trữ thông tin người dùng:', error);
+                  });
+              }
+            })
+            .catch(error => {
+              console.log('Lỗi khi kiểm tra thông tin người dùng:', error);
+            });
           console.log('Thông tin người dùng:', user);
           navigation.replace('Home');
         })

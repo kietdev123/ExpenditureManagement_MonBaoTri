@@ -8,37 +8,88 @@ import {
   View,
   Keyboard,
   StyleSheet,
+  Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import DatePicker from 'react-native-date-picker';
 import Input from './components/input.js';
 import COLORS from '../../constants/colors.js';
 import Button from './components/button.js';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import Avatar from './components/avatar.js';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import moment from 'moment';
+import {showMessage} from 'react-native-flash-message';
+import storage from '@react-native-firebase/storage';
+import RNFS from 'react-native-fs';
+import md5 from 'react-native-md5';
+
 const EditProfilePage = ({navigation}) => {
+  const formatter = new Intl.NumberFormat('en-US');
+  const currentUser = auth().currentUser;
+  const [open, setOpen] = useState(false);
+  const [errors, setErrors] = React.useState({});
+  const [avatarURI, setAvatarURI] = useState('');
   const [inputs, setInputs] = React.useState({
     fullname: '',
-    moneyRange: '',
+    moneyRange: '0',
     gender: '',
-    dateofbirth: '',
+    dateofbirth: new Date(),
+    avatarURL: null,
   });
-  const [errors, setErrors] = React.useState({});
+  const handleAvatarChange = uri => {
+    setAvatarURI(uri);
+  };
+
+  const handleUploadAvatar = async () => {
+    try {
+      const uploadUri =
+        Platform.OS === 'ios' ? avatarURI.replace('file://', '') : avatarURI;
+      const hash = await calculateFileHash(uploadUri);
+      const storageRef = storage().ref(`avatars/${hash}`);
+
+      storageRef
+        .getDownloadURL()
+        .then(downloadURL => {
+          return downloadURL;
+        })
+        .catch(() => {
+          storageRef
+            .putFile(uploadUri)
+            .then(() => {
+              return storageRef.getDownloadURL();
+            })
+            .then(downloadURL => {
+              return downloadURL;
+            });
+        });
+
+      // Image doesn't exist, proceed with uploading
+      await storageRef.putFile(uploadUri);
+      const downloadURL = await storageRef.getDownloadURL();
+      return downloadURL;
+    } catch (error) {
+      throw new Error('Failed to upload avatar: ' + error.message);
+    }
+  };
+
+  const calculateFileHash = async filePath => {
+    const fileData = await RNFS.readFile(filePath, 'base64');
+    return md5.hex_md5(fileData);
+  };
 
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
 
-    if (!inputs.email) {
-      handleError('Vui lòng nhập email', 'email');
-      isValid = false;
-    } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
-      handleError('Hãy nhập email hợp lệ', 'email');
+    if (!inputs.fullname || inputs.fullname === '') {
+      handleError('Vui lòng nhập họ tên', 'fullname');
       isValid = false;
     }
 
-    if (!inputs.fullname) {
-      handleError('Vui lòng nhập họ tên', 'fullname');
+    if (!inputs.moneyRange || inputs.moneyRange === 0) {
+      handleError('Vui lòng nhập số tiền', 'moneyRange');
       isValid = false;
     }
 
@@ -50,31 +101,106 @@ const EditProfilePage = ({navigation}) => {
       handleError('Vui lòng chọn ngày sinh', 'dateofbirth');
       isValid = false;
     }
-
-    if (!inputs.password) {
-      handleError('Vui lòng nhập mật khẩu', 'password');
-      isValid = false;
-    } else if (inputs.password.length < 5) {
-      handleError('Mật khẩu quá ngắn', 'password');
-      isValid = false;
-    }
-    if (inputs.password != inputs.passwordConfirm) {
-      handleError('Mật khẩu không khớp', 'password');
-      isValid = false;
-    }
-
-    navigation.navigate('EmailVerify');
+    return isValid;
   };
   const handleOnchange = (text, input) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
+    if (input === 'moneyRange') {
+      const formattedValue = text.replace(/\D/g, '');
+      setInputs({...inputs, moneyRange: formattedValue});
+    } else {
+      setInputs({
+        ...inputs,
+        [input]: text,
+      });
+    }
   };
   const handleError = (error, input) => {
     setErrors(prevState => ({...prevState, [input]: error}));
   };
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
-  const [dobLabel, setdobLabel] = useState('Ngày sinh');
-  const [isMale, setIsMale] = useState(true);
+
+  const handleUpdateProfile = async () => {
+    if (validate()) {
+      if (currentUser) {
+        const {uid} = currentUser;
+
+        try {
+          const downloadURL = await handleUploadAvatar();
+
+          // Cập nhật thông tin
+          const userDataToUpdate = {
+            fullname: inputs.fullname,
+            moneyRange: inputs.moneyRange,
+            gender: inputs.gender,
+            dateofbirth: moment(inputs.dateofbirth)
+              .format('YYYY-MM-DD')
+              .toString(),
+            avatarURL: downloadURL,
+          };
+
+          await firestore()
+            .collection('users')
+            .doc(uid)
+            .update(userDataToUpdate);
+
+          showMessage({
+            message: 'Cập nhật thông tin thành công',
+            type: 'success',
+            icon: 'success',
+            duration: 1000,
+            onHide: () => {
+              navigation.goBack();
+            },
+          });
+
+          console.log('Thông tin người dùng đã được cập nhật thành công.');
+        } catch (error) {
+          console.log('Lỗi khi cập nhật thông tin người dùng:', error);
+        }
+      }
+    }
+  };
+  useEffect(() => {
+    if (currentUser) {
+      const {uid} = currentUser;
+      firestore()
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then(documentSnapshot => {
+          if (documentSnapshot.exists) {
+            const userData = documentSnapshot.data();
+            console.log('documentSnapshot:', userData);
+            setInputs({
+              fullname: userData.fullname,
+              moneyRange: userData.moneyRange,
+              gender: userData.gender,
+              dateofbirth: moment(userData.dateofbirth),
+              avatarURL: userData.avatarURL,
+            });
+          } else {
+            setInputs({
+              fullname: null,
+              moneyRange: null,
+              gender: null,
+              dateofbirth: null,
+            });
+            console.log('Không tìm thấy thông tin người dùng.');
+          }
+        })
+        .catch(error => {
+          console.log('Lỗi khi lấy thông tin người dùng:', error);
+        });
+    } else {
+      showMessage({
+        message:
+          'Người dùng chưa đăng nhập. Vui lòng thoát ra và đăng nhập lại!',
+        type: 'danger',
+        icon: 'danger',
+        duration: 2000,
+      });
+    }
+  }, [currentUser]);
+
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
       <ScrollView
@@ -86,11 +212,11 @@ const EditProfilePage = ({navigation}) => {
             flexDirection: 'column',
             alignItems: 'center',
           }}>
-          <Avatar></Avatar>
+          <Avatar inputs={inputs} handleAvatarChange={handleAvatarChange} />
         </View>
-        {/* <Avatar avatarSource="../../assets/images/vietnam.png"></Avatar> */}
         <Text style={{fontWeight: 'bold'}}>Họ và tên</Text>
         <Input
+          value={inputs.fullname}
           onChangeText={text => handleOnchange(text, 'fullname')}
           onFocus={() => handleError(null, 'fullname')}
           placeholder="Họ tên"
@@ -98,44 +224,56 @@ const EditProfilePage = ({navigation}) => {
         />
         <Text style={{fontWeight: 'bold'}}>Tiền hằng tháng</Text>
         <Input
+          value={formatter.format(inputs.moneyRange)}
+          keyboardType="numeric"
           onChangeText={text => handleOnchange(text, 'moneyRange')}
           onFocus={() => handleError(null, 'moneyRange')}
           placeholder="Tiền hằng tháng"
-          error={errors.fullname}
+          error={errors.moneyRange}
         />
         <Text style={{fontWeight: 'bold'}}>Ngày sinh</Text>
-        <View
-          style={{
-            paddingHorizontal: 5,
-            justifyContent: 'space-between',
-            alignContent: 'center',
-            alignItems: 'center',
-            borderRadius: 10,
-            height: 55,
-            borderColor: COLORS.light,
-            backgroundColor: COLORS.white,
-            flexDirection: 'row',
-            borderWidth: 0.5,
-            marginVertical: 10,
-          }}>
-          <TouchableOpacity onPress={() => setOpen(true)}>
-            <Text style={{fontSize: 14, marginLeft: 10}}>{dobLabel}</Text>
-          </TouchableOpacity>
-          <Icon
-            onPress={() => setOpen(true)}
-            name={'calendar-outline'}
-            style={{color: 'black', fontSize: 22, marginRight: 10}}
-          />
-        </View>
+
+        {/* Ngày sinh */}
+        <TouchableOpacity activeOpacity={1} onPress={() => setOpen(true)}>
+          <View
+            style={{
+              paddingHorizontal: 5,
+              justifyContent: 'space-between',
+              alignContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+              height: 55,
+              borderColor: COLORS.light,
+              backgroundColor: COLORS.white,
+              flexDirection: 'row',
+              borderWidth: 0.5,
+              marginVertical: 10,
+            }}>
+            <Text style={{fontSize: 14, marginLeft: 10}}>
+              {moment(inputs.dateofbirth).format('DD/MM/YYYY').toString()}
+            </Text>
+            <Icon
+              onPress={() => setOpen(true)}
+              name={'calendar-outline'}
+              style={{color: 'black', fontSize: 22, marginRight: 10}}
+            />
+          </View>
+        </TouchableOpacity>
+
+        {/* Ngày sinh */}
         <DatePicker
           modal
           mode="date"
+          maximumDate={new Date()}
+          timeZoneOffsetInMinutes={7}
           open={open}
-          date={date}
+          date={new Date(inputs.dateofbirth)}
           onConfirm={date => {
             setOpen(false);
-            setDate(date);
-            setdobLabel(date.toDateString());
+            setInputs({
+              ...inputs,
+              dateofbirth: date,
+            });
           }}
           onCancel={() => {
             setOpen(false);
@@ -156,12 +294,15 @@ const EditProfilePage = ({navigation}) => {
           }}>
           <TouchableOpacity
             onPress={() => {
-              setIsMale(true);
+              setInputs({
+                ...inputs,
+                gender: 'male',
+              });
             }}
             activeOpacity={1}>
             <View
               style={[
-                isMale ? styles.isSelected : '',
+                inputs.gender === 'male' ? styles.isSelected : '',
                 {
                   alignItems: 'center',
                   padding: 10,
@@ -177,12 +318,15 @@ const EditProfilePage = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              setIsMale(false);
+              setInputs({
+                ...inputs,
+                gender: 'female',
+              });
             }}
             activeOpacity={1}>
             <View
               style={[
-                !isMale ? styles.isSelected : '',
+                inputs.gender === 'female' ? styles.isSelected : '',
                 {
                   alignItems: 'center',
                   padding: 10,
@@ -197,7 +341,7 @@ const EditProfilePage = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
-        <Button title="Lưu" onPress={validate} />
+        <Button title="Lưu" onPress={handleUpdateProfile} />
         <View
           style={{
             flexDirection: 'row',

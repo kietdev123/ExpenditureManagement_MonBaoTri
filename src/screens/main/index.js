@@ -103,7 +103,7 @@ const MainScreen = ({navigation}) => {
     <CurvedBottomBarExpo.Navigator
       type="DOWN"
       style={styles.bottomBar}
-      shadowStyle={styles.shawdow}
+      shadowStyle={styles.shadow}
       height={55}
       circleWidth={50}
       bgColor="white"
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
-  shawdow: {
+  shadow: {
     shadowColor: '#DDDDDD',
     shadowOffset: {
       width: 0,

@@ -18,7 +18,7 @@ import Button from './components/button.js';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import moment from 'moment';
 import auth from '@react-native-firebase/auth';
-import {StackActions} from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
 
 const SignupScreen = ({navigation}) => {
   const [inputs, setInputs] = React.useState({
@@ -97,16 +97,48 @@ const SignupScreen = ({navigation}) => {
               .createUserWithEmailAndPassword(inputs.email, inputs.password)
               .then(userCredential => {
                 const user = userCredential.user;
-                const additionalUserInfo = {
-                  fullname: inputs.fullname,
-                  dateOfBirth: inputs.dateOfBirth,
-                  gender: inputs.gender,
-                };
-                user.updateProfile(additionalUserInfo).catch(error => {
-                  console.log('Lỗi khi cập nhật thông tin bổ sung:', error);
-                });
-                // Đã đăng nhập
                 console.log('Đăng ký thành công:', user);
+                const {uid, displayName} = user;
+                firestore()
+                  .collection('users')
+                  .doc(uid)
+                  .get()
+                  .then(documentSnapshot => {
+                    if (!documentSnapshot.exists) {
+                      const userData = {
+                        fullname: displayName ? displayName : '',
+                        moneyRange: 0,
+                        gender: inputs.gender,
+                        dateofbirth: moment(inputs.dateOfBirth)
+                          .format('YYYY-MM-DD')
+                          .toString(),
+                        avatarURL: null,
+                      };
+                      // Lưu trữ thông tin người dùng vào Firestore
+                      firestore()
+                        .collection('users')
+                        .doc(uid)
+                        .set(userData)
+                        .then(() => {
+                          console.log(
+                            'Thông tin người dùng ban đầu đã được thiết lập thành công.',
+                          );
+                        })
+                        .catch(error => {
+                          console.log(
+                            'Lỗi khi lưu trữ thông tin người dùng:',
+                            error,
+                          );
+                        });
+                    }
+                  })
+                  .catch(error => {
+                    console.log(
+                      'Lỗi khi kiểm tra thông tin người dùng:',
+                      error,
+                    );
+                  });
+                // Đã đăng nhập
                 sendVerificationEmail(user);
               });
           } catch (error) {
