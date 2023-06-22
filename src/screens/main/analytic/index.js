@@ -4,9 +4,12 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  FlatList,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import React, {useState, useEffect, useRef} from 'react';
+import {connect, setStateForKey} from 'react-native-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {
   format,
@@ -48,6 +51,7 @@ const App = ({navigation}) => {
   );
 
   const [spendings, setSpendings] = useState([]);
+  const [spendingsNotUnque, setSpendingsNotUnque] = useState([]);
   const [spendingsOrigin, setSpendingsOrigin] = useState([]);
 
   const [income, setIncome] = useState(0);
@@ -90,11 +94,16 @@ const App = ({navigation}) => {
 
       if (itemDate >= startDateNew && itemDate <= endDateNew) {
         if (typeChart == 'spending' && item.money < 0) {
-          temp_spendings.push(item);
-          spending += item.money;
+          temp_spendings.push(item);       
         }
         if (typeChart == 'income' && item.money > 0) {
           temp_spendings.push(item);
+          income += item.money;
+        }
+        if (item.money < 0) {
+          spending += item.money;
+        }
+        if (item.money > 0) {
           income += item.money;
         }
       }
@@ -102,6 +111,8 @@ const App = ({navigation}) => {
 
     console.log(temp_spendings);
 
+    setSpendingsNotUnque(temp_spendings);
+    
     var uniqueSpendings = [];
     for (var index in temp_spendings) {
       var sum = 0;
@@ -325,7 +336,147 @@ const App = ({navigation}) => {
     );
   };
 
+  const Item_Spending_Day = spending => {
+    var date = new Date(spending.dateTime.toDate());
+    return (
+      <View
+        style={{
+          height: 120,
+          width: '100%',
+
+          backgroundColor: 'white',
+          borderRadius: 20,
+          marginBottom: 20,
+        }}>
+        <TouchableOpacity
+            onPress={() => {       
+              setStateForKey('spending_selected_dateTime', {
+                value: spending.dateTime
+              });
+              setStateForKey('spending_selected_friend', {
+                value: spending.friend
+              });
+              setStateForKey('spending_selected_id', {
+                value: spending.id
+              });
+              setStateForKey('spending_selected_image', {
+                value: spending.image
+              });
+              setStateForKey('spending_selected_location', {
+                value: spending.location
+              });
+              setStateForKey('spending_selected_money', {
+                value: spending.money
+              });
+              setStateForKey('spending_selected_note', {
+                value: spending.note
+              });
+              setStateForKey('spending_selected_type', {
+                value: spending.type
+              });
+              setStateForKey('spending_selected_typeName', {
+                value: spending.typeName
+              });
+              navigation.navigate('ViewListSpendingPage');
+            }}
+        >
+               <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginLeft: 12,
+                marginRight: 12,
+                marginTop: 12,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <Text style={{alignSelf: 'center', fontSize: 30}}>
+                  {date.getDate()}
+                </Text>
+                <View style={{marginLeft: 10}}>
+                  <Text>Thứ {date.getDay()}</Text>
+                  <Text>
+                    tháng {date.getMonth() + 1} năm {date.getFullYear()}{' '}
+                  </Text>
+                </View>
+              </View>
+
+              <Text style={{fontWeight: 'bold', alignSelf: 'center'}}>
+                {spending.money} VNĐ
+              </Text>
+            </View>
+
+            <View
+              style={{
+                width: '90%',
+                backgroundColor: 'grey',
+                marginTop: 8,
+                marginBottom: 8,
+                height: 1,
+                alignSelf: 'center',
+              }}></View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems : 'center',
+                  marginLeft: 12,
+                  marginRight: 12,
+                  height : 60,
+                  // backgroundColor : 'yellow'
+                }}>
+           
+        
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+
+                height: 30,
+              }}>
+              <View style={{}}>
+                <Image
+                  source={listType[spending.type].image}
+                  resizeMode="contain"
+                  style={{width: 30}}
+                />
+              </View>
+              <View>
+                <Text style={{fontWeight: 'bold', marginLeft: 8}}>
+                  {spending.typeName}
+                </Text>
+              </View>
+            </View>
+            
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+
+                height: 30,
+              }}>
+              <View style={{alignSelf: 'center'}}>
+                <Text>{spending.money} VND</Text>
+              </View>
+              {/* <Icon
+                  color="black"
+                  name="md-chevron-forward-outline"
+                  style={{color: 'black', fontSize: 26, marginLeft: 10}}
+                /> */}
+            </View>
+          
+      
+
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
+    <ScrollView>
     <View style={{flex: 1, backgroundColor: 'transparent'}}>
       {/* Tab View */}
       {/* Render the selected tab view (week, month, year) */}
@@ -609,6 +760,15 @@ const App = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <ScrollView style={{flex: 1}}>
+          {(spendings.length == 0 ? 
+            <Text style={{
+              textAlign: 'center',
+              fontSize: 20,
+              fontFamily: 'bold',
+              color : 'yellow',
+              marginTop : 12,
+              marginBottom : 12}}>
+              Không có dữ liệu</Text> : <></>)}
             {/* Render content based on selectedTab */}
             {selectedTab === 0 && (
               <View>
@@ -641,7 +801,8 @@ const App = ({navigation}) => {
               </View>
             )}
           </ScrollView>
-        </View>
+      
+            </View>
       </View>
       {/* Render the selected tab content */}
 
@@ -656,7 +817,7 @@ const App = ({navigation}) => {
                 paddingVertical: 10,
                 color: 'red',
               }}>
-              {123}
+              {spending}
             </Text>
           </View>
           <View style={{width: 20}}></View>
@@ -669,7 +830,7 @@ const App = ({navigation}) => {
                 paddingVertical: 10,
                 color: 'blue',
               }}>
-              {123}
+              {income}
             </Text>
           </View>
         </View>
@@ -693,12 +854,27 @@ const App = ({navigation}) => {
                 paddingVertical: 10,
                 color: 'black',
               }}>
-              {123}
+              {income + spending}
             </Text>
           </View>
         </View>
       </View>
+      
+      <View style={{height:24}}></View>
+      
+      <View style={{paddingHorizontal: 24}}>
+        <FlatList
+              data={spendingsNotUnque}
+              renderItem={({item, index}) => {
+                return <>{Item_Spending_Day(item)}</>;
+              }}
+          />
+      </View>
+     
+
+      <View style={{height:100}}></View>
     </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -734,4 +910,193 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
 });
-export default App;
+export default connect(App);
+
+const listType = [
+  {title: 'monthly_spending', vntitle: 'Chi tiêu hàng tháng'},
+  {
+    image: require('../../../assets/icons/eat.png'),
+    title: 'eating',
+    vntitle: 'Ăn uống',
+  },
+  {
+    image: require('../../../assets/icons/taxi.png'),
+    title: 'move',
+    vntitle: 'Di chuyển',
+  },
+  {
+    image: require('../../../assets/icons/house.png'),
+    title: 'rent_house',
+    vntitle: 'Thuê nhà',
+  },
+  {
+    image: require('../../../assets/icons/water.png'),
+    title: 'water_money',
+    vntitle: 'Tiền nước',
+  },
+  {
+    image: require('../../../assets/icons/phone.png'),
+    title: 'telephone_fee',
+    vntitle: 'Tiền điện thoại',
+  },
+  {
+    image: require('../../../assets/icons/electricity.png'),
+    title: 'electricity_bill',
+    vntitle: 'Tiền điện',
+  },
+  {
+    image: require('../../../assets/icons/gas.png'),
+    title: 'gas_money',
+    vntitle: 'Tiền ga',
+  },
+  {
+    image: require('../../../assets/icons/tv.png'),
+    title: 'tv_money',
+    vntitle: 'Tiền TV',
+  },
+  {
+    image: require('../../../assets/icons/internet.png'),
+    title: 'internet_money',
+    vntitle: 'Tiền internet',
+  },
+  {title: 'necessary_spending', vntitle: 'Chi tiêu cần thiết'},
+  {
+    image: require('../../../assets/icons/house_2.png'),
+    title: 'repair_and_decorate_the_house',
+    vntitle: 'Sửa và trang trí nhà',
+  },
+  {
+    image: require('../../../assets/icons/tools.png'),
+    title: 'vehicle_maintenance',
+    vntitle: 'Bảo dưỡng xe',
+  },
+  {
+    image: require('../../../assets/icons/doctor.png'),
+    title: 'physical_examination',
+    vntitle: 'Khám sức khỏe',
+  },
+  {
+    image: require('../../../assets/icons/health-insurance.png'),
+    title: 'insurance',
+    vntitle: 'Bảo hiểm',
+  },
+  {
+    image: require('../../../assets/icons/education.png'),
+    title: 'education',
+    vntitle: 'Giáo dục',
+  },
+  {
+    image: require('../../../assets/icons/armchair.png'),
+    title: 'housewares',
+    vntitle: 'Đồ gia dụng',
+  },
+  {
+    image: require('../../../assets/icons/toothbrush.png'),
+    title: 'personal_belongings',
+    vntitle: 'Đồ dùng cá nhân',
+  },
+  {
+    image: require('../../../assets/icons/pet.png'),
+    title: 'pet',
+    vntitle: 'Thú cưng',
+  },
+  {
+    image: require('../../../assets/icons/family.png'),
+    title: 'family_service',
+    vntitle: 'Dịch vụ gia đình',
+  },
+  {
+    image: require('../../../assets/icons/box.png'),
+    title: 'other_costs',
+    vntitle: 'Chi phí khác',
+  },
+  {title: 'fun_play', vntitle: 'Vui - Chơi'},
+  {
+    image: require('../../../assets/icons/sports.png'),
+    title: 'sport',
+    vntitle: 'Thể thao',
+  },
+  {
+    image: require('../../../assets/icons/diamond.png'),
+    title: 'beautify',
+    vntitle: 'Làm đẹp',
+  },
+  {
+    image: require('../../../assets/icons/give-love.png'),
+    title: 'gifts_donations',
+    vntitle: 'Quà tặng & Quyên góp',
+  },
+  {
+    image: require('../../../assets/icons/card-payment.png'),
+    title: 'online_services',
+    vntitle: 'Dịch vụ trực tuyến',
+  },
+  {
+    image: require('../../../assets/icons/game-pad.png'),
+    title: 'fun_play',
+    vntitle: 'Vui - Chơi',
+  },
+  {title: 'investments_loans_debts', vntitle: 'Đầu tư, Cho vay & Nợ'},
+  {
+    image: require('../../../assets/icons/stats.png'),
+    title: 'invest',
+    vntitle: 'Đầu tư',
+  },
+  {
+    image: require('../../../assets/icons/coins.png'),
+    title: 'debt_collection',
+    vntitle: 'Thu nợ',
+  },
+  {
+    image: require('../../../assets/icons/loan.png'),
+    title: 'borrow',
+    vntitle: 'Đi vay',
+  },
+  {
+    image: require('../../../assets/icons/borrow.png'),
+    title: 'loan',
+    vntitle: 'Cho vay',
+  },
+  {
+    image: require('../../../assets/icons/pay.png'),
+    title: 'pay',
+    vntitle: 'Trả nợ',
+  },
+  {
+    image: require('../../../assets/icons/commission.png'),
+    title: 'pay_interest',
+    vntitle: 'Trả lãi',
+  },
+  {
+    image: require('../../../assets/icons/percentage.png'),
+    title: 'earn_profit',
+    vntitle: 'Thu lãi',
+  },
+  {title: 'revenue', vntitle: 'Khoản thu'},
+  {
+    image: require('../../../assets/icons/money.png'),
+    title: 'salary',
+    vntitle: 'Lương',
+  },
+  {
+    image: require('../../../assets/icons/money-bag.png'),
+    title: 'other_income',
+    vntitle: 'Thu nhập khác',
+  },
+  {title: 'other', vntitle: 'Khác'},
+  {
+    image: require('../../../assets/icons/wallet-symbol.png'),
+    title: 'money_transferred',
+    vntitle: 'Tiền chuyển đi',
+  },
+  {
+    image: require('../../../assets/icons/wallet.png'),
+    title: 'money_transferred_to',
+    vntitle: 'Tiền chuyển đến',
+  },
+  {
+    image: require('../../../assets/icons/plus.png'),
+    title: 'new_group',
+    vntitle: 'Nhóm mới',
+  },
+];
