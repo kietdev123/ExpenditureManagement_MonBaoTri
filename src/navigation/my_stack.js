@@ -25,6 +25,7 @@ import AboutPage from '../screens/main/profile/about_page.js';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import FlashMessage from 'react-native-flash-message';
+import ConfirmResetPassword from '../screens/main/profile/confirm_reset_password.js';
 
 const LoadingScreen = () => {
   return (
@@ -127,7 +128,12 @@ function MyStack() {
             <Stack.Screen
               name="ChangePassWordScreen"
               component={ChangePassWordScreen}
-              options={{headerShown: false}}
+              options={{headerShown: true, title: ''}}
+            />
+            <Stack.Screen
+              name="ConfirmResetPassword"
+              component={ConfirmResetPassword}
+              options={{headerShown: true, title: ''}}
             />
             <Stack.Screen
               name="ChooseTypePage"

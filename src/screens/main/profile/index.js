@@ -16,7 +16,6 @@ import COLORS from '../../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import auth from '@react-native-firebase/auth';
 import {showMessage} from 'react-native-flash-message';
-import {Header} from 'react-native-elements';
 
 const ProfileScreen = ({navigation}) => {
   const SettingItem = ({
