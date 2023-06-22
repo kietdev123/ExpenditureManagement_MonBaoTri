@@ -68,6 +68,15 @@ function MyStack() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{
+                headerShown: false,
+                // headerLeft: () => <></>, // Hide back button
+                // title: 'kiet',
+              }}
+            />
+          <Stack.Screen
             name="Home"
             component={MainScreen}
             options={{
@@ -79,15 +88,7 @@ function MyStack() {
             name="SearchSpendingPage"
             component={SearchSpendingPage}
           />
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{
-              headerShown: false,
-              // headerLeft: () => <></>, // Hide back button
-              // title: 'kiet',
-            }}
-          />
+          
           <Stack.Screen
             name="Signup"
             component={SignupScreen}
