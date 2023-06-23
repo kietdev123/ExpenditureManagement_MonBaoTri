@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   View,
   Keyboard,
+  ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-native-redux';
 
 import COLORS from '../../../constants/colors.js';
@@ -18,10 +19,11 @@ import Button from '../../signup/components/button.js';
 import auth from '@react-native-firebase/auth';
 
 const ChangePassWordScreen = ({navigation}) => {
-  const [inputs, setInputs] = React.useState({
+  const [isFirstSetPass, setIsFirstSetPass] = useState(false);
+  const [inputs, setInputs] = useState({
     password: '',
   });
-  const [errors, setErrors] = React.useState({});
+  const [errors, setErrors] = useState({});
 
   const validate = () => {
     Keyboard.dismiss();
@@ -62,6 +64,47 @@ const ChangePassWordScreen = ({navigation}) => {
         });
     }
   };
+
+  const handleSetNewPassword = () => {
+    if (validate()) {
+      auth()
+        .currentUser.updatePassword(inputs.password)
+        .then(() => {
+          // Mật khẩu đã được cập nhật thành công
+          ToastAndroid.showWithGravity(
+            'Cập nhật mật khẩu thành công',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+          navigation.goBack();
+          console.log('Password updated successfully');
+        })
+        .catch(error => {
+          console.log('Xảy ra lỗi khi update mật khẩu lần đầu', error);
+        });
+    }
+  };
+  useEffect(() => {
+    auth()
+      .fetchSignInMethodsForEmail(auth().currentUser.email)
+      .then(signInMethods => {
+        const hasPasswordMethod = signInMethods.includes('password');
+        if (hasPasswordMethod) {
+          // Email đã có phương thức đăng nhập bằng mật khẩu
+          console.log('Email có thể đăng nhập bằng password');
+        } else {
+          // Email không có phương thức đăng nhập bằng mật khẩu
+          setIsFirstSetPass(true);
+          console.log('Email không tòn tại phương thức đăng nhập password');
+        }
+      })
+      .catch(error => {
+        console.log(
+          'Xảy ra lỗi trong quá trình kiểm tra phương thức đăng nhập ở màn hình ChangePassword.',
+        );
+        console.log(error);
+      });
+  }, []);
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
       <ScrollView
@@ -81,7 +124,7 @@ const ChangePassWordScreen = ({navigation}) => {
               color: 'black',
               marginTop: 20,
             }}>
-            Bạn muốn đổi mật khẩu?
+            {isFirstSetPass ? 'Đặt mật khẩu' : 'Bạn muốn đổi mật khẩu?'}
           </Text>
           <Text
             style={{
@@ -89,8 +132,11 @@ const ChangePassWordScreen = ({navigation}) => {
               fontWeight: '300',
               color: 'black',
               paddingBottom: 30,
+              textAlign: 'center',
             }}>
-            Vui lòng nhập mật khẩu hiện tại của bạn
+            {isFirstSetPass
+              ? 'Đây là lần đặt mật khẩu đầu tiên! Vui lòng nhập tối thiểu 6 ký tự'
+              : 'Vui lòng nhập mật khẩu hiện tại của bạn'}
           </Text>
         </View>
         <View
@@ -125,7 +171,12 @@ const ChangePassWordScreen = ({navigation}) => {
             {errors.password}
           </Text>
         )}
-        <Button title="Gửi" onPress={handleConfirmPassword} />
+        <Button
+          title="Gửi"
+          onPress={
+            isFirstSetPass ? handleSetNewPassword : handleConfirmPassword
+          }
+        />
       </ScrollView>
     </SafeAreaView>
   );

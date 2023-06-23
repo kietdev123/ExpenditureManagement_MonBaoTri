@@ -30,7 +30,7 @@ const EditProfilePage = ({navigation}) => {
   const currentUser = auth().currentUser;
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = React.useState({});
-  const [avatarURI, setAvatarURI] = useState('');
+  const [avatarURI, setAvatarURI] = useState(null);
   const [inputs, setInputs] = React.useState({
     fullname: '',
     moneyRange: '0',
@@ -43,34 +43,36 @@ const EditProfilePage = ({navigation}) => {
   };
 
   const handleUploadAvatar = async () => {
-    try {
-      const uploadUri =
-        Platform.OS === 'ios' ? avatarURI.replace('file://', '') : avatarURI;
-      const hash = await calculateFileHash(uploadUri);
-      const storageRef = storage().ref(`avatars/${hash}`);
+    if (avatarURI) {
+      try {
+        const uploadUri =
+          Platform.OS === 'ios' ? avatarURI.replace('file://', '') : avatarURI;
+        const hash = await calculateFileHash(uploadUri);
+        const storageRef = storage().ref(`avatars/${hash}`);
 
-      storageRef
-        .getDownloadURL()
-        .then(downloadURL => {
-          return downloadURL;
-        })
-        .catch(() => {
-          storageRef
-            .putFile(uploadUri)
-            .then(() => {
-              return storageRef.getDownloadURL();
-            })
-            .then(downloadURL => {
-              return downloadURL;
-            });
-        });
+        storageRef
+          .getDownloadURL()
+          .then(downloadURL => {
+            return downloadURL;
+          })
+          .catch(() => {
+            storageRef
+              .putFile(uploadUri)
+              .then(() => {
+                return storageRef.getDownloadURL();
+              })
+              .then(downloadURL => {
+                return downloadURL;
+              });
+          });
 
-      // Image doesn't exist, proceed with uploading
-      await storageRef.putFile(uploadUri);
-      const downloadURL = await storageRef.getDownloadURL();
-      return downloadURL;
-    } catch (error) {
-      throw new Error('Failed to upload avatar: ' + error.message);
+        // Image doesn't exist, proceed with uploading
+        await storageRef.putFile(uploadUri);
+        const downloadURL = await storageRef.getDownloadURL();
+        return downloadURL;
+      } catch (error) {
+        throw new Error('Lỗi khi upload avatar: ' + error.message);
+      }
     }
   };
 
@@ -124,7 +126,8 @@ const EditProfilePage = ({navigation}) => {
         const {uid} = currentUser;
 
         try {
-          const downloadURL = await handleUploadAvatar();
+          const downloadURL =
+            avatarURI == null ? inputs.avatarURL : await handleUploadAvatar();
 
           // Cập nhật thông tin
           const userDataToUpdate = {
@@ -201,6 +204,10 @@ const EditProfilePage = ({navigation}) => {
     }
   }, [currentUser]);
 
+  useEffect(() => {
+    console.log('inputs:', inputs);
+  }, [inputs]);
+
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
       <ScrollView
@@ -265,7 +272,6 @@ const EditProfilePage = ({navigation}) => {
           modal
           mode="date"
           maximumDate={new Date()}
-          timeZoneOffsetInMinutes={7}
           open={open}
           date={new Date(inputs.dateofbirth)}
           onConfirm={date => {

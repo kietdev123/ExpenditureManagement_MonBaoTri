@@ -197,23 +197,23 @@ const LoginScreen = ({navigation}) => {
       'email',
     ]);
     if (result.isCancelled) {
-      throw 'User cancelled the login process';
+      return;
+    } else {
+      // Once signed in, get the users AccesToken
+      const data = await AccessToken.getCurrentAccessToken();
+
+      if (!data) {
+        throw 'Something went wrong obtaining access token';
+      }
+
+      // Create a Firebase credential with the AccessToken
+      const facebookCredential = auth.FacebookAuthProvider.credential(
+        data.accessToken,
+      );
+
+      // Sign-in the user with the credential
+      return auth().signInWithCredential(facebookCredential);
     }
-
-    // Once signed in, get the users AccesToken
-    const data = await AccessToken.getCurrentAccessToken();
-
-    if (!data) {
-      throw 'Something went wrong obtaining access token';
-    }
-
-    // Create a Firebase credential with the AccessToken
-    const facebookCredential = auth.FacebookAuthProvider.credential(
-      data.accessToken,
-    );
-
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(facebookCredential);
   };
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
@@ -279,45 +279,47 @@ const LoginScreen = ({navigation}) => {
 
         <TextContinue></TextContinue>
 
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <View style={{flex: 1}}>
-            <TouchableOpacity
-              onPress={handleGoogleLogin}
-              style={{
-                height: 50,
-                backgroundColor: 'white',
-                borderRadius: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}>
-              <Image
-                source={require('../../assets/logo/google_logo.png')}
-                resizeMode="contain"
-                style={{width: 20}}
-              />
-              <Text style={{color: '#7d7d7d', marginLeft: 10}}>Google</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{width: 30}} />
-          <View style={{flex: 1}}>
-            <TouchableOpacity
-              onPress={handleFacebookLogin}
-              style={{
-                height: 50,
-                backgroundColor: '#4270b2',
-                borderRadius: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}>
-              <Icon
-                name="logo-facebook"
-                style={{color: 'white', fontSize: 20, marginRight: 10}}
-              />
-              <Text style={{color: 'white', marginLeft: 10}}>Facebook</Text>
-            </TouchableOpacity>
-          </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 30,
+            flex: 1,
+          }}>
+          <TouchableOpacity
+            onPress={handleGoogleLogin}
+            style={{
+              height: 50,
+              backgroundColor: 'white',
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'row',
+              flex: 1,
+            }}>
+            <Image
+              source={require('../../assets/logo/google_logo.png')}
+              resizeMode="contain"
+              style={{width: 20}}
+            />
+            <Text style={{color: '#7d7d7d', marginLeft: 10}}>Google</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleFacebookLogin}
+            style={{
+              height: 50,
+              backgroundColor: '#4270b2',
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'row',
+              flex: 1,
+            }}>
+            <Icon
+              name="logo-facebook"
+              style={{color: 'white', fontSize: 20, marginRight: 10}}
+            />
+            <Text style={{color: 'white', marginLeft: 10}}>Facebook</Text>
+          </TouchableOpacity>
         </View>
 
         <View
