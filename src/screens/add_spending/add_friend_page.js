@@ -17,6 +17,13 @@ import {connect, setStateForKey, useStateX} from 'react-native-redux';
 import COLORS from '../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 
+const colors = [
+  "#164B60",
+  "#1B6B93",
+  "#4FC0D0",
+  "#A2FF86",
+];
+
 const AddFriendPage = ({navigation}) => {
   const friends = useStateX('add_spending_friends.value');
   console.log('kiet debug ', friends);
@@ -27,14 +34,31 @@ const AddFriendPage = ({navigation}) => {
       <>
         <FlatList
           data={friends}
-          renderItem={({item}) => (
+          renderItem={({item, index}) => (
             <>
               <View style={styles.typeItem}>
                 {/* <Text style={styles.item}>{item.image}</Text> */}
-
-                <View style={styles.typeItem_text}>
-                  <Text style={styles.item}>{item}</Text>
+                <View style={{
+                    flexDirection : 'row',
+                   
+                  }}>
+                  <View style={{
+                    width : 40, height : 40,
+                    justifyContent : 'center',
+                    borderRadius : 30, backgroundColor : colors[index % 3]}}>
+                    <Text style={{
+                      margin : 'auto',
+                      fontSize : 20,
+                      textAlign : 'center',
+                      fontWeight : 'bold', color : 'white'}}>{item[0].toUpperCase()}</Text>
+                  </View>
+                  
+                  <View style={{width : 12}}></View>
+                  <View style={styles.typeItem_text}>
+                    <Text style={styles.item}>{item}</Text>
+                  </View>
                 </View>
+               
                 <TouchableOpacity
                   onPress={() => {
                     console.log(
@@ -45,7 +69,10 @@ const AddFriendPage = ({navigation}) => {
                       value: friends.filter(friend => friend !== item),
                     });
                   }}>
-                  <Icon name="close" size={40} />
+                  <View style={{backgroundColor : '#E1ECC8', borderRadius : 30}}>
+                      <Icon name="close" size={20} />
+                  </View>
+                  
                 </TouchableOpacity>
               </View>
               {/* <View
@@ -99,13 +126,15 @@ const AddFriendPage = ({navigation}) => {
             style={{height: 55}}
             onChangeText={onChangeText}
             onSubmitEditing={event => {
-              //   Alert.alert(event.nativeEvent.text);
-              console.log('mm ' + [...friends, text]);
-              onChangeText('');
-              setStateForKey('add_spending_friends', {
-                //   value: friends.push(text),
-                value: [...friends, text],
-              });
+              if (text != '') {
+                //   Alert.alert(event.nativeEvent.text);
+                console.log('mm ' + [...friends, text]);
+                onChangeText('');
+                setStateForKey('add_spending_friends', {
+                  //   value: friends.push(text),
+                  value: [...friends, text],
+                });
+              }           
             }}
             value={text}
             placeholder="Điền tên"></TextInput>
@@ -139,21 +168,21 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   item: {
-    fontSize: 30,
+    fontSize: 20,
     marginRight: 12,
   },
   typeItem: {
     flex: 1,
-    // justifyContent: 'space-between',
+    justifyContent: 'space-between',
     // alignContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
-    // marginBottom: 20,
+    marginBottom: 20,
     paddingLeft: 24,
     paddingRight: 24,
     // height: 50,
     // height: 40,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   },
   container: {
     flex: 1,
