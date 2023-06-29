@@ -6,6 +6,7 @@ import {
   View,
   ActivityIndicator,
   FlatList,
+  ScrollView,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {connect, setStateForKey} from 'react-native-redux';
@@ -15,6 +16,8 @@ import Icon from 'react-native-vector-icons/Ionicons.js';
 import firestore from '@react-native-firebase/firestore';
 
 const HomeScreen = ({navigation}) => {
+  const [limitSpendingToday, setLimitSpendingToday] = useState(-1);
+
   const isFocused = useIsFocused();
 
   const flatlistRef = useRef < FlatList < Date >> null;
@@ -54,6 +57,19 @@ const HomeScreen = ({navigation}) => {
     console.log(temp_spendings);
     setSpendings(temp_spendings);
     // setSpendings(temp_spendings);
+    if (limitSpendingToday == -1){
+     
+    }
+    temp_output_value = temp_output_value - inputValue;
+    var today = new Date();
+    var numDateOfThisMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+    console.log(today);
+    console.log(numDateOfThisMonth);
+    console.log(inputValue);
+    console.log(temp_output_value)
+    console.log(numDateOfThisMonth - today.getDate());
+    setLimitSpendingToday( 
+      (inputValue + temp_output_value) / (numDateOfThisMonth - (today.getDate() - 1)));
   }
 
   useEffect(() => {
@@ -131,6 +147,33 @@ const HomeScreen = ({navigation}) => {
         </View>
 
         <View style={{}}>
+          <View style={{marginHorizontal : 12,
+              flexDirection: 'row',
+          }}>
+              <Image
+                source={{
+                  uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png',
+                }}
+                style={{
+                  width: 50,
+                    height: 50,
+                    borderRadius: 50 / 2,
+                    marginRight : 12,
+                }}
+              />
+              <View>
+                <Text style={{
+                    fontWeight : 'bold',
+                    fontSize : 20,
+                }}>Hôm nay, bạn nên chi tiêu ít hơn</Text>
+                <Text style={{
+                    fontWeight : 'bold',
+                    fontSize : 20,
+                }}>{limitSpendingToday} VNĐ</Text>
+              </View>
+               
+          </View>
+          
           <FlatList
             ref={it => (scrollRef.current = it)}
             onContentSizeChange={() =>
@@ -399,16 +442,16 @@ const HomeScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
       {AppBar()}
-      {/* <ScrollView
+      <ScrollView
         contentContainerStyle={{
           paddingTop: 20,
           paddingHorizontal: 20,
         }}>
           {loading ? Loading_Body() : Home_Body()}
-      </ScrollView> */}
-      <View style={{paddingTop: 20, paddingHorizontal: 20}}>
+      </ScrollView>
+      {/* <View style={{paddingTop: 20, paddingHorizontal: 20}}>
         {loading ? Loading_Body() : Home_Body()}
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };
