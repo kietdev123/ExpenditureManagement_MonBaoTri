@@ -363,7 +363,7 @@ const EditSpendingPage = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
-        <ImageComponent></ImageComponent>
+        {/* <ImageComponent></ImageComponent> */}
         <View style={{height: 36}}></View>
       </>
     );
