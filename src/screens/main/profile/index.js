@@ -10,14 +10,22 @@ import {
   Platform,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {connect} from 'react-native-redux';
 import COLORS from '../../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import auth from '@react-native-firebase/auth';
 import {showMessage} from 'react-native-flash-message';
+import SpendingFirebase from '../../../controls/spending_firebase';
+import React, {useState, useEffect} from 'react';
+import moment from 'moment';
+import firestore from '@react-native-firebase/firestore';
+import {useIsFocused} from '@react-navigation/native';
 
 const ProfileScreen = ({navigation}) => {
+  const isFocused = useIsFocused();
+
   const SettingItem = ({
     icon_name,
     icon_background_color,
@@ -73,22 +81,97 @@ const ProfileScreen = ({navigation}) => {
       });
   };
 
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState({
+    avatarURL : "",
+    fullname : "",
+    moneyRange : "0",
+    gender : "male,"
+  });
+  const currentUser = auth().currentUser;
+
+  useEffect(() => {
+    if (currentUser) {
+      setLoading(true);
+      const {uid} = currentUser;
+      firestore()
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then(documentSnapshot => {
+          setLoading(false);
+          if (documentSnapshot.exists) {
+            const userData = documentSnapshot.data();
+            console.log('documentSnapshot:', userData);
+            setProfile({
+              fullname: userData.fullname,
+              moneyRange: userData.moneyRange,
+              gender: userData.gender,
+              dateofbirth: moment(userData.dateofbirth),
+              avatarURL: userData.avatarURL,
+            });
+          } else {
+            setProfile({
+              fullname: null,
+              moneyRange: null,
+              gender: null,
+              dateofbirth: null,
+              avatarURL: userData.avatarURL,
+            });
+            console.log('Không tìm thấy thông tin người dùng.');
+          }
+        })
+        .catch(error => {
+          console.log('Lỗi khi lấy thông tin người dùng:', error);
+        });
+    } else {
+      showMessage({
+        message:
+          'Người dùng chưa đăng nhập. Vui lòng thoát ra và đăng nhập lại!',
+        type: 'danger',
+        icon: 'danger',
+        duration: 2000,
+      });
+    }
+  }, [navigation, isFocused]);
+
+  const Loading_Body = () => {
+    return (
+      <>
+        <View style={{alignItems: 'center', alignSelf: 'center'}}>
+          <ActivityIndicator size="large" color="grey"></ActivityIndicator>
+        </View>
+      </>
+    );
+  };
+
   return (
     <SafeAreaView>
       <View>
         <View style={styles.appBar}>
-          <Text style={styles.info_component_money}>Tài khoản</Text>
+          <Text style={styles.info_component_money}>
+              {loading ?  "???" : (profile.fullname == null ? "Người dùng" : profile.fullname)}</Text>
         </View>
-        <View style={styles.info_component}>
-          <Image
-            source={{
-              uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png',
-            }}
-            style={styles.info_component_image}
-          />
-          <Text>Tiền hàng tháng</Text>
-          <Text style={styles.info_component_money}>1,000,000 VND</Text>
-        </View>
+        {loading ? Loading_Body() : 
+        <>
+          <View style={styles.info_component}>
+            <Image
+                // source={{
+                //   uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png',
+                // }}
+                source={profile.avatarURL === null      
+                    ? profile.gender === 'male'
+                      ? require('../../../assets/images/male.png')
+                      : require('../../../assets/images/female.png')
+                    : profile.avatarURL
+                }
+                style={styles.info_component_image}
+              />   
+            <Text>Tiền hàng tháng</Text>
+            <Text style={styles.info_component_money}>{profile.moneyRange} VND</Text>
+          </View>
+        </>}
+        
 
         <View style={{height: 400}}>
           <ScrollView>

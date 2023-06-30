@@ -1,5 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 import {Alert} from 'react-native';
+
+
 const SpendingFirebase = {
   addSpending: async (
     _money,
@@ -83,6 +85,50 @@ const SpendingFirebase = {
     });
     return list;
   },
+  getProfile: async () => {
+    const currentUser = auth().currentUser;
+    if (currentUser) {
+      const {uid} = currentUser;
+      await firestore()
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then(documentSnapshot => {
+          if (documentSnapshot.exists) {
+            const userData = documentSnapshot.data();
+            console.log('documentSnapshot:', userData);
+            const profile = {
+              fullname: userData.fullname,
+              moneyRange: userData.moneyRange,
+              gender: userData.gender,
+              dateofbirth: moment(userData.dateofbirth),
+              avatarURL: userData.avatarURL,
+            };
+            return profile;
+          } else {
+            console.log('Không tìm thấy thông tin người dùng.');
+            const profile = {
+              fullname: null,
+              moneyRange: null,
+              gender: null,
+              dateofbirth: null,
+            };
+            return profile;
+          }
+        })
+        .catch(error => {
+          console.log('Lỗi khi lấy thông tin người dùng:', error);
+        });
+    } else {
+      showMessage({
+        message:
+          'Người dùng chưa đăng nhập. Vui lòng thoát ra và đăng nhập lại!',
+        type: 'danger',
+        icon: 'danger',
+        duration: 2000,
+      });
+    }
+  }, 
   updateInfo: async () => {},
   updateWalletMoney: async () => {},
   addWalletMoney: async () => {},
