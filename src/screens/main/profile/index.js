@@ -83,10 +83,10 @@ const ProfileScreen = ({navigation}) => {
 
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState({
-    avatarURL : "",
+    avatarURL : 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png',
     fullname : "",
     moneyRange : "0",
-    gender : "male,"
+    gender : "male"
   });
   const currentUser = auth().currentUser;
 
@@ -110,13 +110,15 @@ const ProfileScreen = ({navigation}) => {
               dateofbirth: moment(userData.dateofbirth),
               avatarURL: userData.avatarURL,
             });
+            console.log("profile screen");
+            console.log(userData.avatarURL);
           } else {
             setProfile({
               fullname: null,
               moneyRange: null,
               gender: null,
               dateofbirth: null,
-              avatarURL: userData.avatarURL,
+              avatarURL: null,
             });
             console.log('Không tìm thấy thông tin người dùng.');
           }
@@ -155,18 +157,23 @@ const ProfileScreen = ({navigation}) => {
         {loading ? Loading_Body() : 
         <>
           <View style={styles.info_component}>
-            <Image
-                // source={{
-                //   uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png',
-                // }}
-                source={profile.avatarURL === null      
-                    ? profile.gender === 'male'
-                      ? require('../../../assets/images/male.png')
-                      : require('../../../assets/images/female.png')
-                    : profile.avatarURL
-                }
+            {
+              (profile.avatar === null) ?
+                <Image
+                  source={profile.gender === 'male'
+                    ? require('../../../assets/images/male.png')
+                    : require('../../../assets/images/female.png')
+                  }
+                  style={styles.info_component_image}
+                />   
+              :
+              <Image
+                source={{
+                  uri: profile.avatarURL,
+                }}          
                 style={styles.info_component_image}
               />   
+            }
             <Text>Tiền hàng tháng</Text>
             <Text style={styles.info_component_money}>{profile.moneyRange} VND</Text>
           </View>
