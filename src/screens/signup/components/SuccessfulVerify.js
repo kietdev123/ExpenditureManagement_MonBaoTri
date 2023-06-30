@@ -57,7 +57,7 @@ function SuccessfulVerify({navigation}) {
       <TouchableOpacity
         style={styles.buttonResend}
         onPress={() => {
-          navigation.navigate('Home');
+          navigation.replace('Home');
         }}>
         <IconEntypo name="home" size={30} color="#fff" />
         <Text style={styles.textResend}>Đến trang chủ</Text>

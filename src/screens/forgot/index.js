@@ -71,7 +71,7 @@ const ForgotScreen = ({navigation}) => {
               {
                 text: 'OK',
                 onPress: () => {
-                  navigation.navigate('Login');
+                  navigation.replace('Login');
                 },
               },
             ],

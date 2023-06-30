@@ -1,9 +1,11 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import COLORS from '../../../constants/colors.js';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const Input = ({
   label,
+  value,
   iconName,
   error,
   password,
@@ -34,6 +36,7 @@ const Input = ({
           }}
           onBlur={() => setIsFocused(false)}
           secureTextEntry={hidePassword}
+          value={value}
           style={{color: COLORS.black, flex: 1, marginLeft: 10}}
           {...props}
         />

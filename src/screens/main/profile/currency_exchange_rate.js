@@ -498,10 +498,6 @@ const styles = StyleSheet.create({
     marginEnd: 10,
     marginStart: 10,
   },
-  container: {
-    backgroundColor: 'white',
-    padding: 16,
-  },
   dropdown: {
     height: 30,
     // borderColor: 'gray',

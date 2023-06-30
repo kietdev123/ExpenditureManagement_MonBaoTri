@@ -12,12 +12,7 @@
           "package_name": "com.todoapp"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "367968834061-vv83cthoqk8bbq589772o1e8hr85vbgn.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyBdfHjEgAIfZ6HZQQ_VwXM1ri81QswtID0"

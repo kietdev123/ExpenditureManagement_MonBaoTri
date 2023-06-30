@@ -1,13 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, TouchableOpacity, Image, StyleSheet, Alert} from 'react-native';
 var ImagePicker = require('react-native-image-picker');
 import PlusIcon from 'react-native-vector-icons/FontAwesome';
-import firestore from '@react-native-firebase/firestore';
 
-const Avatar = () => {
-  const [avatarSource, setAvatarSource] = useState(
-    require('../../../assets/images/male.png'),
-  );
+const Avatar = ({inputs, handleAvatarChange}) => {
+  const [localSource, setLocalSource] = useState(null);
 
   const changeAvatar = async () => {
     try {
@@ -23,43 +20,47 @@ const Avatar = () => {
         } else if (response.customButton) {
           console.log('User tapped custom button:', response.customButton);
         } else {
-          console.log(response);
-
-          // Upload the image to Firebase Cloud Firestore storage
-          // const response = await fetch(uri);
-          // const blob = await response.blob();
-          // const storageRef = firebase
-          //   .storage()
-          //   .ref()
-          //   .child(`avatars/avatar_${Date.now()}`);
-          // await storageRef.put(blob);
-
-          // // Get the download URL of the uploaded image
-          // const downloadURL = await storageRef.getDownloadURL();
-
-          // // Save the download URL in Firebase Realtime Database
-          // firebase.database().ref('avatars').set({
-          //   avatarURL: downloadURL,
-          // });
-          setAvatarSource(response.uri);
+          const uri = response.assets[0].uri;
+          console.log('uri', uri);
+          setLocalSource({uri: uri});
+          handleAvatarChange(uri);
         }
       });
     } catch (error) {
-      Alert.alert('Error', 'An error occurred while changing the avatar.');
+      Alert.alert('Lỗi:', 'Xảy ra lỗi trong khi thay đổi ảnh đại diện.');
       console.log(error);
     }
   };
 
+  useEffect(() => {
+    if (inputs.avatarURL) {
+      setLocalSource({uri: inputs.avatarURL});
+    }
+  }, [inputs.avatarURL]);
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.avatarContainer} onPress={changeAvatar}>
-        <Image source={avatarSource} style={styles.avatar} />
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={changeAvatar}>
-            <PlusIcon name="plus" size={18} color={'white'} />
-          </TouchableOpacity>
-        </View>
+      <TouchableOpacity onPress={changeAvatar}>
+        <Image
+          source={
+            inputs.avatarURL === null
+              ? localSource === null
+                ? inputs.gender === 'male'
+                  ? require('../../../assets/images/male.png')
+                  : require('../../../assets/images/female.png')
+                : localSource
+              : localSource
+              ? localSource
+              : require('../../../assets/images/male.png')
+          }
+          style={styles.avatar}
+        />
       </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={changeAvatar}>
+          <PlusIcon name="plus" size={18} color={'white'} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -69,13 +70,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarContainer: {
-    position: 'relative',
-  },
   avatar: {
     width: 150,
     height: 150,
-    borderRadius: 50,
+    borderRadius: 100,
   },
   buttonContainer: {
     position: 'absolute',

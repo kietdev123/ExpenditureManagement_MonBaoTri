@@ -20,6 +20,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
+import firestore from '@react-native-firebase/firestore';
+import moment from 'moment';
 
 const LoginScreen = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -127,8 +129,42 @@ const LoginScreen = ({navigation}) => {
         .signInWithCredential(googleCredential)
         .then(userCredential => {
           const user = userCredential.user;
+          const {uid, displayName, photoURL} = user;
+          firestore()
+            .collection('users')
+            .doc(uid)
+            .get()
+            .then(documentSnapshot => {
+              if (!documentSnapshot.exists) {
+                // Người dùng chưa được thiết lập thông tin trước đó
+                const userData = {
+                  fullname: displayName ? displayName : '',
+                  moneyRange: 0,
+                  gender: 'male',
+                  dateofbirth: moment().format('YYYY-MM-DD').toString(),
+                  avatarURL: photoURL,
+                };
+
+                // Lưu trữ thông tin người dùng vào Firestore
+                firestore()
+                  .collection('users')
+                  .doc(uid)
+                  .set(userData)
+                  .then(() => {
+                    console.log(
+                      'Thông tin người dùng ban đầu đã được thiết lập thành công.',
+                    );
+                  })
+                  .catch(error => {
+                    console.log('Lỗi khi lưu trữ thông tin người dùng:', error);
+                  });
+              }
+            })
+            .catch(error => {
+              console.log('Lỗi khi kiểm tra thông tin người dùng:', error);
+            });
           console.log('Thông tin người dùng:', user);
-          navigation.navigate('Home');
+          navigation.replace('Home');
         })
         .catch(error => {
           Alert.alert('Đăng nhập thất bại', 'Lỗi: ' + error.message);
@@ -150,7 +186,7 @@ const LoginScreen = ({navigation}) => {
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
-        '367968834061-vv83cthoqk8bbq589772o1e8hr85vbgn.apps.googleusercontent.com',
+        '452597848432-p4li0pnjo58p6b8h4bv1pg0ki6adiqsi.apps.googleusercontent.com',
     });
   });
 
@@ -161,23 +197,23 @@ const LoginScreen = ({navigation}) => {
       'email',
     ]);
     if (result.isCancelled) {
-      throw 'User cancelled the login process';
+      return;
+    } else {
+      // Once signed in, get the users AccesToken
+      const data = await AccessToken.getCurrentAccessToken();
+
+      if (!data) {
+        throw 'Something went wrong obtaining access token';
+      }
+
+      // Create a Firebase credential with the AccessToken
+      const facebookCredential = auth.FacebookAuthProvider.credential(
+        data.accessToken,
+      );
+
+      // Sign-in the user with the credential
+      return auth().signInWithCredential(facebookCredential);
     }
-
-    // Once signed in, get the users AccesToken
-    const data = await AccessToken.getCurrentAccessToken();
-
-    if (!data) {
-      throw 'Something went wrong obtaining access token';
-    }
-
-    // Create a Firebase credential with the AccessToken
-    const facebookCredential = auth.FacebookAuthProvider.credential(
-      data.accessToken,
-    );
-
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(facebookCredential);
   };
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
@@ -243,45 +279,47 @@ const LoginScreen = ({navigation}) => {
 
         <TextContinue></TextContinue>
 
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <View style={{flex: 1}}>
-            <TouchableOpacity
-              onPress={handleGoogleLogin}
-              style={{
-                height: 50,
-                backgroundColor: 'white',
-                borderRadius: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}>
-              <Image
-                source={require('../../assets/logo/google_logo.png')}
-                resizeMode="contain"
-                style={{width: 20}}
-              />
-              <Text style={{color: '#7d7d7d', marginLeft: 10}}>Google</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{width: 30}} />
-          <View style={{flex: 1}}>
-            <TouchableOpacity
-              onPress={handleFacebookLogin}
-              style={{
-                height: 50,
-                backgroundColor: '#4270b2',
-                borderRadius: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}>
-              <Icon
-                name="logo-facebook"
-                style={{color: 'white', fontSize: 20, marginRight: 10}}
-              />
-              <Text style={{color: 'white', marginLeft: 10}}>Facebook</Text>
-            </TouchableOpacity>
-          </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 30,
+            flex: 1,
+          }}>
+          <TouchableOpacity
+            onPress={handleGoogleLogin}
+            style={{
+              height: 50,
+              backgroundColor: 'white',
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'row',
+              flex: 1,
+            }}>
+            <Image
+              source={require('../../assets/logo/google_logo.png')}
+              resizeMode="contain"
+              style={{width: 20}}
+            />
+            <Text style={{color: '#7d7d7d', marginLeft: 10}}>Google</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleFacebookLogin}
+            style={{
+              height: 50,
+              backgroundColor: '#4270b2',
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'row',
+              flex: 1,
+            }}>
+            <Icon
+              name="logo-facebook"
+              style={{color: 'white', fontSize: 20, marginRight: 10}}
+            />
+            <Text style={{color: 'white', marginLeft: 10}}>Facebook</Text>
+          </TouchableOpacity>
         </View>
 
         <View

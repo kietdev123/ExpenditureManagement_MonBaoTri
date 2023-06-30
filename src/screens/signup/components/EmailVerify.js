@@ -15,7 +15,7 @@ function EmailVerify({navigation}) {
         user.reload().then(() => {
           if (user.emailVerified) {
             clearInterval(checkEmailVerification);
-            navigation.navigate('SuccessfulVerify');
+            navigation.replace('SuccessfulVerify');
           }
         });
       }

@@ -1,3 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/no-unstable-nested-components */
 import {
   Text,
   View,
@@ -11,7 +14,8 @@ import {
 import {connect} from 'react-native-redux';
 import COLORS from '../../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons.js';
-import {Header} from 'react-native-elements';
+import auth from '@react-native-firebase/auth';
+import {showMessage} from 'react-native-flash-message';
 
 const ProfileScreen = ({navigation}) => {
   const SettingItem = ({
@@ -48,6 +52,27 @@ const ProfileScreen = ({navigation}) => {
       </>
     );
   };
+
+  //  Đăng xuất tài khoản
+  const handleLogout = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        showMessage({
+          message: 'Đăng xuất thành công',
+          type: 'success',
+          icon: 'success',
+          duration: 2000,
+          onHide: () => {
+            navigation.replace('Login');
+          },
+        });
+      })
+      .catch(error => {
+        console.log('Đã xảy ra lỗi khi đăng xuất:', error);
+      });
+  };
+
   return (
     <SafeAreaView>
       <View>
@@ -118,7 +143,7 @@ const ProfileScreen = ({navigation}) => {
               })} */}
 
               <TouchableOpacity
-                onPress={() => navigation.navigate('Login')}
+                onPress={handleLogout}
                 activeOpacity={0.7}
                 style={{
                   height: 55,

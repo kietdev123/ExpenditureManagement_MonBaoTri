@@ -18,6 +18,7 @@ import Button from './components/button.js';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import moment from 'moment';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const SignupScreen = ({navigation}) => {
   const [inputs, setInputs] = React.useState({
@@ -29,7 +30,6 @@ const SignupScreen = ({navigation}) => {
     passwordConfirm: '',
   });
   const [errors, setErrors] = React.useState({});
-  const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const validate = () => {
     Keyboard.dismiss();
@@ -96,16 +96,48 @@ const SignupScreen = ({navigation}) => {
               .createUserWithEmailAndPassword(inputs.email, inputs.password)
               .then(userCredential => {
                 const user = userCredential.user;
-                const additionalUserInfo = {
-                  fullname: inputs.fullname,
-                  dateOfBirth: inputs.dateOfBirth,
-                  gender: inputs.gender,
-                };
-                user.updateProfile(additionalUserInfo).catch(error => {
-                  console.log('Lỗi khi cập nhật thông tin bổ sung:', error);
-                });
-                // Đã đăng nhập
                 console.log('Đăng ký thành công:', user);
+                const {uid, displayName} = user;
+                firestore()
+                  .collection('users')
+                  .doc(uid)
+                  .get()
+                  .then(documentSnapshot => {
+                    if (!documentSnapshot.exists) {
+                      const userData = {
+                        fullname: inputs.fullname,
+                        moneyRange: 0,
+                        gender: inputs.gender,
+                        dateofbirth: moment(inputs.dateOfBirth)
+                          .format('YYYY-MM-DD')
+                          .toString(),
+                        avatarURL: null,
+                      };
+                      // Lưu trữ thông tin người dùng vào Firestore
+                      firestore()
+                        .collection('users')
+                        .doc(uid)
+                        .set(userData)
+                        .then(() => {
+                          console.log(
+                            'Thông tin người dùng ban đầu đã được thiết lập thành công.',
+                          );
+                        })
+                        .catch(error => {
+                          console.log(
+                            'Lỗi khi lưu trữ thông tin người dùng:',
+                            error,
+                          );
+                        });
+                    }
+                  })
+                  .catch(error => {
+                    console.log(
+                      'Lỗi khi kiểm tra thông tin người dùng:',
+                      error,
+                    );
+                  });
+                // Đã đăng nhập
                 sendVerificationEmail(user);
               });
           } catch (error) {
@@ -123,7 +155,7 @@ const SignupScreen = ({navigation}) => {
       .sendEmailVerification()
       .then(() => {
         // Chuyển đến trang đợi xác thực
-        navigation.navigate('EmailVerify');
+        navigation.replace('EmailVerify');
       })
       .catch(error => {
         console.log('Lỗi khi gửi email xác thực ở màn hình Signup:', error);
@@ -303,7 +335,10 @@ const SignupScreen = ({navigation}) => {
             justifyContent: 'center',
           }}>
           <Text> Đã có tài khoản?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
             <Text style={{color: '#16d5f2'}}> Đăng nhập ngay</Text>
           </TouchableOpacity>
         </View>
