@@ -863,12 +863,17 @@ const App = ({navigation}) => {
       <View style={{height:24}}></View>
       
       <View style={{paddingHorizontal: 24}}>
-        <FlatList
+        {/* <FlatList
               data={spendingsNotUnque}
               renderItem={({item, index}) => {
                 return <>{Item_Spending_Day(item)}</>;
               }}
-          />
+          /> */}
+        {
+                spendingsNotUnque.map((item,index) => {
+                  return <View key={index}>{Item_Spending_Day(item)}</View>;
+                } )
+        }
       </View>
      
 

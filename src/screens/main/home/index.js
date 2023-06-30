@@ -238,6 +238,8 @@ const HomeScreen = ({navigation}) => {
               );
             }}
           />
+
+          
         </View>
       </View>
     );
@@ -417,12 +419,17 @@ const HomeScreen = ({navigation}) => {
             </View>
           </>
         ) : (
-          <FlatList
-            data={spendings}
-            renderItem={({item, index}) => {
-              return <>{Item_Spending_Day(item)}</>;
-            }}
-          />
+          // <FlatList
+          //   data={spendings}
+          //   renderItem={({item, index}) => {
+          //     return <>{Item_Spending_Day(item)}</>;
+          //   }}
+          // />
+          
+            spendings.map((item,index) => {
+              return <View key={index}>{Item_Spending_Day(item)}</View>;
+            } )
+          
         )}
         <View style={{height: 300}}></View>
       </>

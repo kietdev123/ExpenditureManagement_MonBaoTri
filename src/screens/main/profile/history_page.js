@@ -188,12 +188,19 @@ const HistoryPage = ({navigation}) => {
   const History_Body = () => {
     return (
       <>
-        <FlatList
+        {/* <FlatList
           data={spendings}
           renderItem={({item, index}) => {
             return <>{Item_Spending_Day(item)}</>;
           }}
-        />
+        /> */}
+        {
+          spendings.map((item,index) => {
+            return <View key={index}>
+              {Item_Spending_Day(item)}
+            </View>
+          })
+        }
       </>
     );
   };
@@ -211,14 +218,16 @@ const HistoryPage = ({navigation}) => {
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
       {AppBar()}
-      {/* <ScrollView
+      <ScrollView
         contentContainerStyle={{
           paddingTop: 20,
           paddingHorizontal: 20,
-        }}></ScrollView> */}
-      <View style={{paddingTop: 20, paddingHorizontal: 20}}>
+        }}>
+           {loading ? Loading_Body() : History_Body()}
+      </ScrollView>
+      {/* <View style={{paddingTop: 20, paddingHorizontal: 20}}>
         {loading ? Loading_Body() : History_Body()}
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

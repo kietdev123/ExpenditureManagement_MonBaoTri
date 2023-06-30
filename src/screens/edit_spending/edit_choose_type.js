@@ -296,60 +296,63 @@ const EditChooseTypePage = ({navigation}) => {
 
   const ListType = () => {
     return (
-      <FlatList
-        data={listType}
-        renderItem={({item, index}) => {
-          var searchText = text.toLowerCase();
+      <>
+        {
+          listType.map((item, index) => {
+            var searchText = text.toLowerCase();
 
-          if (item.vntitle.toLowerCase().includes(searchText) == false) {
-            return <></>;
-          }
-          if (
-            value == 'income' &&
-            [29, 30, 34, 36, 37, 40, 27, 35, 38, 41].indexOf(index) == -1
-          ) {
-            return <></>;
-          }
-          if (
-            value == 'spending' &&
-            [29, 30, 34, 36, 37, 40, 35].indexOf(index) != -1
-          ) {
-            return <></>;
-          }
-          if (item.image != null) {
-            // var imageName = require('../../' + item.image);
-            return (
-              <>
-                <TouchableOpacity
-                  onPress={() => {
-                    setStateForKey('spending_selected_type', {
-                      value: index
-                    });
-                    navigation.goBack();
-                  }}>
-                  <View style={styles.typeItem}>
-                    {/* <Text style={styles.item}>{item.image}</Text> */}
-                    <View style={styles.container}>
-                      <Image source={item.image} style={styles.image} />
+            if (item.vntitle.toLowerCase().includes(searchText) == false) {
+              return <></>;
+            }
+            if (
+              value == 'income' &&
+              [29, 30, 34, 36, 37, 40, 27, 35, 38, 41].indexOf(index) == -1
+            ) {
+              return <></>;
+            }
+            if (
+              value == 'spending' &&
+              [29, 30, 34, 36, 37, 40, 35].indexOf(index) != -1
+            ) {
+              return <></>;
+            }
+            if (item.image != null) {
+              // var imageName = require('../../' + item.image);
+              return (
+                <>
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      setStateForKey('spending_selected_type', {
+                        value: index
+                      });
+                      navigation.goBack();
+                    }}>
+                    <View style={styles.typeItem}>
+                      {/* <Text style={styles.item}>{item.image}</Text> */}
+                      <View style={styles.container}>
+                        <Image source={item.image} style={styles.image} />
+                      </View>
+                      <View style={styles.typeItem_text}>
+                        <Text style={styles.item}>{item.vntitle}</Text>
+                      </View>
                     </View>
-                    <View style={styles.typeItem_text}>
-                      <Text style={styles.item}>{item.vntitle}</Text>
-                    </View>
+                  </TouchableOpacity>
+                </>
+              );
+            } else {
+              return (
+                <>
+                  <View style={styles.titleType} key={index}>
+                    <Text style={styles.itemTitleText}>{item.vntitle}</Text>
                   </View>
-                </TouchableOpacity>
-              </>
-            );
-          } else {
-            return (
-              <>
-                <View style={styles.titleType}>
-                  <Text style={styles.itemTitleText}>{item.vntitle}</Text>
-                </View>
-              </>
-            );
-          }
-        }}
-      />
+                </>
+              );
+            }
+          })
+        }
+      </>
+      
     );
   };
 

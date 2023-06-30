@@ -33,63 +33,63 @@ const EditAddFriendPage = ({navigation}) => {
   const FriendsComponent = () => {
     return (
       <>
-        <FlatList
-          data={friends}
-          renderItem={({item, index}) => (
-            <>
-              <View style={styles.typeItem}>
-                {/* <Text style={styles.item}>{item.image}</Text> */}
-                <View style={{
-                    flexDirection : 'row',
-                   
-                  }}>
+        {
+            friends.map((item,index) => {
+              return <>
+                <View style={styles.typeItem} key={index}>
+                  {/* <Text style={styles.item}>{item.image}</Text> */}
                   <View style={{
-                    width : 40, height : 40,
-                    justifyContent : 'center',
-                    borderRadius : 30, backgroundColor : colors[index % 3]}}>
-                    <Text style={{
-                      margin : 'auto',
-                      fontSize : 20,
-                      textAlign : 'center',
-                      fontWeight : 'bold', color : 'white'}}>{item[0].toUpperCase()}</Text>
+                      flexDirection : 'row',
+                    
+                    }}>
+                    <View style={{
+                      width : 40, height : 40,
+                      justifyContent : 'center',
+                      borderRadius : 30, backgroundColor : colors[index % 3]}}>
+                      <Text style={{
+                        margin : 'auto',
+                        fontSize : 20,
+                        textAlign : 'center',
+                        fontWeight : 'bold', color : 'white'}}>{item[0].toUpperCase()}</Text>
+                    </View>
+                    
+                    <View style={{width : 12}}></View>
+                    <View style={styles.typeItem_text}>
+                      <Text style={styles.item}>{item}</Text>
+                    </View>
                   </View>
-                  
-                  <View style={{width : 12}}></View>
-                  <View style={styles.typeItem_text}>
-                    <Text style={styles.item}>{item}</Text>
-                  </View>
+                
+                  <TouchableOpacity
+                    onPress={() => {
+                      console.log(
+                        'new ',
+                        friends.filter(friend => friend !== item),
+                      );
+                      setStateForKey('spending_selected_friend', {
+                        value: friends.filter(friend => friend !== item),
+                      });
+                    }}>
+                    <View style={{backgroundColor : '#E1ECC8', borderRadius : 30}}>
+                        <Icon name="close" size={20} />
+                    </View>
+                    
+                  </TouchableOpacity>
                 </View>
-               
-                <TouchableOpacity
-                  onPress={() => {
-                    console.log(
-                      'new ',
-                      friends.filter(friend => friend !== item),
-                    );
-                    setStateForKey('spending_selected_friend', {
-                      value: friends.filter(friend => friend !== item),
-                    });
+                {/* <View
+                  styles={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginRight: 24,
+                    backgroundColor: 'yellow',
                   }}>
-                  <View style={{backgroundColor : '#E1ECC8', borderRadius : 30}}>
-                      <Icon name="close" size={20} />
-                  </View>
-                  
-                </TouchableOpacity>
-              </View>
-              {/* <View
-                styles={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginRight: 24,
-                  backgroundColor: 'yellow',
-                }}>
-                <Text style={{fontSize: 24}}>{item}</Text>
-                <Text style={{fontSize: 24}}>{item}</Text>
-              </View> */}
-            </>
-          )}
-        />
+                  <Text style={{fontSize: 24}}>{item}</Text>
+                  <Text style={{fontSize: 24}}>{item}</Text>
+                </View> */}
+              </>
+            })
+        }
+       
       </>
     );
   };

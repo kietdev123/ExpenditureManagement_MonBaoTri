@@ -375,12 +375,18 @@ const CalenderScreen = ({navigation})  => {
           
               
             </View>
-            <FlatList
+            {/* <FlatList
             data={spendings}
             renderItem={({item, index}) => {
               return <>{Item_Spending_Day(item)}</>;
             }}
-         />
+             /> */}
+            {
+                spendings.map((item,index) => {
+                  return <View key={index}>{Item_Spending_Day(item)}</View>;
+                } )
+            }
+       
           </>
          
         )}
