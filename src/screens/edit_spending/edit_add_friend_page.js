@@ -24,11 +24,12 @@ const colors = [
   "#A2FF86",
 ];
 
-const AddFriendPage = ({navigation}) => {
-  const friends = useStateX('add_spending_friends.value');
+const EditAddFriendPage = ({navigation}) => {
+  const friends = useStateX('spending_selected_friend.value');
   console.log('kiet debug ', friends);
   const [text, onChangeText] = useState('');
 
+  
   const FriendsComponent = () => {
     return (
       <>
@@ -65,7 +66,7 @@ const AddFriendPage = ({navigation}) => {
                       'new ',
                       friends.filter(friend => friend !== item),
                     );
-                    setStateForKey('add_spending_friends', {
+                    setStateForKey('spending_selected_friend', {
                       value: friends.filter(friend => friend !== item),
                     });
                   }}>
@@ -126,15 +127,13 @@ const AddFriendPage = ({navigation}) => {
             style={{height: 55}}
             onChangeText={onChangeText}
             onSubmitEditing={event => {
-              if (text != '') {
-                //   Alert.alert(event.nativeEvent.text);
-                console.log('mm ' + [...friends, text]);
-                onChangeText('');
-                setStateForKey('add_spending_friends', {
-                  //   value: friends.push(text),
-                  value: [...friends, text],
-                });
-              }           
+              //   Alert.alert(event.nativeEvent.text);
+              console.log('mm ' + [...friends, text]);
+              onChangeText('');
+              setStateForKey('spending_selected_friend', {
+                //   value: friends.push(text),
+                value: [...friends, text],
+              });
             }}
             value={text}
             placeholder="Điền tên"></TextInput>
@@ -241,4 +240,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(AddFriendPage);
+export default connect(EditAddFriendPage);

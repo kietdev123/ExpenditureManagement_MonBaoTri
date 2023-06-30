@@ -32,10 +32,35 @@ const SpendingFirebase = {
       friend: _friends,
       image: _image,
     });
-    Alert.alert('done add spending');
+    Alert.alert('Thêm thành công');
   },
-  updateSpending: async () => {},
-  deleteSpending: async () => {},
+  updateSpending: async (
+    id,
+    _money,
+    _dateTime,
+    _note,
+    _type,
+    _typeName,
+    _location,
+    _friends,
+    _image,
+  ) => {
+    await firestore().collection('spendings').doc(id).update({
+      money: _money,
+      dateTime: _dateTime,
+      note: _note,
+      type: _type,
+      typeName: _typeName,
+      location: _location,
+      friend: _friends,
+      image: _image,
+    });
+    Alert.alert('Cập nhật thành công');
+  },
+  deleteSpending: async (id) => {
+    await firestore().collection('spendings').doc(id).delete();
+    Alert.alert('Xóa thành công');
+  },
   getSpendingList: async () => {
     const ref = firestore().collection('spendings');
     const list = [];

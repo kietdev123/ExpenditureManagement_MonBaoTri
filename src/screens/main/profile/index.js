@@ -77,7 +77,7 @@ const ProfileScreen = ({navigation}) => {
     <SafeAreaView>
       <View>
         <View style={styles.appBar}>
-          <Text style={styles.info_component_money}>Profile Screen</Text>
+          <Text style={styles.info_component_money}>Tài khoản</Text>
         </View>
         <View style={styles.info_component}>
           <Image
@@ -105,42 +105,42 @@ const ProfileScreen = ({navigation}) => {
                 text: 'Đổi Mật Khẩu',
                 name_back_screen: 'ChangePassWordScreen',
               })}
-              {SettingItem({
+              {/* {SettingItem({
                 icon_name: 'moon-sharp',
                 icon_background_color: 'black',
                 text: 'Chế Độ Tối',
-                name_back_screen: 'ChangeModePage',
-              })}
-              {SettingItem({
+                name_back_screen: 'EditProfilePage',
+              })} */}
+              {/* {SettingItem({
                 icon_name: 'language',
                 icon_background_color: 'rgba(218, 165, 32, 1.0)',
                 text: 'Ngôn Ngữ',
-                name_back_screen: 'ChangeLanguagePage',
-              })}
+                name_back_screen: 'EditProfilePage',
+              })} */}
               {SettingItem({
                 icon_name: 'timer-outline',
                 icon_background_color: 'rgba(121, 189, 161, 1.0)',
                 text: 'Lịch Sử',
                 name_back_screen: 'HistoryPage',
               })}
-              {SettingItem({
+              {/* {SettingItem({
                 icon_name: 'ios-archive',
                 icon_background_color: 'rgba(137, 207, 240, 1.0)',
                 text: 'Xuất CSV',
                 name_back_screen: 'EditProfilePage',
-              })}
+              })} */}
               {SettingItem({
                 icon_name: 'ios-logo-usd',
                 icon_background_color: 'rgba(255, 192, 0, 1.0)',
                 text: 'Tỷ Giá Tiền Tệ',
                 name_back_screen: 'CurrencyExchangeRatePage',
               })}
-              {SettingItem({
+              {/* {SettingItem({
                 icon_name: 'information-circle',
                 icon_background_color: 'rgba(79, 121, 66, 1.0)',
                 text: 'Thông Tin',
-                name_back_screen: 'AboutPage',
-              })}
+                name_back_screen: 'EditProfilePage',
+              })} */}
 
               <TouchableOpacity
                 onPress={handleLogout}
@@ -158,6 +158,7 @@ const ProfileScreen = ({navigation}) => {
                   Đăng xuất
                 </Text>
               </TouchableOpacity>
+              <View style={{height:100}}></View>
             </View>
           </ScrollView>
         </View>

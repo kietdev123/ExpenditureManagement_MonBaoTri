@@ -21,7 +21,14 @@ import AddFriendPage from '../screens/add_spending/add_friend_page.js';
 import HistoryPage from '../screens/main/profile/history_page.js';
 import COLORS from '../constants/colors.js';
 import CurrencyExchangeRatePage from '../screens/main/profile/currency_exchange_rate.js';
+import SearchSpendingPage from '../screens/search_spending/index.js';
+import AnalyticPage from '../screens/main/analytic/index.js';
 import AboutPage from '../screens/main/profile/about_page.js';
+import EditAddFriendPage from '../screens/edit_spending/edit_add_friend_page.js';
+import EditChooseTypePage from '../screens/edit_spending/edit_choose_type.js';
+import ViewListSpendingPage from '../screens/main/home/view_list_spending_page.js';
+import ViewSpendingPage from '../screens/view_spending/view_spending_page.js';
+
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import FlashMessage from 'react-native-flash-message';
@@ -42,8 +49,18 @@ const myInitialState = {
     id: 'user_id_1234',
     name: 'Nguyen Hoang Kiet',
   },
-  add_spending_friends_: {value: []},
+  add_spending_friends: {value: []},
   add_spending_type_choosen: {value: -1},
+
+  spending_selected_dateTime: {value: ''},
+  spending_selected_friend: {value: []},
+  spending_selected_id: {value: ''},
+  spending_selected_image: {value: ''},
+  spending_selected_location: {value: ''},
+  spending_selected_money: {value: 0},
+  spending_selected_note: {value: ''},
+  spending_selected_type: {value: 0},
+  spending_selected_typeName: {value: ''},
 };
 function MyStack() {
   return (
@@ -56,14 +73,27 @@ function MyStack() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen
-              name="Login"
-              component={LoginScreen}
+                name="Login"
+                component={LoginScreen}
+                options={{
+                  headerShown: false,
+                  // headerLeft: () => <></>, // Hide back button
+                  // title: 'kiet',
+                }}
+              />
+            <Stack.Screen
+              name="Home"
+              component={MainScreen}
               options={{
                 headerShown: false,
-                // headerLeft: () => <></>, // Hide back button
-                // title: 'kiet',
               }}
             />
+            <Stack.Screen name="AnalyticScreen" component={AnalyticPage} />
+            <Stack.Screen
+              name="SearchSpendingPage"
+              component={SearchSpendingPage}
+            />
+            
             <Stack.Screen
               name="Signup"
               component={SignupScreen}
@@ -92,13 +122,7 @@ function MyStack() {
                 headerShown: false,
               }}
             />
-            <Stack.Screen
-              name="Home"
-              component={MainScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
+
             <Stack.Screen
               name="Todo"
               component={ToDoPage}
@@ -128,12 +152,7 @@ function MyStack() {
             <Stack.Screen
               name="ChangePassWordScreen"
               component={ChangePassWordScreen}
-              options={{headerShown: true, title: ''}}
-            />
-            <Stack.Screen
-              name="ConfirmResetPassword"
-              component={ConfirmResetPassword}
-              options={{headerShown: true, title: ''}}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="ChooseTypePage"
@@ -169,10 +188,43 @@ function MyStack() {
                 title: '',
               }}
             />
+            <Stack.Screen
+              name="EditAddFriendPage"
+              component={EditAddFriendPage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="EditChooseTypePage"
+              component={EditChooseTypePage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="ViewListSpendingPage"
+              component={ViewListSpendingPage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="ViewSpendingPage"
+              component={ViewSpendingPage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="ConfirmResetPassword"
+              component={ConfirmResetPassword}
+              options={{headerShown: true, title: ''}}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
-    </View>
+      </View>
   );
 }
 
