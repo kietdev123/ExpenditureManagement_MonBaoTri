@@ -62,14 +62,14 @@ import {
             
 
             <View style={{flexDirection : 'row',}}>
-                <View style={{marginRight: 12}}>
+                {/* <View style={{marginRight: 12}}>
                     <TouchableOpacity
                       onPress={() => {
                         navigation.goBack();
                       }}>
                       <Icon name="share-social" size={30} color="blue" />
                     </TouchableOpacity>
-                </View>
+                </View> */}
                 <View style={{marginRight: 12}}>
                     <TouchableOpacity
                       onPress={() => {

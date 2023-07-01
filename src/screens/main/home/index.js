@@ -71,16 +71,16 @@ const HomeScreen = ({navigation}) => {
     if (limitSpendingToday == -1){
      
     }
-    temp_output_value = temp_output_value - _valueInput;
+    // temp_output_value = temp_output_value - _valueInput;
     var today = new Date();
     var numDateOfThisMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-    // console.log(today);
-    // console.log(numDateOfThisMonth);
-    // console.log( _valueInput);
-    // console.log(temp_output_value)
-    // console.log(numDateOfThisMonth - today.getDate());
+    console.log(today);
+    console.log(numDateOfThisMonth);
+    console.log( _valueInput);
+    console.log(temp_output_value)
+    console.log(numDateOfThisMonth - today.getDate());
     setLimitSpendingToday( 
-      ( _valueInput + temp_output_value) / (numDateOfThisMonth - (today.getDate() - 1)));
+      ( temp_output_value) / (numDateOfThisMonth - (today.getDate() - 1)));
   }
 
   useEffect(() => {
@@ -247,19 +247,27 @@ const HomeScreen = ({navigation}) => {
                               }}
                             />   
                           }
-              <View>
+              <View style={{justifyContent : 'center'}}>
               <Text style={{
                     // fontWeight : 'bold',
                     fontSize : 20,
                 }}>Chào, {profile.fullname}</Text>
-                <Text style={{
-                    // fontWeight : 'bold',
-                    fontSize : 20,
-                }}>Hôm nay, bạn nên chi tiêu ít hơn</Text>
-                <Text style={{
-                    fontWeight : 'bold',
-                    fontSize : 20,
-                }}>{limitSpendingToday} VNĐ</Text>
+                {
+                  (_monthSelected == 18) ? 
+                  <>
+                     <Text style={{
+                      // fontWeight : 'bold',
+                      fontSize : 20,
+                      }}>Hôm nay, bạn nên chi tiêu ít hơn</Text>
+                      <Text style={{
+                          fontWeight : 'bold',
+                          fontSize : 20,
+                      }}>{limitSpendingToday} VNĐ</Text>
+                  </>
+                  :
+                  <></>
+                }
+               
               </View>
                
           </View>
@@ -304,7 +312,7 @@ const HomeScreen = ({navigation}) => {
                       <TouchableOpacity
                         onPress={() => {
                           setMonthSelected(index);
-                          filter(months[index], spendingsOrigin);
+                          filter(months[index], spendingsOrigin, Number(profile.moneyRange));
                         }}>
                         <View style={{width: 140, marginVertical: 8}}>
                           <Text
