@@ -2114,34 +2114,34 @@
   "version" "1.3.0"
 
 "@react-native-firebase/app@^18.0.0", "@react-native-firebase/app@18.0.0":
-  version "18.0.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.0.0.tgz"
-  integrity sha512-jvxitPNkcxE6IyGHiOGaURA42ZHBesTeSLbOfqQL6ZtTkQ0sPkFk6VPM2OR5s5S2NfOCfd9dddOhFLIX5VE3ig==
+  "integrity" "sha512-jvxitPNkcxE6IyGHiOGaURA42ZHBesTeSLbOfqQL6ZtTkQ0sPkFk6VPM2OR5s5S2NfOCfd9dddOhFLIX5VE3ig=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.0.0.tgz"
+  "version" "18.0.0"
   dependencies:
     "opencollective-postinstall" "^2.0.1"
     "superstruct" "^0.6.2"
 
 "@react-native-firebase/auth@^18.0.0":
-  version "18.0.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-18.0.0.tgz"
-  integrity sha512-9FOsvNH/w5+Cr48nxuJ3Lb85vxFe2A45w37OMxzfZCnLYXJJBvlF1espy3SCMKzwA31RN9+D0jH7OavacKbpzw==
+  "integrity" "sha512-9FOsvNH/w5+Cr48nxuJ3Lb85vxFe2A45w37OMxzfZCnLYXJJBvlF1espy3SCMKzwA31RN9+D0jH7OavacKbpzw=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-18.0.0.tgz"
+  "version" "18.0.0"
   dependencies:
     "plist" "^3.0.5"
 
 "@react-native-firebase/database@^18.0.0":
-  version "18.0.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/database/-/database-18.0.0.tgz"
-  integrity sha512-6FguiE6rs/28qhFkUdZU/yLYqJAt9wSLGT+9RQ8cCGPVj9rfjGI5FLh9rGUOOVWmsSWbBL3WsThmMQzk6Y946A==
+  "integrity" "sha512-6FguiE6rs/28qhFkUdZU/yLYqJAt9wSLGT+9RQ8cCGPVj9rfjGI5FLh9rGUOOVWmsSWbBL3WsThmMQzk6Y946A=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/database/-/database-18.0.0.tgz"
+  "version" "18.0.0"
 
 "@react-native-firebase/firestore@^18.0.0":
-  version "18.0.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-18.0.0.tgz"
-  integrity sha512-jGalEquLZGvn2iM1pGQsC0tFnUlA1mRt7hqYbrSSo8eVdcr05NhlNwNvBu2ShcVi1MCQvtsPmEQ8ppu3pt0srw==
+  "integrity" "sha512-jGalEquLZGvn2iM1pGQsC0tFnUlA1mRt7hqYbrSSo8eVdcr05NhlNwNvBu2ShcVi1MCQvtsPmEQ8ppu3pt0srw=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-18.0.0.tgz"
+  "version" "18.0.0"
 
 "@react-native-firebase/storage@^18.0.0":
-  version "18.0.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-18.0.0.tgz"
-  integrity sha512-aJchEV1nHzECq5bNE9bA6sczJs0ox59IQoox9vnuzdfh+Aep3ezjQBVJckriQ7/W/pV28fs32XyRx3GLVSRq6w==
+  "integrity" "sha512-aJchEV1nHzECq5bNE9bA6sczJs0ox59IQoox9vnuzdfh+Aep3ezjQBVJckriQ7/W/pV28fs32XyRx3GLVSRq6w=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-18.0.0.tgz"
+  "version" "18.0.0"
 
 "@react-native-google-signin/google-signin@^10.0.1":
   "integrity" "sha512-oZoU2lfKyn0s0GqqdFsi4v2FSENrxQYQU9DD/RSkxDdkIQ49Wwo6p5LKlgXY04GwZEVdYMuvZN3G89gQW0ig2g=="
@@ -6929,18 +6929,18 @@
   dependencies:
     "xml2js" "^0.4.23"
 
-react-native-flash-message@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.npmjs.org/react-native-flash-message/-/react-native-flash-message-0.4.1.tgz"
-  integrity sha512-sWpLBzB7Nbrh9ppq/8BfU10kd2wQuEGsg0RXf5qpQ9yxnsO7ShZzCGh7WLzRZcttkQg43onKkL2gvuI0PG1Buw==
+"react-native-flash-message@^0.4.1":
+  "integrity" "sha512-sWpLBzB7Nbrh9ppq/8BfU10kd2wQuEGsg0RXf5qpQ9yxnsO7ShZzCGh7WLzRZcttkQg43onKkL2gvuI0PG1Buw=="
+  "resolved" "https://registry.npmjs.org/react-native-flash-message/-/react-native-flash-message-0.4.1.tgz"
+  "version" "0.4.1"
   dependencies:
-    prop-types "^15.8.1"
-    react-native-iphone-screen-helper "^2.0.2"
+    "prop-types" "^15.8.1"
+    "react-native-iphone-screen-helper" "^2.0.2"
 
-react-native-fontawesome@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.npmjs.org/react-native-fontawesome/-/react-native-fontawesome-7.0.0.tgz"
-  integrity sha512-UBZXyTLO8rK2NMf7Eomzb70b6cpL5JlBI4xwJGnRroRofrIXUxPelmm0Ojs6OcMs4ucAyPidCOxbJDJlmb2vdA==
+"react-native-fontawesome@^7.0.0":
+  "integrity" "sha512-UBZXyTLO8rK2NMf7Eomzb70b6cpL5JlBI4xwJGnRroRofrIXUxPelmm0Ojs6OcMs4ucAyPidCOxbJDJlmb2vdA=="
+  "resolved" "https://registry.npmjs.org/react-native-fontawesome/-/react-native-fontawesome-7.0.0.tgz"
+  "version" "7.0.0"
 
 "react-native-fs@^2.20.0":
   "integrity" "sha512-VkTBzs7fIDUiy/XajOSNk0XazFE9l+QlMAce7lGuebZcag5CnjszB+u4BdqzwaQOdcYb5wsJIsqq4kxInIRpJQ=="
@@ -6960,25 +6960,25 @@ react-native-fontawesome@^7.0.0:
   "resolved" "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-5.3.1.tgz"
   "version" "5.3.1"
 
-react-native-iphone-screen-helper@^2.0.2:
-  version "2.0.3"
-  resolved "https://registry.npmjs.org/react-native-iphone-screen-helper/-/react-native-iphone-screen-helper-2.0.3.tgz"
-  integrity sha512-gbSnV0iYWQ3hne3inYoueatSJL/Un49biIkHLGKsm7J7QjFhL+/WSPB1sZhQ87lNIANwFh33nvxcjixxR4T+NQ==
+"react-native-iphone-screen-helper@^2.0.2":
+  "integrity" "sha512-gbSnV0iYWQ3hne3inYoueatSJL/Un49biIkHLGKsm7J7QjFhL+/WSPB1sZhQ87lNIANwFh33nvxcjixxR4T+NQ=="
+  "resolved" "https://registry.npmjs.org/react-native-iphone-screen-helper/-/react-native-iphone-screen-helper-2.0.3.tgz"
+  "version" "2.0.3"
 
-react-native-loading-spinner-overlay@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-3.0.1.tgz"
-  integrity sha512-4GdR54HQnKg2HPSSisVizfTLuyhSh4splY9eb8mKiYF1Ihjn/5EmdNo5bN3S7uKPFRC3WLzIZIouX6G6fXfnjw==
+"react-native-loading-spinner-overlay@^3.0.1":
+  "integrity" "sha512-4GdR54HQnKg2HPSSisVizfTLuyhSh4splY9eb8mKiYF1Ihjn/5EmdNo5bN3S7uKPFRC3WLzIZIouX6G6fXfnjw=="
+  "resolved" "https://registry.npmjs.org/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-3.0.1.tgz"
+  "version" "3.0.1"
 
-react-native-md5@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/react-native-md5/-/react-native-md5-1.0.0.tgz"
-  integrity sha512-+QGVe0ShxWpcgr1pNKc2XGv/EbDpOdpvSQVkIPSGU+wLtlgbz5eDECgIZt+1y8JdNHfofGyQJk4FTTDu3rAX2w==
+"react-native-md5@^1.0.0":
+  "integrity" "sha512-+QGVe0ShxWpcgr1pNKc2XGv/EbDpOdpvSQVkIPSGU+wLtlgbz5eDECgIZt+1y8JdNHfofGyQJk4FTTDu3rAX2w=="
+  "resolved" "https://registry.npmjs.org/react-native-md5/-/react-native-md5-1.0.0.tgz"
+  "version" "1.0.0"
 
-react-native-paper@^5.5.2, "react-native-paper@>= 3.0.0":
-  version "5.5.2"
-  resolved "https://registry.npmjs.org/react-native-paper/-/react-native-paper-5.5.2.tgz"
-  integrity sha512-cgkx67++r1oDoZRhzTohb0//qkD1Z20C/OcLfrE0HzyAkG+bYm0fA6gWqvHpdC7icQmuDS8iOOLu2288IYWiOA==
+"react-native-paper@^5.5.2", "react-native-paper@>= 3.0.0":
+  "integrity" "sha512-cgkx67++r1oDoZRhzTohb0//qkD1Z20C/OcLfrE0HzyAkG+bYm0fA6gWqvHpdC7icQmuDS8iOOLu2288IYWiOA=="
+  "resolved" "https://registry.npmjs.org/react-native-paper/-/react-native-paper-5.5.2.tgz"
+  "version" "5.5.2"
   dependencies:
     "@callstack/react-theme-provider" "^3.0.8"
     "color" "^3.1.2"
@@ -7077,10 +7077,10 @@ react-native-paper@^5.5.2, "react-native-paper@>= 3.0.0":
     "escape-string-regexp" "2.0.0"
     "invariant" "2.2.4"
 
-react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", "react-native@>= 0.64.3", react-native@>=0.42.0, react-native@>=0.57, react-native@>=0.59, react-native@>=0.63.3, react-native@0.71.5:
-  version "0.71.5"
-  resolved "https://registry.npmjs.org/react-native/-/react-native-0.71.5.tgz"
-  integrity sha512-fMptnHXoIPotg7gPYAvjMRnfC6gUSkTJzgaIDQJTY/f5F+g6qph5J1xT9LCuWuNguyQ9dh8b0MZTK5ROvTTV9w==
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", "react-native@>= 0.30.0", "react-native@>= 0.50.0", "react-native@>= 0.64.3", "react-native@>=0.42.0", "react-native@>=0.57", "react-native@>=0.59", "react-native@>=0.63.3", "react-native@>=0.69.0", "react-native@0.71.5":
+  "integrity" "sha512-fMptnHXoIPotg7gPYAvjMRnfC6gUSkTJzgaIDQJTY/f5F+g6qph5J1xT9LCuWuNguyQ9dh8b0MZTK5ROvTTV9w=="
+  "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.71.5.tgz"
+  "version" "0.71.5"
   dependencies:
     "@jest/create-cache-key-function" "^29.2.1"
     "@react-native-community/cli" "10.2.2"

@@ -105,8 +105,56 @@ const ChangePassWordScreen = ({navigation}) => {
         console.log(error);
       });
   }, []);
+
+  const AppBar = () => {
+    return (
+      <View>
+        <View style={{backgroundColor: COLORS.grey, alignItems: 'center'}}>
+          <View style={{position: 'absolute', left: 24, top: 8}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <Icon name="close" size={30} />
+            </TouchableOpacity>
+          </View>
+          <View style={{width: 150, backgroundColor: COLORS.grey}}>
+            <Text
+              style={{
+                backgroundColor: COLORS.grey,
+                alignSelf: 'center',
+                fontSize: 20,
+                fontWeight: 'bold',
+                marginTop: 10,
+              }}>
+              
+            </Text>
+          </View>
+        </View>
+
+        <View style={{backgroundColor: COLORS.grey, height: 12}}></View>
+
+        <View style={{overflow: 'hidden', paddingBottom: 5}}>
+          <View
+            style={{
+              backgroundColor: '#fff',
+              width: '100%',
+              height: 1,
+              shadowColor: '#000',
+              shadowOffset: {width: 1, height: 1},
+              shadowOpacity: 0.4,
+              shadowRadius: 3,
+              elevation: 5,
+            }}
+          />
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
+      {AppBar()}
       <ScrollView
         contentContainerStyle={{paddingTop: 20, paddingHorizontal: 20}}>
         <View

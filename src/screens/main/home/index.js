@@ -14,8 +14,19 @@ import {useIsFocused} from '@react-navigation/native';
 import COLORS from '../../../constants/colors.js';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import firestore from '@react-native-firebase/firestore';
+import moment from 'moment';
+import auth from '@react-native-firebase/auth';
+import {showMessage} from 'react-native-flash-message';
 
 const HomeScreen = ({navigation}) => {
+  const [profile, setProfile] = useState({
+    avatarURL : "",
+    fullname : "",
+    moneyRange : "0",
+    gender : "male"
+  });
+  const currentUser = auth().currentUser;
+
   const [limitSpendingToday, setLimitSpendingToday] = useState(-1);
 
   const isFocused = useIsFocused();
@@ -37,10 +48,10 @@ const HomeScreen = ({navigation}) => {
 
   const ref = firestore().collection('spendings');
 
-  function filter(_month, origin) {
+  function filter(_month, origin, _valueInput) {
     console.log(_month);
     var temp_spendings = [];
-    var temp_output_value = inputValue;
+    var temp_output_value = _valueInput;
 
     for (var index in origin) {
       var item = origin[index];
@@ -60,16 +71,16 @@ const HomeScreen = ({navigation}) => {
     if (limitSpendingToday == -1){
      
     }
-    temp_output_value = temp_output_value - inputValue;
+    // temp_output_value = temp_output_value - _valueInput;
     var today = new Date();
     var numDateOfThisMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
     console.log(today);
     console.log(numDateOfThisMonth);
-    console.log(inputValue);
+    console.log( _valueInput);
     console.log(temp_output_value)
     console.log(numDateOfThisMonth - today.getDate());
     setLimitSpendingToday( 
-      (inputValue + temp_output_value) / (numDateOfThisMonth - (today.getDate() - 1)));
+      ( temp_output_value) / (numDateOfThisMonth - (today.getDate() - 1)));
   }
 
   useEffect(() => {
@@ -104,9 +115,56 @@ const HomeScreen = ({navigation}) => {
         });
       });
       setSpendingsOrigin(list);
-      filter(new Date(), list);
+      
       // console.log(list);
-      setLoading(false);
+
+      if (currentUser) {
+        // setLoading(true);
+        const {uid} = currentUser;
+        firestore()
+          .collection('users')
+          .doc(uid)
+          .get()
+          .then(documentSnapshot => {
+            setLoading(false);
+            if (documentSnapshot.exists) {
+              const userData = documentSnapshot.data();
+              console.log('documentSnapshot:', userData);
+              setProfile({
+                fullname: userData.fullname,
+                moneyRange: userData.moneyRange,
+                gender: userData.gender,
+                dateofbirth: moment(userData.dateofbirth),
+                avatarURL: userData.avatarURL,
+              });
+              setInputValue(Number(userData.moneyRange));
+              filter(new Date(), list, Number(userData.moneyRange));
+              
+            } else {
+              setProfile({
+                fullname: null,
+                moneyRange: null,
+                gender: null,
+                dateofbirth: null,
+                avatarURL: null,
+              });
+              console.log('Không tìm thấy thông tin người dùng.');
+            }
+          })
+          .catch(error => {
+            console.log('Lỗi khi lấy thông tin người dùng:', error);
+          });
+      } else {
+        showMessage({
+          message:
+            'Người dùng chưa đăng nhập. Vui lòng thoát ra và đăng nhập lại!',
+          type: 'danger',
+          icon: 'danger',
+          duration: 2000,
+        });
+      }
+
+      // setLoading(false);
     });
   }, [navigation, isFocused]);
 
@@ -150,7 +208,7 @@ const HomeScreen = ({navigation}) => {
           <View style={{marginHorizontal : 12,
               flexDirection: 'row',
           }}>
-              <Image
+              {/* <Image
                 source={{
                   uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png',
                 }}
@@ -160,16 +218,56 @@ const HomeScreen = ({navigation}) => {
                     borderRadius: 50 / 2,
                     marginRight : 12,
                 }}
-              />
-              <View>
-                <Text style={{
-                    fontWeight : 'bold',
+              /> */}
+
+              {
+                            (profile.avatar === null) ?
+                              <Image
+                                source={profile.gender === 'male'
+                                  ? require('../../../assets/images/male.png')
+                                  : require('../../../assets/images/female.png')
+                                }
+                                style={{
+                                  width: 70,
+                                    height: 70,
+                                    borderRadius: 70 / 2,
+                                    marginRight : 12,
+                                }}
+                              />   
+                            :
+                            <Image
+                              source={{
+                                uri: profile.avatarURL,
+                              }}          
+                              style={{
+                                width: 70,
+                                  height: 70,
+                                  borderRadius: 70 / 2,
+                                  marginRight : 12,
+                              }}
+                            />   
+                          }
+              <View style={{justifyContent : 'center'}}>
+              <Text style={{
+                    // fontWeight : 'bold',
                     fontSize : 20,
-                }}>Hôm nay, bạn nên chi tiêu ít hơn</Text>
-                <Text style={{
-                    fontWeight : 'bold',
-                    fontSize : 20,
-                }}>{limitSpendingToday} VNĐ</Text>
+                }}>Chào, {profile.fullname}</Text>
+                {
+                  (_monthSelected == 18) ? 
+                  <>
+                     <Text style={{
+                      // fontWeight : 'bold',
+                      fontSize : 20,
+                      }}>Hôm nay, bạn nên chi tiêu ít hơn</Text>
+                      <Text style={{
+                          fontWeight : 'bold',
+                          fontSize : 20,
+                      }}>{limitSpendingToday} VNĐ</Text>
+                  </>
+                  :
+                  <></>
+                }
+               
               </View>
                
           </View>
@@ -214,7 +312,7 @@ const HomeScreen = ({navigation}) => {
                       <TouchableOpacity
                         onPress={() => {
                           setMonthSelected(index);
-                          filter(months[index], spendingsOrigin);
+                          filter(months[index], spendingsOrigin, Number(profile.moneyRange));
                         }}>
                         <View style={{width: 140, marginVertical: 8}}>
                           <Text
@@ -238,6 +336,8 @@ const HomeScreen = ({navigation}) => {
               );
             }}
           />
+
+          
         </View>
       </View>
     );
@@ -417,12 +517,17 @@ const HomeScreen = ({navigation}) => {
             </View>
           </>
         ) : (
-          <FlatList
-            data={spendings}
-            renderItem={({item, index}) => {
-              return <>{Item_Spending_Day(item)}</>;
-            }}
-          />
+          // <FlatList
+          //   data={spendings}
+          //   renderItem={({item, index}) => {
+          //     return <>{Item_Spending_Day(item)}</>;
+          //   }}
+          // />
+          
+            spendings.map((item,index) => {
+              return <View key={index}>{Item_Spending_Day(item)}</View>;
+            } )
+          
         )}
         <View style={{height: 300}}></View>
       </>

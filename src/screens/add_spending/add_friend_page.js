@@ -32,15 +32,14 @@ const AddFriendPage = ({navigation}) => {
   const FriendsComponent = () => {
     return (
       <>
-        <FlatList
-          data={friends}
-          renderItem={({item, index}) => (
-            <>
-              <View style={styles.typeItem}>
+        {
+          friends.map((item, index) => {
+            return  <>
+              <View style={styles.typeItem} key={index}>
                 {/* <Text style={styles.item}>{item.image}</Text> */}
                 <View style={{
                     flexDirection : 'row',
-                   
+                  
                   }}>
                   <View style={{
                     width : 40, height : 40,
@@ -58,7 +57,7 @@ const AddFriendPage = ({navigation}) => {
                     <Text style={styles.item}>{item}</Text>
                   </View>
                 </View>
-               
+              
                 <TouchableOpacity
                   onPress={() => {
                     console.log(
@@ -87,8 +86,9 @@ const AddFriendPage = ({navigation}) => {
                 <Text style={{fontSize: 24}}>{item}</Text>
               </View> */}
             </>
-          )}
-        />
+          })
+        }
+       
       </>
     );
   };
