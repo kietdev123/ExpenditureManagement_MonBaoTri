@@ -1,4 +1,5 @@
-/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect, useState} from 'react';
+import {connect} from 'react-redux';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,45 +9,62 @@ import {
   View,
   Keyboard,
   ToastAndroid,
+  StyleSheet,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-native-redux';
-
-import COLORS from '../../../constants/colors.js';
-
-import Icon from 'react-native-vector-icons/Ionicons.js';
-import Button from '../../signup/components/button.js';
+import Icon from 'react-native-vector-icons/Ionicons';
 import auth from '@react-native-firebase/auth';
+
+import COLORS from '../../../constants/colors';
+import Button from '../../signup/components/button';
 
 const ChangePassWordScreen = ({navigation}) => {
   const [isFirstSetPass, setIsFirstSetPass] = useState(false);
-  const [inputs, setInputs] = useState({
-    password: '',
-  });
+  const [inputs, setInputs] = useState({password: ''});
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    auth()
+      .fetchSignInMethodsForEmail(auth().currentUser.email)
+      .then(signInMethods => {
+        const hasPasswordMethod = signInMethods.includes('password');
+        if (hasPasswordMethod) {
+          console.log('Email có thể đăng nhập bằng password');
+        } else {
+          setIsFirstSetPass(true);
+          console.log('Email không tòn tại phương thức đăng nhập password');
+        }
+      })
+      .catch(error => {
+        console.log(
+          'Xảy ra lỗi trong quá trình kiểm tra phương thức đăng nhập ở màn hình ChangePassword.',
+        );
+        console.log(error);
+      });
+  }, []);
 
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-
     if (!inputs.password) {
       handleError('Vui lòng nhập mật khẩu', 'password');
       isValid = false;
-    } else {
-      if (inputs.password.length < 6) {
-        handleError('Mật khẩu quá ngắn!', 'password');
-        isValid = false;
-      }
+    } else if (inputs.password.length < 6) {
+      handleError('Mật khẩu quá ngắn!', 'password');
+      isValid = false;
     }
+
     return isValid;
   };
+
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({...prevState, [input]: text}));
   };
+
   const handleError = (error, input) => {
     setErrors(prevState => ({...prevState, [input]: error}));
   };
-  const [showPassword, setShowPassword] = useState(false);
+
   const handleConfirmPassword = () => {
     if (validate()) {
       const user = auth().currentUser;
@@ -59,7 +77,7 @@ const ChangePassWordScreen = ({navigation}) => {
         .then(() => {
           navigation.navigate('ConfirmResetPassword');
         })
-        .catch(error => {
+        .catch(() => {
           handleError('Mật khẩu không đúng', 'password');
         });
     }
@@ -70,7 +88,6 @@ const ChangePassWordScreen = ({navigation}) => {
       auth()
         .currentUser.updatePassword(inputs.password)
         .then(() => {
-          // Mật khẩu đã được cập nhật thành công
           ToastAndroid.showWithGravity(
             'Cập nhật mật khẩu thành công',
             ToastAndroid.SHORT,
@@ -84,140 +101,37 @@ const ChangePassWordScreen = ({navigation}) => {
         });
     }
   };
-  useEffect(() => {
-    auth()
-      .fetchSignInMethodsForEmail(auth().currentUser.email)
-      .then(signInMethods => {
-        const hasPasswordMethod = signInMethods.includes('password');
-        if (hasPasswordMethod) {
-          // Email đã có phương thức đăng nhập bằng mật khẩu
-          console.log('Email có thể đăng nhập bằng password');
-        } else {
-          // Email không có phương thức đăng nhập bằng mật khẩu
-          setIsFirstSetPass(true);
-          console.log('Email không tòn tại phương thức đăng nhập password');
-        }
-      })
-      .catch(error => {
-        console.log(
-          'Xảy ra lỗi trong quá trình kiểm tra phương thức đăng nhập ở màn hình ChangePassword.',
-        );
-        console.log(error);
-      });
-  }, []);
-
-  const AppBar = () => {
-    return (
-      <View>
-        <View style={{backgroundColor: COLORS.grey, alignItems: 'center'}}>
-          <View style={{position: 'absolute', left: 24, top: 8}}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-              }}>
-              <Icon name="close" size={30} />
-            </TouchableOpacity>
-          </View>
-          <View style={{width: 150, backgroundColor: COLORS.grey}}>
-            <Text
-              style={{
-                backgroundColor: COLORS.grey,
-                alignSelf: 'center',
-                fontSize: 20,
-                fontWeight: 'bold',
-                marginTop: 10,
-              }}>
-              
-            </Text>
-          </View>
-        </View>
-
-        <View style={{backgroundColor: COLORS.grey, height: 12}}></View>
-
-        <View style={{overflow: 'hidden', paddingBottom: 5}}>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              width: '100%',
-              height: 1,
-              shadowColor: '#000',
-              shadowOffset: {width: 1, height: 1},
-              shadowOpacity: 0.4,
-              shadowRadius: 3,
-              elevation: 5,
-            }}
-          />
-        </View>
-      </View>
-    );
-  };
 
   return (
-    <SafeAreaView style={{backgroundColor: COLORS.grey, flex: 1}}>
-      {AppBar()}
-      <ScrollView
-        contentContainerStyle={{paddingTop: 20, paddingHorizontal: 20}}>
-        <View
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{
-            justifyContent: 'center',
-            flexDirection: 'column',
-            gap: 20,
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              fontSize: 24,
-              fontWeight: 'bold',
-              color: 'black',
-              marginTop: 20,
-            }}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <View style={styles.flexContainer}>
+          <Text style={styles.title}>
             {isFirstSetPass ? 'Đặt mật khẩu' : 'Bạn muốn đổi mật khẩu?'}
           </Text>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '300',
-              color: 'black',
-              paddingBottom: 30,
-              textAlign: 'center',
-            }}>
+          <Text style={styles.subtitle}>
             {isFirstSetPass
               ? 'Đây là lần đặt mật khẩu đầu tiên! Vui lòng nhập tối thiểu 6 ký tự'
               : 'Vui lòng nhập mật khẩu hiện tại của bạn'}
           </Text>
         </View>
-        <View
-          style={{
-            backgroundColor: 'white',
-            alignItems: 'center',
-            flexDirection: 'row',
-            paddingVertical: 5,
-            paddingHorizontal: 10,
-            borderRadius: 10,
-          }}>
+        <View style={styles.inputContainer}>
           <TextInput
             autoCorrect={false}
-            style={{color: COLORS.black, flex: 1, marginLeft: 10}}
+            style={styles.input}
             secureTextEntry={!showPassword}
             onChangeText={text => handleOnchange(text, 'password')}
             onFocus={() => handleError(null, 'password')}
             placeholder="Mật khẩu"
           />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <TouchableOpacity
+            style={styles.eyeIconContainer}
+            onPress={() => setShowPassword(!showPassword)}>
             <Icon name={!showPassword ? 'eye-off' : 'eye'} size={24} />
           </TouchableOpacity>
         </View>
         {errors.password && (
-          <Text
-            style={{
-              marginLeft: 10,
-              marginTop: 5,
-              color: COLORS.red,
-              fontSize: 12,
-            }}>
-            {errors.password}
-          </Text>
+          <Text style={styles.errorText}>{errors.password}</Text>
         )}
         <Button
           title="Gửi"
@@ -230,4 +144,56 @@ const ChangePassWordScreen = ({navigation}) => {
   );
 };
 
-export default connect(ChangePassWordScreen);
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: COLORS.grey,
+    flex: 1,
+  },
+  contentContainer: {
+    paddingTop: 20,
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+    marginTop: 20,
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: '300',
+    color: 'black',
+    paddingBottom: 30,
+    textAlign: 'center',
+  },
+  inputContainer: {
+    backgroundColor: 'white',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+  },
+  input: {
+    color: COLORS.black,
+    flex: 1,
+    marginLeft: 10,
+  },
+  eyeIconContainer: {
+    marginLeft: 10,
+  },
+  errorText: {
+    marginLeft: 10,
+    marginTop: 5,
+    color: COLORS.red,
+    fontSize: 12,
+  },
+  flexContainer: {
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: 20,
+    alignItems: 'center',
+  },
+});
+
+export default ChangePassWordScreen;

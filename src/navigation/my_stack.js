@@ -73,14 +73,14 @@ function MyStack() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen
-                name="Login"
-                component={LoginScreen}
-                options={{
-                  headerShown: false,
-                  // headerLeft: () => <></>, // Hide back button
-                  // title: 'kiet',
-                }}
-              />
+              name="Login"
+              component={LoginScreen}
+              options={{
+                headerShown: false,
+                // headerLeft: () => <></>, // Hide back button
+                // title: 'kiet',
+              }}
+            />
             <Stack.Screen
               name="Home"
               component={MainScreen}
@@ -93,7 +93,7 @@ function MyStack() {
               name="SearchSpendingPage"
               component={SearchSpendingPage}
             />
-            
+
             <Stack.Screen
               name="Signup"
               component={SignupScreen}
@@ -152,7 +152,7 @@ function MyStack() {
             <Stack.Screen
               name="ChangePassWordScreen"
               component={ChangePassWordScreen}
-              options={{headerShown: false}}
+              options={{headerShown: true, title: ''}}
             />
             <Stack.Screen
               name="ChooseTypePage"
@@ -224,7 +224,7 @@ function MyStack() {
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
-      </View>
+    </View>
   );
 }
 

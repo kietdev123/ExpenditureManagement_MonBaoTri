@@ -83,10 +83,11 @@ const ProfileScreen = ({navigation}) => {
 
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState({
-    avatarURL : 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png',
-    fullname : "",
-    moneyRange : "0",
-    gender : "male"
+    avatarURL:
+      'https://raw.githubusercontent.com/AboutReact/sampleresource/master/old_logo.png',
+    fullname: '',
+    moneyRange: '0',
+    gender: 'male',
   });
   const currentUser = auth().currentUser;
 
@@ -110,7 +111,7 @@ const ProfileScreen = ({navigation}) => {
               dateofbirth: moment(userData.dateofbirth),
               avatarURL: userData.avatarURL,
             });
-            console.log("profile screen");
+            console.log('profile screen');
             console.log(userData.avatarURL);
           } else {
             setProfile({
@@ -135,50 +136,52 @@ const ProfileScreen = ({navigation}) => {
         duration: 2000,
       });
     }
-  }, [navigation, isFocused]);
-
-  const Loading_Body = () => {
-    return (
-      <>
-        <View style={{alignItems: 'center', alignSelf: 'center'}}>
-          <ActivityIndicator size="large" color="grey"></ActivityIndicator>
-        </View>
-      </>
-    );
-  };
+  }, [currentUser]);
 
   return (
     <SafeAreaView>
       <View>
         <View style={styles.appBar}>
           <Text style={styles.info_component_money}>
-              {loading ?  "???" : (profile.fullname == null ? "Người dùng" : profile.fullname)}</Text>
+            {loading
+              ? '???'
+              : profile.fullname == null
+              ? 'Người dùng'
+              : profile.fullname}
+          </Text>
         </View>
-        {loading ? Loading_Body() : 
-        <>
-          <View style={styles.info_component}>
-            {
-              (profile.avatar === null) ?
+        {loading ? (
+          <ActivityIndicator size="large" color="grey" />
+        ) : (
+          <>
+            <View style={styles.info_component}>
+              {profile.avatar === null ? (
                 <Image
-                  source={profile.gender === 'male'
-                    ? require('../../../assets/images/male.png')
-                    : require('../../../assets/images/female.png')
+                  source={
+                    profile.gender === 'male'
+                      ? require('../../../assets/images/male.png')
+                      : require('../../../assets/images/female.png')
                   }
                   style={styles.info_component_image}
-                />   
-              :
-              <Image
-                source={{
-                  uri: profile.avatarURL,
-                }}          
-                style={styles.info_component_image}
-              />   
-            }
-            <Text>Tiền hàng tháng</Text>
-            <Text style={styles.info_component_money}>{profile.moneyRange} VND</Text>
-          </View>
-        </>}
-        
+                />
+              ) : (
+                <Image
+                  source={{
+                    uri: profile.avatarURL,
+                  }}
+                  style={styles.info_component_image}
+                />
+              )}
+              <Text>Tiền hàng tháng</Text>
+              <Text style={styles.info_component_money}>
+                {parseInt(profile.moneyRange, 10)
+                  .toFixed(0)
+                  .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}{' '}
+                VND
+              </Text>
+            </View>
+          </>
+        )}
 
         <View style={{height: 400}}>
           <ScrollView>
@@ -248,7 +251,7 @@ const ProfileScreen = ({navigation}) => {
                   Đăng xuất
                 </Text>
               </TouchableOpacity>
-              <View style={{height:100}}></View>
+              <View style={{height: 100}}></View>
             </View>
           </ScrollView>
         </View>
@@ -276,6 +279,7 @@ const styles = StyleSheet.create({
   },
   info_component: {
     justifyContent: 'center',
+    gap: 5,
     alignItems: 'center',
     height: 'auto',
     paddingTop: 20,
