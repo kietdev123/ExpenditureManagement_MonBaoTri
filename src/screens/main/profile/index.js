@@ -14,18 +14,14 @@ import {
 } from 'react-native';
 import {connect} from 'react-native-redux';
 import COLORS from '../../../constants/colors';
-import Icon from 'react-native-vector-icons/Ionicons.js';
+import Icon from 'react-native-vector-icons/Ionicons';
 import auth from '@react-native-firebase/auth';
 import {showMessage} from 'react-native-flash-message';
-import SpendingFirebase from '../../../controls/spending_firebase';
 import React, {useState, useEffect} from 'react';
 import moment from 'moment';
 import firestore from '@react-native-firebase/firestore';
-import {useIsFocused} from '@react-navigation/native';
 
 const ProfileScreen = ({navigation}) => {
-  const isFocused = useIsFocused();
-
   const SettingItem = ({
     icon_name,
     icon_background_color,
@@ -251,7 +247,7 @@ const ProfileScreen = ({navigation}) => {
                   Đăng xuất
                 </Text>
               </TouchableOpacity>
-              <View style={{height: 100}}></View>
+              <View style={styles.space} />
             </View>
           </ScrollView>
         </View>
@@ -261,6 +257,9 @@ const ProfileScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  space: {
+    height: 100,
+  },
   appBar: {
     justifyContent: 'center',
     alignItems: 'center',

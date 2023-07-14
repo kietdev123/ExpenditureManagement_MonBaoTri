@@ -156,7 +156,7 @@ const HomeScreen = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <AppBar
         profile={profile}
-        _monthSelected={profile}
+        _monthSelected={_monthSelected}
         limitSpendingToday={limitSpendingToday}
         scrollRef={scrollRef}
         months={months}

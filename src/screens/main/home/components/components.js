@@ -57,7 +57,10 @@ const Item_Spending_Day = ({item, setStateForKey}) => {
             <Text style={styles.spendingTypeName}>{item.typeName}</Text>
           </View>
           <View style={styles.spendingDetailContainer}>
-            <Text>{item.money} VND</Text>
+            <Text>
+              {item.money.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}{' '}
+              VND
+            </Text>
             <Icon
               color="black"
               name="md-chevron-forward-outline"
@@ -98,12 +101,17 @@ export const AppBar = ({
         <View style={styles.profileContainer}>
           <Text style={styles.greetingText}>Chào, {profile.fullname}</Text>
           {_monthSelected === 18 ? (
-            <>
+            <View>
               <Text style={styles.spendText}>
                 Hôm nay, bạn nên chi tiêu ít hơn
               </Text>
-              <Text style={styles.limitText}>{limitSpendingToday} VNĐ</Text>
-            </>
+              <Text style={styles.limitText}>
+                {limitSpendingToday
+                  .toFixed(0)
+                  .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}{' '}
+                VNĐ
+              </Text>
+            </View>
           ) : (
             <></>
           )}
@@ -179,18 +187,27 @@ export const Home_Body = ({
       <View style={styles.balanceContainer}>
         <View style={styles.balanceRow}>
           <Text style={styles.balanceLabel}>Số dư đầu</Text>
-          <Text style={styles.balanceValue}>{inputValue} VND</Text>
+          <Text style={styles.balanceValue}>
+            {inputValue.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}{' '}
+            VND
+          </Text>
         </View>
         <View style={styles.balanceRow}>
           <Text style={styles.balanceLabel}>Số dư cuối</Text>
-          <Text style={styles.balanceValue}>{outputValue} VND</Text>
+          <Text style={styles.balanceValue}>
+            {outputValue.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}{' '}
+            VND
+          </Text>
         </View>
         <View style={styles.balanceDivider} />
         <View style={styles.balanceRow}>
           <Text style={styles.balanceText}>
             {outputValue - inputValue > 0 ? 'Bạn có thêm ' : ''}
             {outputValue - inputValue < 0 ? 'Bạn đã chi ' : ''}
-            {Math.abs(outputValue - inputValue)} VND
+            {Math.abs(outputValue - inputValue)
+              .toFixed(0)
+              .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}{' '}
+            VND
           </Text>
         </View>
       </View>
@@ -252,6 +269,7 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     justifyContent: 'center',
+    gap: 5,
   },
   greetingText: {
     fontSize: 18,
@@ -288,9 +306,9 @@ const styles = StyleSheet.create({
   },
   balanceContainer: {
     backgroundColor: 'white',
-    height: 120,
     borderRadius: 12,
     padding: 12,
+    gap: 10,
   },
   balanceRow: {
     flexDirection: 'row',

@@ -1,27 +1,20 @@
 import {
   SafeAreaView,
-  Image,
   Text,
   TouchableOpacity,
   View,
   StyleSheet,
-  FlatList,
   TextInput,
   ScrollView,
-  // Picker,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-// import {ScrollView} from 'react-native-virtualized-view';
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-native-redux';
 
 import COLORS from '../../../constants/colors.js';
 
 import Icon from 'react-native-vector-icons/Ionicons.js';
-import Input from '../../signup/components/input.js';
-import Button from '../../signup/components/button.js';
 import EXCHANGE from '../../../constants/exchange.js';
-import {Dropdown} from 'react-native-element-dropdown';
 
 const data = [
   {label: 'Tất cả', value: 'all'},
@@ -34,7 +27,6 @@ const CurrencyExchangeRatePage = ({navigation}) => {
 
   const [rate, setRate] = useState([]);
   const countries = EXCHANGE.getCountry();
-  //  countrie[0] = {"countryName": "Zambia", "currencyCode": "ZMW", "symbol": ""}
 
   const [money, setMoney] = useState(1);
   const [currentCurrency, setCurrentCurrency] = useState('VND');
@@ -61,7 +53,6 @@ const CurrencyExchangeRatePage = ({navigation}) => {
 
   function symbolsToText(value) {
     var list = value.split(';');
-    // console.log(list);
     var res = '';
     for (var i = 0; i < list.length; i++)
       if (list[i] != '') {
@@ -111,7 +102,6 @@ const CurrencyExchangeRatePage = ({navigation}) => {
                 borderRadius: 10,
                 width: '60%',
                 marginLeft: 24,
-                // marginRight: 24,
                 textAlign: 'right',
               }}
               keyboardType="number-pad"
@@ -135,7 +125,6 @@ const CurrencyExchangeRatePage = ({navigation}) => {
               style={{
                 width: 80,
                 marginLeft: 10,
-                // alignSelf: 'center',
                 height: 50,
               }}>
               <View>
@@ -154,29 +143,6 @@ const CurrencyExchangeRatePage = ({navigation}) => {
                   ))}
                 </Picker>
               </View>
-
-              {/* <Dropdown
-                style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={rate}
-                search
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus ? 'Select item' : '...'}
-                searchPlaceholder="Search..."
-                value={currentCurrency}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChange={item => {
-                  // setValue(item.value);
-                  setCurrentCurrency(item.value);
-                  setIsFocus(false);
-                }}
-              /> */}
             </View>
           </View>
         </View>
@@ -317,45 +283,12 @@ const CurrencyExchangeRatePage = ({navigation}) => {
   const ListCurrency = () => {
     return (
       <View style={{paddingTop: 20, paddingHorizontal: 20}}>
-        {/* <FlatList
-          data={rate}
-          renderItem={({item, index}) => {
-            var _searchText = searchText.toLowerCase();
-
-            var country = countries.filter(function (element) {
-              return element.currencyCode == item.value;
-            });
-            // console.log(country);
-            // console.log(_searchText);
-            if (country.length == 0) return <></>;
-            if (country[0].countryName == undefined) return <></>;
-            if (
-              country[0].countryName.toLowerCase().includes(_searchText) ==
-                false &&
-              country[0].currencyCode.toLowerCase().includes(_searchText) ==
-                false &&
-              _searchText != ''
-            ) {
-              return <></>;
-            }
-
-            return (
-              <View>
-                {country[0].countryName != undefined &&
-                  Item_Currency(country[0])}
-              </View>
-            );
-            // return <Text>{item.value}</Text>;
-          }}
-        /> */}
         {rate.map((item, index) => {
           var _searchText = searchText.toLowerCase();
 
           var country = countries.filter(function (element) {
             return element.currencyCode == item.value;
           });
-          // console.log(country);
-          // console.log(_searchText);
           if (country.length == 0) return <></>;
           if (country[0].countryName == undefined) return <></>;
           if (
@@ -373,7 +306,6 @@ const CurrencyExchangeRatePage = ({navigation}) => {
               {country[0].countryName != undefined && Item_Currency(country[0])}
             </View>
           );
-          // return <Text>{item.value}</Text>;
         })}
       </View>
     );
@@ -385,10 +317,6 @@ const CurrencyExchangeRatePage = ({navigation}) => {
         {AppBar()}
         <ScrollView contentContainerStyle={{}}>
           <View>
-            {/* <Text>CurrencyExchangeRate</Text>
-            <Text>{rate.VND}</Text>
-            <Text>{countries[0].countryName}</Text>
-            <Text>{symbols[0].currency}</Text> */}
             {SearchBar()}
             {ListCurrency()}
           </View>
@@ -403,8 +331,6 @@ const styles = StyleSheet.create({
   searchSection: {
     flex: 1,
     flexDirection: 'row',
-    // justifyContent: 'center',
-    // alignItems: 'center',
     backgroundColor: COLORS.grey,
     marginLeft: 12,
     marginRight: 12,
@@ -448,13 +374,9 @@ const styles = StyleSheet.create({
   },
   typeItem: {
     flex: 1,
-    // justifyContent: 'space-between',
-    // alignContent: 'center',
     flexDirection: 'row',
-    // marginBottom: 20,
     paddingLeft: 24,
     paddingRight: 24,
-    // height: 40,
     backgroundColor: 'white',
   },
   container: {
@@ -468,8 +390,6 @@ const styles = StyleSheet.create({
     top: 12,
     paddingHorizontal: 16,
     backgroundColor: COLORS.grey,
-    // borderBottomWidth: 1,
-    // borderBottomColor: 'grey',
   },
   title: {
     fontWeight: 'bold',
@@ -486,8 +406,6 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     paddingBottom: 16,
-    // borderBottomWidth: 1,
-    // borderBottomColor: 'grey',
   },
   searchInputContainer: {
     paddingLeft: 24,
@@ -495,7 +413,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     height: 55,
     backgroundColor: COLORS.grey,
-    // backgroundColor: 'yellow',
     marginLeft: 24,
     marginRight: 24,
     marginVertical: 10,
@@ -510,7 +427,6 @@ const styles = StyleSheet.create({
   },
   moreButton: {
     height: 40,
-    // backgroundColor: '#eeeeee',
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
@@ -527,9 +443,6 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 30,
-    // borderColor: 'gray',
-    // borderWidth: 0.5,
-    // borderRadius: 8,
     paddingHorizontal: 8,
   },
   icon: {

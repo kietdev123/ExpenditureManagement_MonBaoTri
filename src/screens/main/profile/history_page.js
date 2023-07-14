@@ -52,50 +52,23 @@ const HistoryPage = ({navigation}) => {
         setLoading(false);
       }
     });
-  }, []);
+  }, [loading, ref]);
 
   const AppBar = () => {
     return (
-      <View>
-        <View style={{backgroundColor: COLORS.grey, alignItems: 'center'}}>
-          <View style={{position: 'absolute', left: 24, top: 8}}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-              }}>
-              <Icon name="close" size={30} />
-            </TouchableOpacity>
-          </View>
-          <View style={{width: 150, backgroundColor: COLORS.grey}}>
-            <Text
-              style={{
-                backgroundColor: COLORS.grey,
-                alignSelf: 'center',
-                fontSize: 20,
-                fontWeight: 'bold',
-                marginTop: 10,
-              }}>
-              Lịch sử
-            </Text>
-          </View>
-        </View>
-
-        <View style={{backgroundColor: COLORS.grey, height: 12}}></View>
-
-        <View style={{overflow: 'hidden', paddingBottom: 5}}>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              width: '100%',
-              height: 1,
-              shadowColor: '#000',
-              shadowOffset: {width: 1, height: 1},
-              shadowOpacity: 0.4,
-              shadowRadius: 3,
-              elevation: 5,
-            }}
-          />
-        </View>
+      <View style={{overflow: 'hidden'}}>
+        <View
+          style={{
+            backgroundColor: '#fff',
+            width: '100%',
+            height: 1,
+            shadowColor: '#000',
+            shadowOffset: {width: 1, height: 1},
+            shadowOpacity: 0.4,
+            shadowRadius: 3,
+            elevation: 5,
+          }}
+        />
       </View>
     );
   };
@@ -194,13 +167,9 @@ const HistoryPage = ({navigation}) => {
             return <>{Item_Spending_Day(item)}</>;
           }}
         /> */}
-        {
-          spendings.map((item,index) => {
-            return <View key={index}>
-              {Item_Spending_Day(item)}
-            </View>
-          })
-        }
+        {spendings.map((item, index) => {
+          return <View key={index}>{Item_Spending_Day(item)}</View>;
+        })}
       </>
     );
   };
@@ -223,7 +192,7 @@ const HistoryPage = ({navigation}) => {
           paddingTop: 20,
           paddingHorizontal: 20,
         }}>
-           {loading ? Loading_Body() : History_Body()}
+        {loading ? Loading_Body() : History_Body()}
       </ScrollView>
       {/* <View style={{paddingTop: 20, paddingHorizontal: 20}}>
         {loading ? Loading_Body() : History_Body()}
@@ -257,18 +226,10 @@ const styles = StyleSheet.create({
   },
   typeItem: {
     flex: 1,
-    // justifyContent: 'space-between',
-    // alignContent: 'center',
     flexDirection: 'row',
-    // marginBottom: 20,
     paddingLeft: 24,
     paddingRight: 24,
-    // height: 40,
     backgroundColor: 'white',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.grey,
   },
   header: {
     height: 30,
