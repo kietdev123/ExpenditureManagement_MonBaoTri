@@ -348,36 +348,33 @@ const CurrencyExchangeRatePage = ({navigation}) => {
             // return <Text>{item.value}</Text>;
           }}
         /> */}
-        {
-          rate.map((item,index)=> { 
-            var _searchText = searchText.toLowerCase();
+        {rate.map((item, index) => {
+          var _searchText = searchText.toLowerCase();
 
-            var country = countries.filter(function (element) {
-              return element.currencyCode == item.value;
-            });
-            // console.log(country);
-            // console.log(_searchText);
-            if (country.length == 0) return <></>;
-            if (country[0].countryName == undefined) return <></>;
-            if (
-              country[0].countryName.toLowerCase().includes(_searchText) ==
-                false &&
-              country[0].currencyCode.toLowerCase().includes(_searchText) ==
-                false &&
-              _searchText != ''
-            ) {
-              return <></>;
-            }
+          var country = countries.filter(function (element) {
+            return element.currencyCode == item.value;
+          });
+          // console.log(country);
+          // console.log(_searchText);
+          if (country.length == 0) return <></>;
+          if (country[0].countryName == undefined) return <></>;
+          if (
+            country[0].countryName.toLowerCase().includes(_searchText) ==
+              false &&
+            country[0].currencyCode.toLowerCase().includes(_searchText) ==
+              false &&
+            _searchText != ''
+          ) {
+            return <></>;
+          }
 
-            return (
-              <View key={index}>
-                {country[0].countryName != undefined &&
-                  Item_Currency(country[0])}
-              </View>
-            );
-            // return <Text>{item.value}</Text>;
-          })
-        }
+          return (
+            <View key={index}>
+              {country[0].countryName != undefined && Item_Currency(country[0])}
+            </View>
+          );
+          // return <Text>{item.value}</Text>;
+        })}
       </View>
     );
   };
