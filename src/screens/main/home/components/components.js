@@ -90,11 +90,13 @@ export const AppBar = ({
       <View style={styles.appBarContainer}>
         <Image
           source={
-            profile.avatarURL === null
-              ? profile.gender === 'male'
-                ? require('../../../../assets/images/male.png')
-                : require('../../../../assets/images/female.png')
-              : {uri: profile.avatarURL}
+            profile.avatarURL !== '' && profile.avatarURL !== null
+              ? {
+                  uri: profile.avatarURL,
+                }
+              : profile.gender === 'male'
+              ? require('../../../../assets/images/male.png')
+              : require('../../../../assets/images/female.png')
           }
           style={styles.avatar}
         />

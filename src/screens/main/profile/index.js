@@ -162,9 +162,15 @@ const ProfileScreen = ({navigation}) => {
                 />
               ) : (
                 <Image
-                  source={{
-                    uri: profile.avatarURL,
-                  }}
+                  source={
+                    profile.avatarURL !== '' && profile.avatarURL !== null
+                      ? {
+                          uri: profile.avatarURL,
+                        }
+                      : profile.gender === 'male'
+                      ? require('../../../assets/images/male.png')
+                      : require('../../../assets/images/female.png')
+                  }
                   style={styles.info_component_image}
                 />
               )}
