@@ -9,31 +9,28 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import React, {useState, useEffect} from 'react';
-import {connect} from 'react-native-redux';
-
 import COLORS from '../../../constants/colors.js';
-
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import EXCHANGE from '../../../constants/exchange.js';
 
-const data = [
-  {label: 'Tất cả', value: 'all'},
-  {label: 'Chi tiêu', value: 'spending'},
-  {label: 'Thu nhập', value: 'income'},
-];
+function symbolsToText(value) {
+  var list = value.split(';');
+  var res = '';
+  for (var i = 0; i < list.length; i++) {
+    if (list[i] !== '') {
+      res = res + String.fromCharCode(Number(list[i].slice(2, list[i].length)));
+    }
+  }
+  return res;
+}
 
 const CurrencyExchangeRatePage = ({navigation}) => {
-  const symbols = EXCHANGE.getSymbolCurrency();
-
   const [rate, setRate] = useState([]);
   const countries = EXCHANGE.getCountry();
 
   const [money, setMoney] = useState(1);
   const [currentCurrency, setCurrentCurrency] = useState('VND');
   const [searchText, setSearchText] = useState('');
-
-  const [value, setValue] = useState('all');
-  const [isFocus, setIsFocus] = useState(false);
 
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -49,17 +46,6 @@ const CurrencyExchangeRatePage = ({navigation}) => {
 
   function isNumeric(value) {
     return /^-?\d+$/.test(value);
-  }
-
-  function symbolsToText(value) {
-    var list = value.split(';');
-    var res = '';
-    for (var i = 0; i < list.length; i++)
-      if (list[i] != '') {
-        res =
-          res + String.fromCharCode(Number(list[i].slice(2, list[i].length)));
-      }
-    return res;
   }
 
   const AppBar = () => {
@@ -473,4 +459,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(CurrencyExchangeRatePage);
+export default CurrencyExchangeRatePage;
